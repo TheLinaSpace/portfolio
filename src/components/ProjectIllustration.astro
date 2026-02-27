@@ -1,0 +1,165 @@
+---
+interface Props {
+  slug: string;
+}
+const { slug } = Astro.props;
+---
+
+{slug === 'project-one' && (
+  <!-- Terminal window -->
+  <svg viewBox="0 0 480 160" width="100%" height="100%" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <pattern id="c1-dots" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+        <circle cx="10" cy="10" r="1.5" fill="#1e3058" opacity="0.5"/>
+      </pattern>
+    </defs>
+    <!-- Halftone bg -->
+    <rect width="480" height="160" fill="url(#c1-dots)"/>
+    <!-- Speed lines -->
+    <line x1="240" y1="80" x2="40"  y2="10"  stroke="#1a3060" stroke-width="1.5" opacity="0.5"/>
+    <line x1="240" y1="80" x2="20"  y2="80"  stroke="#1a3060" stroke-width="1.5" opacity="0.5"/>
+    <line x1="240" y1="80" x2="40"  y2="150" stroke="#1a3060" stroke-width="1.5" opacity="0.5"/>
+    <line x1="240" y1="80" x2="440" y2="10"  stroke="#1a3060" stroke-width="1.5" opacity="0.5"/>
+    <line x1="240" y1="80" x2="460" y2="80"  stroke="#1a3060" stroke-width="1.5" opacity="0.5"/>
+    <line x1="240" y1="80" x2="440" y2="150" stroke="#1a3060" stroke-width="1.5" opacity="0.5"/>
+    <line x1="240" y1="80" x2="140" y2="0"   stroke="#1a3060" stroke-width="1"   opacity="0.3"/>
+    <line x1="240" y1="80" x2="340" y2="0"   stroke="#1a3060" stroke-width="1"   opacity="0.3"/>
+    <line x1="240" y1="80" x2="140" y2="160" stroke="#1a3060" stroke-width="1"   opacity="0.3"/>
+    <line x1="240" y1="80" x2="340" y2="160" stroke="#1a3060" stroke-width="1"   opacity="0.3"/>
+    <!-- Drop shadow -->
+    <rect x="153" y="18" width="178" height="128" rx="8" fill="#1d4ed8" opacity="0.2"/>
+    <!-- Window frame -->
+    <rect x="150" y="15" width="180" height="128" rx="7" fill="#0f172a" stroke="#3b82f6" stroke-width="2.5"/>
+    <!-- Title bar -->
+    <rect x="150" y="15" width="180" height="30" rx="7" fill="#1e3a5f"/>
+    <rect x="150" y="37" width="180" height="8"  fill="#1e3a5f"/>
+    <line x1="150" y1="45" x2="330" y2="45" stroke="#3b82f6" stroke-width="2.5"/>
+    <!-- Traffic lights -->
+    <circle cx="170" cy="30" r="5.5" fill="#ef4444"/>
+    <circle cx="188" cy="30" r="5.5" fill="#f59e0b"/>
+    <circle cx="206" cy="30" r="5.5" fill="#22c55e"/>
+    <!-- Code line 1 -->
+    <circle cx="163" cy="61" r="4.5" fill="#4ade80"/>
+    <rect x="173" y="57" width="44" height="7" rx="2" fill="#60a5fa"/>
+    <rect x="222" y="57" width="28" height="7" rx="2" fill="#a78bfa"/>
+    <rect x="255" y="57" width="40" height="7" rx="2" fill="#60a5fa" opacity="0.5"/>
+    <!-- Code line 2 -->
+    <rect x="160" y="74" width="55" height="6" rx="2" fill="#4ade80" opacity="0.8"/>
+    <rect x="220" y="74" width="35" height="6" rx="2" fill="#4ade80" opacity="0.5"/>
+    <rect x="260" y="74" width="48" height="6" rx="2" fill="#e2e8f0" opacity="0.15"/>
+    <!-- Code line 3 -->
+    <rect x="160" y="89" width="26" height="6" rx="2" fill="#a78bfa"/>
+    <rect x="191" y="89" width="55" height="6" rx="2" fill="#60a5fa" opacity="0.6"/>
+    <rect x="251" y="89" width="30" height="6" rx="2" fill="#e2e8f0" opacity="0.2"/>
+    <!-- Code line 4 -->
+    <rect x="160" y="104" width="42" height="6" rx="2" fill="#60a5fa" opacity="0.5"/>
+    <rect x="207" y="104" width="60" height="6" rx="2" fill="#a78bfa" opacity="0.6"/>
+    <!-- Cursor line -->
+    <circle cx="163" cy="120" r="4.5" fill="#4ade80"/>
+    <rect x="173" y="116" width="8" height="9" rx="1.5" fill="#60a5fa"/>
+    <!-- Floating dots -->
+    <circle cx="94"  cy="45"  r="5" fill="#3b82f6" opacity="0.5"/>
+    <circle cx="80"  cy="80"  r="3" fill="#60a5fa" opacity="0.4"/>
+    <circle cx="94"  cy="115" r="4" fill="#3b82f6" opacity="0.4"/>
+    <circle cx="382" cy="35"  r="4" fill="#3b82f6" opacity="0.5"/>
+    <circle cx="396" cy="80"  r="5" fill="#60a5fa" opacity="0.4"/>
+    <circle cx="382" cy="122" r="3" fill="#3b82f6" opacity="0.4"/>
+  </svg>
+)}
+
+{slug === 'project-two' && (
+  <!-- Server stack -->
+  <svg viewBox="0 0 480 160" width="100%" height="100%" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <pattern id="c2-grid" x="0" y="0" width="24" height="24" patternUnits="userSpaceOnUse">
+        <line x1="0" y1="0" x2="24" y2="0"  stroke="#152e1f" stroke-width="0.8"/>
+        <line x1="0" y1="0" x2="0"  y2="24" stroke="#152e1f" stroke-width="0.8"/>
+      </pattern>
+    </defs>
+    <rect width="480" height="160" fill="url(#c2-grid)"/>
+    <!-- Server 1 -->
+    <rect x="150" y="18" width="180" height="36" rx="4" fill="#052e16" stroke="#22c55e" stroke-width="2.5"/>
+    <circle cx="170" cy="36" r="5.5" fill="#22c55e"/>
+    <circle cx="188" cy="36" r="5.5" fill="#22c55e" opacity="0.55"/>
+    <circle cx="206" cy="36" r="5.5" fill="#4ade80" opacity="0.25"/>
+    <rect x="222" y="27" width="54" height="6" rx="2" fill="#0d3321" stroke="#166534" stroke-width="1"/>
+    <rect x="222" y="38" width="54" height="6" rx="2" fill="#0d3321" stroke="#166534" stroke-width="1"/>
+    <rect x="283" y="25" width="22" height="18" rx="2" fill="#0d3321" stroke="#22c55e" stroke-width="1.5"/>
+    <circle cx="294" cy="34" r="3.5" fill="#22c55e" opacity="0.9"/>
+    <!-- Server 2 -->
+    <rect x="150" y="62" width="180" height="36" rx="4" fill="#052e16" stroke="#22c55e" stroke-width="2.5"/>
+    <circle cx="170" cy="80" r="5.5" fill="#4ade80" opacity="0.85"/>
+    <circle cx="188" cy="80" r="5.5" fill="#22c55e"/>
+    <circle cx="206" cy="80" r="5.5" fill="#22c55e" opacity="0.45"/>
+    <rect x="222" y="71" width="54" height="6" rx="2" fill="#0d3321" stroke="#166534" stroke-width="1"/>
+    <rect x="222" y="82" width="54" height="6" rx="2" fill="#0d3321" stroke="#166534" stroke-width="1"/>
+    <rect x="283" y="69" width="22" height="18" rx="2" fill="#0d3321" stroke="#22c55e" stroke-width="1.5"/>
+    <circle cx="294" cy="78" r="3.5" fill="#4ade80"/>
+    <!-- Server 3 -->
+    <rect x="150" y="106" width="180" height="36" rx="4" fill="#052e16" stroke="#22c55e" stroke-width="2.5"/>
+    <circle cx="170" cy="124" r="5.5" fill="#22c55e" opacity="0.4"/>
+    <circle cx="188" cy="124" r="5.5" fill="#22c55e" opacity="0.85"/>
+    <circle cx="206" cy="124" r="5.5" fill="#4ade80"/>
+    <rect x="222" y="115" width="54" height="6" rx="2" fill="#0d3321" stroke="#166534" stroke-width="1"/>
+    <rect x="222" y="126" width="54" height="6" rx="2" fill="#0d3321" stroke="#166534" stroke-width="1"/>
+    <rect x="283" y="113" width="22" height="18" rx="2" fill="#0d3321" stroke="#22c55e" stroke-width="1.5"/>
+    <circle cx="294" cy="122" r="3.5" fill="#22c55e" opacity="0.7"/>
+    <!-- Lightning bolt -->
+    <polygon points="378,38 362,80 380,80 362,128 402,74 382,74 402,38" fill="#22c55e" stroke="#052e16" stroke-width="2" stroke-linejoin="round"/>
+    <!-- Left connection dots -->
+    <circle cx="94"  cy="36"  r="5" fill="#22c55e" opacity="0.4"/>
+    <circle cx="80"  cy="80"  r="4" fill="#4ade80" opacity="0.3"/>
+    <circle cx="94"  cy="124" r="5" fill="#22c55e" opacity="0.4"/>
+    <line x1="99"  y1="36"  x2="150" y2="36"  stroke="#22c55e" stroke-width="1" stroke-dasharray="4,4" opacity="0.4"/>
+    <line x1="84"  y1="80"  x2="150" y2="80"  stroke="#22c55e" stroke-width="1" stroke-dasharray="4,4" opacity="0.3"/>
+    <line x1="99"  y1="124" x2="150" y2="124" stroke="#22c55e" stroke-width="1" stroke-dasharray="4,4" opacity="0.4"/>
+  </svg>
+)}
+
+{slug === 'project-three' && (
+  <!-- Rocket in space -->
+  <svg viewBox="0 0 480 160" width="100%" height="100%" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+    <!-- Stars -->
+    <circle cx="55"  cy="25"  r="1.5" fill="#e879f9" opacity="0.6"/>
+    <circle cx="130" cy="18"  r="1"   fill="#f0abfc" opacity="0.5"/>
+    <circle cx="210" cy="28"  r="1.5" fill="#e879f9" opacity="0.4"/>
+    <circle cx="370" cy="22"  r="1"   fill="#f0abfc" opacity="0.6"/>
+    <circle cx="432" cy="35"  r="2"   fill="#e879f9" opacity="0.5"/>
+    <circle cx="60"  cy="130" r="1"   fill="#f0abfc" opacity="0.4"/>
+    <circle cx="450" cy="100" r="1.5" fill="#e879f9" opacity="0.4"/>
+    <circle cx="340" cy="140" r="1"   fill="#f0abfc" opacity="0.5"/>
+    <!-- Planet -->
+    <circle cx="85" cy="80" r="42" fill="#150829" stroke="#7e22ce" stroke-width="2.5"/>
+    <circle cx="85" cy="80" r="29" fill="#1a0a2e"/>
+    <ellipse cx="85" cy="80" rx="60" ry="13" fill="none" stroke="#a855f7" stroke-width="1.5" opacity="0.7"/>
+    <circle cx="70" cy="68" r="6"   fill="none" stroke="#2d1058" stroke-width="1.5"/>
+    <circle cx="100" cy="90" r="4"  fill="none" stroke="#2d1058" stroke-width="1.5"/>
+    <!-- Speed lines -->
+    <line x1="164" y1="58"  x2="230" y2="68"  stroke="#6b21a8" stroke-width="2"   opacity="0.5" stroke-linecap="round"/>
+    <line x1="158" y1="72"  x2="228" y2="78"  stroke="#7e22ce" stroke-width="1.5" opacity="0.4" stroke-linecap="round"/>
+    <line x1="164" y1="86"  x2="230" y2="88"  stroke="#6b21a8" stroke-width="2"   opacity="0.5" stroke-linecap="round"/>
+    <line x1="160" y1="100" x2="230" y2="98"  stroke="#7e22ce" stroke-width="1.5" opacity="0.3" stroke-linecap="round"/>
+    <!-- Exhaust flames -->
+    <path d="M 256 122 C 253 136, 250 150, 256 158" fill="none" stroke="#f97316" stroke-width="3"   stroke-linecap="round" opacity="0.9"/>
+    <path d="M 267 124 C 267 140, 269 152, 267 160" fill="none" stroke="#fbbf24" stroke-width="2.5" stroke-linecap="round" opacity="0.8"/>
+    <path d="M 278 122 C 282 136, 285 150, 281 158" fill="none" stroke="#f97316" stroke-width="3"   stroke-linecap="round" opacity="0.9"/>
+    <!-- Left fin -->
+    <path d="M 240 110 L 222 140 L 240 130 Z" fill="#1a0a2e" stroke="#a855f7" stroke-width="2" stroke-linejoin="round"/>
+    <!-- Right fin -->
+    <path d="M 296 110 L 314 140 L 296 130 Z" fill="#1a0a2e" stroke="#a855f7" stroke-width="2" stroke-linejoin="round"/>
+    <!-- Rocket body -->
+    <rect x="240" y="82" width="56" height="52" rx="4" fill="#2e1065" stroke="#a855f7" stroke-width="2.5"/>
+    <!-- Nose cone -->
+    <path d="M 268 20 L 240 82 L 296 82 Z" fill="#1a0a2e" stroke="#a855f7" stroke-width="2.5" stroke-linejoin="round"/>
+    <!-- Porthole -->
+    <circle cx="268" cy="104" r="13" fill="#120d1e" stroke="#c084fc" stroke-width="2"/>
+    <circle cx="268" cy="104" r="7"  fill="#1a0a2e" stroke="#a855f7" stroke-width="1.5"/>
+    <circle cx="264" cy="100" r="2.5" fill="#e879f9" opacity="0.85"/>
+    <!-- Body stripe -->
+    <rect x="240" y="120" width="56" height="8" fill="#3b0764" stroke="#7e22ce" stroke-width="1"/>
+    <!-- Floating stars near rocket -->
+    <circle cx="340" cy="42"  r="2.5" fill="#e879f9" opacity="0.7"/>
+    <circle cx="396" cy="62"  r="2"   fill="#f0abfc" opacity="0.6"/>
+    <circle cx="418" cy="108" r="1.5" fill="#e879f9" opacity="0.5"/>
+  </svg>
+)}

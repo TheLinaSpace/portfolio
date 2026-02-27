@@ -1,5 +1,8 @@
 ---
+import ProjectIllustration from './ProjectIllustration.astro';
+
 interface Props {
+  slug: string;
   title: string;
   description: string;
   tags?: string[];
@@ -7,7 +10,7 @@ interface Props {
   year?: string;
 }
 
-const { title, description, tags = [], href, year } = Astro.props;
+const { slug, title, description, tags = [], href, year } = Astro.props;
 const isExternal = href.startsWith('http');
 ---
 
@@ -15,24 +18,32 @@ const isExternal = href.startsWith('http');
   href={href}
   target={isExternal ? '_blank' : undefined}
   rel={isExternal ? 'noopener noreferrer' : undefined}
-  class="group block border border-neutral-800 p-6 hover:border-neutral-500 hover:bg-neutral-900 transition-all duration-200"
+  class="group block border border-neutral-800 hover:border-neutral-600 transition-all duration-200 overflow-hidden"
 >
-  <div class="flex items-start justify-between gap-4 mb-3">
-    <h2 class="text-neutral-100 font-semibold text-lg group-hover:text-white transition-colors">
-      {title}
-    </h2>
-    {year && <span class="text-neutral-600 text-sm shrink-0">{year}</span>}
+  <!-- Illustration -->
+  <div class="h-36 bg-neutral-900 border-b border-neutral-800 group-hover:border-neutral-700 transition-colors overflow-hidden">
+    <ProjectIllustration slug={slug} />
   </div>
 
-  <p class="text-neutral-400 text-sm leading-relaxed mb-4">{description}</p>
-
-  {tags.length > 0 && (
-    <div class="flex flex-wrap gap-2">
-      {tags.map((tag) => (
-        <span class="text-xs text-neutral-500 border border-neutral-800 px-2 py-0.5">
-          {tag}
-        </span>
-      ))}
+  <!-- Content -->
+  <div class="p-6">
+    <div class="flex items-start justify-between gap-4 mb-3">
+      <h2 class="text-neutral-100 font-semibold text-lg group-hover:text-white transition-colors">
+        {title}
+      </h2>
+      {year && <span class="text-neutral-600 text-sm shrink-0">{year}</span>}
     </div>
-  )}
+
+    <p class="text-neutral-400 text-sm leading-relaxed mb-4">{description}</p>
+
+    {tags.length > 0 && (
+      <div class="flex flex-wrap gap-2">
+        {tags.map((tag) => (
+          <span class="text-xs text-neutral-500 border border-neutral-800 px-2 py-0.5">
+            {tag}
+          </span>
+        ))}
+      </div>
+    )}
+  </div>
 </a>

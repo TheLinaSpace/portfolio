@@ -1,5 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import ProjectIllustration from '../../components/ProjectIllustration.astro';
 import { projects } from '../../data/projects';
 
 export function getStaticPaths() {
@@ -13,12 +14,17 @@ const { project } = Astro.props;
 ---
 
 <Layout title={`${project.title} — Lina`}>
-  <main class="max-w-2xl mx-auto px-6 py-20">
+  <!-- Illustration banner -->
+  <div class="w-full h-52 bg-neutral-900 border-b border-neutral-800 overflow-hidden">
+    <ProjectIllustration slug={project.slug} />
+  </div>
+
+  <main class="max-w-2xl mx-auto px-6 py-12">
 
     <!-- Back -->
     <a
       href="/"
-      class="inline-flex items-center gap-2 text-sm text-neutral-500 hover:text-neutral-300 transition-colors mb-12"
+      class="inline-flex items-center gap-2 text-sm text-neutral-500 hover:text-neutral-300 transition-colors mb-10"
     >
       ← Back
     </a>
