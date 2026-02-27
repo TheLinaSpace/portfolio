@@ -1,0 +1,153 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout title="Career Track — Lina">
+
+<main class="max-w-2xl mx-auto px-6 py-12">
+
+    <!-- Back -->
+    <a href="/" class="inline-flex items-center gap-2 text-sm text-neutral-700 hover:text-neutral-900 transition-colors mb-10">
+      ← Back
+    </a>
+
+    <!-- Header -->
+    <header class="mb-10">
+      <div class="flex items-start justify-between gap-4 mb-2">
+        <h1 class="font-semibold text-neutral-900" style="font-size: 32px;">Career Track</h1>
+        <span class="text-neutral-700 text-sm shrink-0 mt-1">2024</span>
+      </div>
+      <p class="text-xs text-neutral-500 italic mb-8">Real product modified for confidentiality using Figma's design system.</p>
+      <p class="text-neutral-700 leading-relaxed">
+        Career Track enables administrators, managers, and trainers to monitor team progress, define skill-development areas, and assign tasks based on qualifications.
+      </p>
+    </header>
+
+    <!-- Meta -->
+    <dl class="flex flex-col gap-4 text-sm">
+      <div>
+        <dt class="text-xs text-neutral-500 mb-1">Role</dt>
+        <dd class="text-neutral-900">UX/UI Designer (Lead)</dd>
+      </div>
+      <div>
+        <dt class="text-xs text-neutral-500 mb-1">Timeline</dt>
+        <dd class="text-neutral-900">Nov 2024 — Ongoing</dd>
+      </div>
+      <div>
+        <dt class="text-xs text-neutral-500 mb-1">Team</dt>
+        <dd class="text-neutral-900">Product Manager, Developers, Lead Designer</dd>
+      </div>
+    </dl>
+
+
+    <hr class="border-neutral-200 mb-10" />
+
+    <!-- Challenge -->
+    <section class="mb-10">
+      <h2 class="font-semibold text-neutral-900 mb-3" style="font-size: 20px;">Challenge</h2>
+      <p class="text-neutral-700 text-sm leading-7">
+        "Design a new product based on the collected user problems in the company."
+      </p>
+    </section>
+
+    <!-- Design Strategy -->
+    <section class="mb-10">
+      <h2 class="font-semibold text-neutral-900 mb-3" style="font-size: 20px;">Design Strategy</h2>
+      <p class="text-neutral-700 text-sm leading-7 mb-6">
+        There is never a strict design process to follow. The design strategy would change and adapt depending on the project scope, user problem, business requirements, and the team.
+      </p>
+      <img src="/career-track/process.jpg" alt="Design process" class="w-full" />
+    </section>
+
+    <!-- User Problems -->
+    <section class="mb-10">
+      <h2 class="font-semibold text-neutral-900 mb-4" style="font-size: 20px;">User Problems</h2>
+      <div class="flex flex-col gap-5">
+        <div>
+          <p class="text-xs text-neutral-500 mb-1.5">Employee</p>
+          <p class="text-neutral-700 text-sm leading-7">Lack of clarity regarding required skills for career advancement and role elevation.</p>
+        </div>
+        <div>
+          <p class="text-xs text-neutral-500 mb-1.5">Manager</p>
+          <p class="text-neutral-700 text-sm leading-7">Absence of unified documentation tracking employee skill progression and career development guidance.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Product Background -->
+    <section class="mb-10">
+      <h2 class="font-semibold text-neutral-900 mb-3" style="font-size: 20px;">Product Background</h2>
+      <p class="text-neutral-700 text-sm leading-7 mb-5">
+        Career Track enables administrators, managers, and trainers to monitor team progress, define skill-development areas, and assign tasks based on qualifications. Employees gain visibility into assigned skills and advancement pathways.
+      </p>
+      <ul class="list-disc list-inside text-neutral-700 text-sm flex flex-col gap-1 mb-6">
+        <li>Skill Module</li>
+        <li>Assignment Module</li>
+        <li>Dashboard</li>
+      </ul>
+      <img src="/career-track/site-map.jpg" alt="Site map" class="w-full" />
+    </section>
+
+    <!-- Design Evolution -->
+    <section class="mb-10">
+      <h2 class="font-semibold text-neutral-900 mb-5" style="font-size: 20px;">Design Evolution</h2>
+
+      <!-- Skill Module -->
+      <div class="mb-8">
+        <h3 class="text-sm font-medium text-neutral-900 mb-2">Skill Module</h3>
+        <p class="text-neutral-700 text-sm leading-7 mb-5">Encompasses Skill List, Skill Creation, and Skill Pages. Admins and skill creators establish competencies requested by management teams.</p>
+        <img src="/career-track/skill-list.jpg" alt="Skill list" class="w-full mb-4" />
+        <img src="/career-track/explanations-skills.png" alt="Skills explanation" class="w-full mb-4" />
+        <img src="/career-track/skill-page.jpg" alt="Skill page creation" class="w-full" />
+      </div>
+
+      <!-- Assignment Module -->
+      <div class="mb-8">
+        <h3 class="text-sm font-medium text-neutral-900 mb-2">Assignment Module</h3>
+        <p class="text-neutral-700 text-sm leading-7 mb-5">The setup interface for the dashboard experience where skill sets combining roles and skills are established for teams or role groups.</p>
+        <img src="/career-track/assignment-page.jpg" alt="Assignment page" class="w-full mb-4" />
+        <img src="/career-track/in-between-1.jpg" alt="Assignment module evolution" class="w-full" />
+      </div>
+
+      <!-- Dashboard -->
+      <div class="mb-8">
+        <h3 class="text-sm font-medium text-neutral-900 mb-2">Dashboard</h3>
+        <p class="text-neutral-700 text-sm leading-7 mb-5">The most-used module accessible to admins, managers, and trainers. Functions as employee qualification documentation enabling manager task assignment based on demonstrated competencies. Designs evolved through user testing and real-world usage patterns.</p>
+        <img src="/career-track/dash-1.jpg" alt="Dashboard" class="w-full mb-4" />
+        <img src="/career-track/in-between-4.jpg" alt="Dashboard evolution" class="w-full mb-4" />
+        <img src="/career-track/dash-2.png" alt="Dashboard refined" class="w-full mb-4" />
+        <img src="/career-track/in-between-5.jpg" alt="Dashboard iteration" class="w-full mb-4" />
+        <img src="/career-track/in-between-3.jpg" alt="Dashboard final" class="w-full" />
+      </div>
+    </section>
+
+    <!-- Design System -->
+    <section class="mb-10">
+      <h2 class="font-semibold text-neutral-900 mb-3" style="font-size: 20px;">Design System</h2>
+      <p class="text-neutral-700 text-sm leading-7 mb-5">
+        Utilises Figma's Simple System with custom additions including chips, data tables, and sheets to maintain design consistency.
+      </p>
+      <img src="/career-track/design-system.png" alt="Design system" class="w-full" />
+    </section>
+
+    <!-- Key Learnings -->
+    <section class="mb-12">
+      <h2 class="font-semibold text-neutral-900 mb-5" style="font-size: 20px;">Key Learnings</h2>
+      <ol class="flex flex-col gap-5">
+        <li class="flex gap-4">
+          <span class="text-xs text-neutral-400 mt-0.5 shrink-0 font-[Chillax,sans-serif]">01</span>
+          <p class="text-neutral-700 text-sm leading-7">Products continuously evolve through user interaction and feedback — no final design exists.</p>
+        </li>
+        <li class="flex gap-4">
+          <span class="text-xs text-neutral-400 mt-0.5 shrink-0 font-[Chillax,sans-serif]">02</span>
+          <p class="text-neutral-700 text-sm leading-7">Business requirements must be grounded in actual user problems rather than assumptions.</p>
+        </li>
+        <li class="flex gap-4">
+          <span class="text-xs text-neutral-400 mt-0.5 shrink-0 font-[Chillax,sans-serif]">03</span>
+          <p class="text-neutral-700 text-sm leading-7">Exceptional UX reflects strong team collaboration across product, design, and engineering.</p>
+        </li>
+      </ol>
+    </section>
+
+  </main>
+</Layout>

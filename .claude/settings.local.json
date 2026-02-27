@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl -sL \"https://images.squarespace-cdn.com/content/v1/6391d1fed9ccd1251ba2135c/8cd4c064-c1dc-4ca6-adaa-e6a79f364287/Skill+List.jpg\" -o \"skill-list.jpg\")",
+      "Bash(curl -sL \"https://images.squarespace-cdn.com/content/v1/6391d1fed9ccd1251ba2135c/1697c647-10be-4ae1-bd82-4af8c968116b/Explanations_%2BSKills.png\" -o \"explanations-skills.png\")",
+      "Bash(curl -sL \"https://images.squarespace-cdn.com/content/v1/6391d1fed9ccd1251ba2135c/7d475597-53ef-4a60-bfb8-0b0ce88e55d5/Explanations_%2BSkill%2BPage%2B%281%29.jpg\" -o \"skill-page.jpg\")"
+    ]
+  }
+}

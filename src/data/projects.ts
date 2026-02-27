@@ -10,6 +10,14 @@ export interface Project {
 
 export const projects: Project[] = [
   {
+    slug: 'career-track',
+    title: 'Career Track',
+    description: 'Enabling managers and employees to track skill development and career advancement pathways.',
+    body: '',
+    tags: ['Design Strategy', 'User Research', 'User Interface', 'User Testing', 'Prototyping'],
+    year: '2024',
+  },
+  {
     slug: 'project-one',
     title: 'Project One',
     description: 'A short description of what this project does and the problem it solves.',
