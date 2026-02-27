@@ -1,15 +1,22 @@
 ---
 import Layout from '../layouts/Layout.astro';
+
+const links = [
+  { label: 'Email',    href: 'mailto:hello@lina.dev'              },
+  { label: 'GitHub',   href: 'https://github.com'                 },
+  { label: 'LinkedIn', href: 'https://linkedin.com'               },
+];
 ---
 
 <Layout title="About — Lina">
   <main class="max-w-2xl mx-auto px-6 py-20">
+
     <header class="mb-12">
       <h1 class="text-2xl font-semibold text-neutral-900 mb-2">About</h1>
-      <p class="text-neutral-600 text-sm">A little bit about me.</p>
+      <p class="text-neutral-700 text-sm">A little bit about me.</p>
     </header>
 
-    <div class="text-neutral-700 text-sm leading-7 space-y-4">
+    <div class="text-neutral-700 text-sm leading-7 space-y-4 mb-16">
       <p>
         Hi, I'm Lina. I build things for the web — from interfaces to APIs
         to whatever falls in between.
@@ -18,5 +25,23 @@ import Layout from '../layouts/Layout.astro';
         I care about clean code, good design, and software that actually works.
       </p>
     </div>
+
+    <h2 class="text-xs uppercase tracking-widest text-neutral-700 mb-4">Get in touch</h2>
+    <ul class="flex flex-col gap-3">
+      {links.map(({ label, href }) => (
+        <li>
+          <a
+            href={href}
+            target={href.startsWith('http') ? '_blank' : undefined}
+            rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}
+            class="flex items-center justify-between border border-neutral-200 px-5 py-4 text-sm text-neutral-700 hover:border-neutral-400 hover:text-neutral-900 transition-all"
+          >
+            {label}
+            <span class="text-neutral-700">↗</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+
   </main>
 </Layout>

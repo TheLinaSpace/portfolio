@@ -12,7 +12,7 @@ const { title = 'Lina — Portfolio' } = Astro.props;
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/webp" href="/favicon.webp" />
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
@@ -24,12 +24,12 @@ const { title = 'Lina — Portfolio' } = Astro.props;
       }
     </script>
   </head>
-  <body class="bg-white text-neutral-900 min-h-screen font-mono">
+  <body class="bg-[#DDE6F8] text-neutral-900 min-h-screen font-mono">
     <Header />
     <slot />
     <footer class="border-t border-neutral-200 mt-20">
       <div class="px-12 h-14 flex items-center justify-center">
-        <p class="text-xs text-neutral-500">Lina 2026</p>
+        <p class="text-xs text-neutral-700">Lina 2026</p>
       </div>
     </footer>
   </body>
