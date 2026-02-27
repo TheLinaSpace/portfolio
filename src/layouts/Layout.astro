@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import Header from '../components/Header.astro';
 
 interface Props {
   title?: string;
@@ -15,8 +16,21 @@ const { title = 'Lina — Portfolio' } = Astro.props;
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
+    <script>
+      if (["localhost", "127.0.0.1"].includes(location.hostname)) {
+        const s = document.createElement("script");
+        s.src = "https://unpkg.com/flare-dev/dist/flare.js";
+        document.head.appendChild(s);
+      }
+    </script>
   </head>
-  <body class="bg-neutral-950 text-neutral-100 min-h-screen font-mono">
+  <body class="bg-white text-neutral-900 min-h-screen font-mono">
+    <Header />
     <slot />
+    <footer class="border-t border-neutral-200 mt-20">
+      <div class="px-12 h-14 flex items-center justify-center">
+        <p class="text-xs text-neutral-500">Lina 2026</p>
+      </div>
+    </footer>
   </body>
 </html>

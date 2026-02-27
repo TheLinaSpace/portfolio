@@ -1,0 +1,47 @@
+---
+const pathname = Astro.url.pathname;
+
+const nav = [
+  { label: 'Work',    href: '/'        },
+  { label: 'About',   href: '/about'   },
+  { label: 'Contact', href: '/contact' },
+];
+
+function isActive(href: string) {
+  if (href === '/') return pathname === '/';
+  return pathname.startsWith(href);
+}
+---
+
+<header class="sticky top-0 z-50 border-b border-neutral-200 bg-white/90 backdrop-blur-sm">
+  <div class="px-12 h-18 flex items-center justify-between">
+
+    <!-- Logo -->
+    <a href="/" class="flex items-center gap-2.5 text-sm font-semibold text-neutral-900 hover:text-black transition-colors">
+      <img src="/favicon.svg" alt="" width="22" height="22" class="rounded" />
+      Lina
+    </a>
+
+    <!-- Nav -->
+    <nav>
+      <ul class="flex items-center gap-6">
+        {nav.map(({ label, href }) => (
+          <li>
+            <a
+              href={href}
+              class:list={[
+                'text-sm transition-colors',
+                isActive(href)
+                  ? 'text-neutral-900'
+                  : 'text-neutral-500 hover:text-neutral-700',
+              ]}
+            >
+              {label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+  </div>
+</header>

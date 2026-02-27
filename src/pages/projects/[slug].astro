@@ -15,7 +15,7 @@ const { project } = Astro.props;
 
 <Layout title={`${project.title} — Lina`}>
   <!-- Illustration banner -->
-  <div class="w-full h-52 bg-neutral-900 border-b border-neutral-800 overflow-hidden">
+  <div class="w-full h-52 bg-neutral-900 border-b border-neutral-700 overflow-hidden">
     <ProjectIllustration slug={project.slug} />
   </div>
 
@@ -24,7 +24,7 @@ const { project } = Astro.props;
     <!-- Back -->
     <a
       href="/"
-      class="inline-flex items-center gap-2 text-sm text-neutral-500 hover:text-neutral-300 transition-colors mb-10"
+      class="inline-flex items-center gap-2 text-sm text-neutral-500 hover:text-neutral-700 transition-colors mb-10"
     >
       ← Back
     </a>
@@ -32,17 +32,17 @@ const { project } = Astro.props;
     <!-- Header -->
     <header class="mb-10">
       <div class="flex items-start justify-between gap-4 mb-4">
-        <h1 class="text-2xl font-semibold text-neutral-100">{project.title}</h1>
-        <span class="text-neutral-600 text-sm shrink-0 mt-1">{project.year}</span>
+        <h1 class="text-2xl font-semibold text-neutral-900">{project.title}</h1>
+        <span class="text-neutral-500 text-sm shrink-0 mt-1">{project.year}</span>
       </div>
-      <p class="text-neutral-400 leading-relaxed">{project.description}</p>
+      <p class="text-neutral-600 leading-relaxed">{project.description}</p>
     </header>
 
     <!-- Tags -->
     {project.tags.length > 0 && (
       <div class="flex flex-wrap gap-2 mb-10">
         {project.tags.map((tag) => (
-          <span class="text-xs text-neutral-500 border border-neutral-800 px-2 py-0.5">
+          <span class="text-xs text-neutral-500 border border-neutral-200 px-2 py-0.5">
             {tag}
           </span>
         ))}
@@ -50,10 +50,10 @@ const { project } = Astro.props;
     )}
 
     <!-- Divider -->
-    <hr class="border-neutral-800 mb-10" />
+    <hr class="border-neutral-200 mb-10" />
 
     <!-- Body -->
-    <div class="text-neutral-300 text-sm leading-7 whitespace-pre-line mb-12">
+    <div class="text-neutral-700 text-sm leading-7 whitespace-pre-line mb-12">
       {project.body}
     </div>
 
@@ -65,7 +65,7 @@ const { project } = Astro.props;
             href={link.href}
             target="_blank"
             rel="noopener noreferrer"
-            class="text-sm text-neutral-400 border border-neutral-800 px-4 py-2 hover:border-neutral-500 hover:text-neutral-100 transition-all"
+            class="text-sm text-neutral-600 border border-neutral-200 px-4 py-2 hover:border-neutral-400 hover:text-neutral-900 transition-all"
           >
             {link.label} ↗
           </a>

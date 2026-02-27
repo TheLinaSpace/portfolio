@@ -1,0 +1,34 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const links = [
+  { label: 'Email',    href: 'mailto:hello@lina.dev'              },
+  { label: 'GitHub',   href: 'https://github.com'                 },
+  { label: 'LinkedIn', href: 'https://linkedin.com'               },
+];
+---
+
+<Layout title="Contact — Lina">
+  <main class="max-w-2xl mx-auto px-6 py-20">
+    <header class="mb-12">
+      <h1 class="text-2xl font-semibold text-neutral-900 mb-2">Contact</h1>
+      <p class="text-neutral-600 text-sm">Get in touch.</p>
+    </header>
+
+    <ul class="flex flex-col gap-3">
+      {links.map(({ label, href }) => (
+        <li>
+          <a
+            href={href}
+            target={href.startsWith('http') ? '_blank' : undefined}
+            rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}
+            class="flex items-center justify-between border border-neutral-200 px-5 py-4 text-sm text-neutral-700 hover:border-neutral-400 hover:text-neutral-900 transition-all"
+          >
+            {label}
+            <span class="text-neutral-400">↗</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </main>
+</Layout>
