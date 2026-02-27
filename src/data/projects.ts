@@ -6,6 +6,8 @@ export interface Project {
   tags: string[];
   year: string;
   links?: { label: string; href: string }[];
+  defaultImage?: string;
+  hoverImage?: string;
 }
 
 export const projects: Project[] = [
@@ -19,13 +21,15 @@ export const projects: Project[] = [
   },
   {
     slug: 'project-one',
-    title: 'Project One',
-    description: 'A short description of what this project does and the problem it solves.',
+    title: 'Construct',
+    description: 'Construction management application.',
     body: `This is a longer write-up about the project. What was the problem? How did you approach it? What did you learn?
 
 You can describe the architecture, interesting technical decisions, and any challenges you faced along the way.`,
     tags: ['TypeScript', 'React', 'Node.js'],
     year: '2025',
+    defaultImage: '/Construct default.PNG',
+    hoverImage: '/Construct Hover.PNG',
     links: [
       { label: 'GitHub', href: 'https://github.com' },
       { label: 'Live', href: 'https://example.com' },
