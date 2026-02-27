@@ -1,0 +1,71 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { projects } from '../../data/projects';
+
+export function getStaticPaths() {
+  return projects.map((project) => ({
+    params: { slug: project.slug },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+---
+
+<Layout title={`${project.title} — Lina`}>
+  <main class="max-w-2xl mx-auto px-6 py-20">
+
+    <!-- Back -->
+    <a
+      href="/"
+      class="inline-flex items-center gap-2 text-sm text-neutral-500 hover:text-neutral-300 transition-colors mb-12"
+    >
+      ← Back
+    </a>
+
+    <!-- Header -->
+    <header class="mb-10">
+      <div class="flex items-start justify-between gap-4 mb-4">
+        <h1 class="text-2xl font-semibold text-neutral-100">{project.title}</h1>
+        <span class="text-neutral-600 text-sm shrink-0 mt-1">{project.year}</span>
+      </div>
+      <p class="text-neutral-400 leading-relaxed">{project.description}</p>
+    </header>
+
+    <!-- Tags -->
+    {project.tags.length > 0 && (
+      <div class="flex flex-wrap gap-2 mb-10">
+        {project.tags.map((tag) => (
+          <span class="text-xs text-neutral-500 border border-neutral-800 px-2 py-0.5">
+            {tag}
+          </span>
+        ))}
+      </div>
+    )}
+
+    <!-- Divider -->
+    <hr class="border-neutral-800 mb-10" />
+
+    <!-- Body -->
+    <div class="text-neutral-300 text-sm leading-7 whitespace-pre-line mb-12">
+      {project.body}
+    </div>
+
+    <!-- Links -->
+    {project.links && project.links.length > 0 && (
+      <div class="flex gap-4">
+        {project.links.map((link) => (
+          <a
+            href={link.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-sm text-neutral-400 border border-neutral-800 px-4 py-2 hover:border-neutral-500 hover:text-neutral-100 transition-all"
+          >
+            {link.label} ↗
+          </a>
+        ))}
+      </div>
+    )}
+
+  </main>
+</Layout>
