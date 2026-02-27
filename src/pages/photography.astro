@@ -1,12 +1,82 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { analog } from '../data/photography';
 ---
 
 <Layout title="Photography — Lina">
-  <main class="max-w-2xl mx-auto px-6 py-20">
-    <header class="mb-12">
+  <main class="max-w-5xl mx-auto px-6 py-14">
+
+    <!-- Header -->
+    <header class="mb-8">
       <h1 class="text-2xl font-semibold text-neutral-900 mb-2">Photography</h1>
-      <p class="text-neutral-700 text-sm">A collection of photographs.</p>
+      <p class="text-neutral-700 text-sm">Collection of my favourite 35 mm film photos I took over the years</p>
     </header>
+
+    <!-- Analog section -->
+    <section>
+      <h2 class="text-sm font-semibold text-neutral-500 uppercase tracking-widest mb-5">MINOLTA X700 - Yashica FX-3</h2>
+      {analog.length > 0 ? (
+        <div class="columns-2 md:columns-3 gap-4">
+          {analog.map((filename) => (
+            <img
+              src={`/Analog%20photos/${filename}`}
+              alt=""
+              class="w-full mb-4 break-inside-avoid cursor-pointer"
+              data-lightbox
+            />
+          ))}
+        </div>
+      ) : (
+        <p class="text-sm text-neutral-400 italic">No photos yet.</p>
+      )}
+    </section>
+
   </main>
+
+  <!-- Lightbox -->
+  <div id="lightbox" class="fixed inset-0 z-50 items-center justify-center bg-black/90" style="display:none;">
+    <button id="lightbox-close" class="absolute top-5 right-6 text-white text-2xl leading-none">&times;</button>
+    <button id="lightbox-prev" class="absolute left-4 top-1/2 -translate-y-1/2 text-white text-xl w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/25 transition-colors">&#8592;</button>
+    <img id="lightbox-img" src="" alt="" class="max-h-screen max-w-full p-6 object-contain" />
+    <button id="lightbox-next" class="absolute right-4 top-1/2 -translate-y-1/2 text-white text-xl w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/25 transition-colors">&#8594;</button>
+  </div>
 </Layout>
+
+<script>
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightbox-img') as HTMLImageElement;
+  const closeBtn = document.getElementById('lightbox-close');
+  const prevBtn = document.getElementById('lightbox-prev');
+  const nextBtn = document.getElementById('lightbox-next');
+
+  const imgs = Array.from(document.querySelectorAll<HTMLImageElement>('[data-lightbox]'));
+  let current = 0;
+
+  function show(index: number) {
+    current = (index + imgs.length) % imgs.length;
+    lightboxImg.src = imgs[current].src;
+    lightbox!.style.display = 'flex';
+  }
+
+  function close() {
+    lightbox!.style.display = 'none';
+    lightboxImg.src = '';
+  }
+
+  imgs.forEach((img, i) => img.addEventListener('click', () => show(i)));
+
+  closeBtn?.addEventListener('click', close);
+  prevBtn?.addEventListener('click', (e) => { e.stopPropagation(); show(current - 1); });
+  nextBtn?.addEventListener('click', (e) => { e.stopPropagation(); show(current + 1); });
+
+  lightbox?.addEventListener('click', (e) => {
+    if (e.target === lightbox) close();
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (lightbox!.style.display === 'none') return;
+    if (e.key === 'Escape') close();
+    if (e.key === 'ArrowLeft') show(current - 1);
+    if (e.key === 'ArrowRight') show(current + 1);
+  });
+</script>
