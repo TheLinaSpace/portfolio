@@ -11,13 +11,23 @@ export const illustrations: Illustration[] = [
     description: 'An illustrated children\'s book about a magical never-ending scarf.',
   },
   {
-    slug: 'illustration-two',
-    title: 'Illustration Two',
-    description: 'A short description of this illustration.',
+    slug: 'abo-sharshoob',
+    title: 'Abo Sharshoob',
+    description: 'A comic series following the daily struggles of an immigrant cockroach in Berlin.',
   },
   {
-    slug: 'illustration-three',
-    title: 'Illustration Three',
-    description: 'A short description of this illustration.',
+    slug: 'em-kees',
+    title: 'Em Kees',
+    description: 'Concept art for a Lebanese folkloric character and her haunted Beiruti house.',
+  },
+  {
+    slug: 'leila',
+    title: 'Leila',
+    description: 'A watercolour retelling of Red Riding Hood with a twist.',
+  },
+  {
+    slug: 'bambi',
+    title: 'Bambi',
+    description: 'A knitted cat that comes alive and befriends a little girl named Rim.',
   },
 ];
