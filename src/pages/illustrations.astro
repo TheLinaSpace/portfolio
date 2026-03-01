@@ -21,12 +21,12 @@ import { illustrations } from '../data/illustrations';
             style={`animation-delay: ${(i + 1) * 100}ms;`}
           >
             <img
-              src="/Skills Default.png"
+              src={item.defaultImage ?? '/Skills Default.png'}
               alt={item.title}
               class="w-full group-hover:opacity-0 transition-opacity duration-200"
             />
             <img
-              src="/Skills Hover.png"
+              src={item.hoverImage ?? '/Skills Hover.png'}
               alt={item.title}
               class="w-full absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
             />
