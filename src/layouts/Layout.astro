@@ -4,9 +4,10 @@ import Header from '../components/Header.astro';
 
 interface Props {
   title?: string;
+  bgColor?: string;
 }
 
-const { title = 'Lina - Portfolio' } = Astro.props;
+const { title = 'Lina - Portfolio', bgColor = '#DDE6F8' } = Astro.props;
 ---
 
 <html lang="en">
@@ -26,7 +27,7 @@ const { title = 'Lina - Portfolio' } = Astro.props;
       }
     </script>
   </head>
-  <body class="bg-[#DDE6F8] text-neutral-900 min-h-screen font-[Inter,sans-serif]">
+  <body class="text-neutral-900 min-h-screen font-[Inter,sans-serif]" style={`background-color: ${bgColor}; --page-bg: ${bgColor};`}>
     <Header />
     <slot />
     <footer class="border-t border-neutral-200 mt-10 md:mt-20">

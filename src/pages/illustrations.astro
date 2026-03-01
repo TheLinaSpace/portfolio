@@ -3,21 +3,22 @@ import Layout from '../layouts/Layout.astro';
 import { illustrations } from '../data/illustrations';
 ---
 
-<Layout title="Illustrations - Lina">
+<Layout title="Illustrations - Lina" bgColor="#F5F5F0">
   <main class="max-w-5xl mx-auto px-6 py-14">
 
     <!-- Header -->
-    <header class="mb-8">
+    <header class="mb-8 animate-fade-up">
       <h1 class="text-2xl font-semibold text-neutral-900 mb-2">Illustrations</h1>
       <p class="text-neutral-700 text-sm">A collection of illustrations.</p>
     </header>
 
     <!-- Cards -->
     <div class="grid grid-cols-2 gap-5">
-        {illustrations.map((item) => (
+        {illustrations.map((item, i) => (
           <a
             href={`/illustrations/${item.slug}`}
-            class="group relative block"
+            class="group relative block animate-fade-up"
+            style={`animation-delay: ${(i + 1) * 100}ms;`}
           >
             <img
               src="/Skills Default.png"

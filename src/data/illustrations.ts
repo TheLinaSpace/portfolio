@@ -6,9 +6,9 @@ export interface Illustration {
 
 export const illustrations: Illustration[] = [
   {
-    slug: 'illustration-one',
-    title: 'Illustration One',
-    description: 'A short description of this illustration.',
+    slug: 'kishki',
+    title: 'Kishki',
+    description: 'An illustrated children\'s book about a magical never-ending scarf.',
   },
   {
     slug: 'illustration-two',
