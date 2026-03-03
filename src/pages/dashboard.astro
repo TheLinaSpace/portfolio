@@ -1,0 +1,1206 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const skillGroups = [
+  {
+    name: 'Finance',
+    skills: [
+      { name: 'Attention to Detail', icon: 'feather' },
+      { name: 'Financial Modeling', icon: 'tool' },
+      { name: 'Data Analysis', icon: 'tool' },
+      { name: 'Data Analysis 2', icon: 'tool', flagged: true },
+    ],
+  },
+  {
+    name: 'Planing',
+    skills: [
+      { name: 'Communication', icon: 'feather' },
+      { name: 'Taxation & Compliance', icon: 'tool' },
+      { name: 'Strategic Thinking', icon: 'tool' },
+      { name: 'Data Analysis', icon: 'tool' },
+    ],
+  },
+  {
+    name: 'AP & AR',
+    skills: [
+      { name: 'Communication', icon: 'feather' },
+      { name: 'Taxation & Compliance', icon: 'tool' },
+      { name: 'Strategic Thinking', icon: 'tool' },
+      { name: 'Data Analysis', icon: 'tool' },
+    ],
+  },
+  {
+    name: 'Compliance',
+    skills: [
+      { name: 'Compliance 101', icon: 'feather' },
+      { name: 'Compliance 102', icon: 'feather' },
+      { name: 'Strategic Thinking', icon: 'tool' },
+      { name: 'Compliance 103', icon: 'feather', flagged: true },
+    ],
+  },
+  {
+    name: 'Risk Management',
+    skills: [
+      { name: 'Risk Management 1', icon: 'feather' },
+      { name: 'Risk Management 2', icon: 'feather' },
+      { name: 'Risk Management 3', icon: 'feather' },
+      { name: 'Risk Management 4', icon: 'feather' },
+    ],
+  },
+];
+
+const employees = [
+  { initials: 'YW', name: 'Yareli Wheeler', level: 'entry', scores: [2,2,2,2, 1,3,2,2, 1,1,0,2, 1,3,0,3, 1,1,0,2] },
+  { initials: 'AA', name: 'Audrey Arias', level: 'entry', scores: [0,1,0,2, 0,3,0,0, 0,1,2,0, 0,3,3,3, 0,1,2,0] },
+  { initials: 'LA', name: 'Langston Aguilar', level: 'entry', scores: [2,1,2,0, 1,1,0,2, 0,1,2,0, 3,0,3,0, 0,1,2,2] },
+  { initials: 'SJ', name: 'Shepard Johnson', level: 'entry', scores: [2,3,2,2, 0,1,2,2, 2,3,0,2, 3,1,3,1, 2,3,0,2] },
+  { initials: 'BB', name: 'Bronson Black', level: 'entry', scores: [1,3,1,1, 1,1,1,1, 2,3,2,1, 3,1,1,1, 2,3,2,1] },
+  { initials: 'HE', name: 'Harley Everett', level: 'entry', scores: [0,3,1,1, 1,3,1,1, 1,3,1,1, 1,3,2,3, 1,3,1,1] },
+  { initials: 'TJ', name: 'Theodora Jenning', level: 'mid', scores: [2,1,2,1, 1,2,1,2, 2,1,1,2, 2,2,1,2, 1,2,1,2] },
+  { initials: 'GM', name: 'Giavanna Michael', level: 'mid', scores: [1,2,1,0, 0,1,2,1, 1,2,0,1, 1,2,2,1, 0,1,2,1] },
+  { initials: 'WM', name: 'Wallace Moreno', level: 'mid', scores: [3,2,3,2, 2,3,2,3, 3,2,1,3, 2,3,2,3, 2,3,2,3] },
+  { initials: 'DA', name: 'Dina Abdallah', level: 'senior', scores: [3,3,2,3, 3,2,3,3, 3,3,2,3, 3,3,3,2, 3,3,2,3] },
+  { initials: 'EN', name: 'Everest Nelson', level: 'senior', scores: [3,2,3,2, 2,3,3,2, 3,2,3,2, 3,2,3,3, 3,2,3,2] },
+];
+
+// Assessment view employees grouped by level (derived from overview data)
+const levelLabels: Record<string, string> = { entry: 'Entry Level', mid: 'Mid Level', senior: 'Senior Level' };
+const assessmentByLevel = ['entry', 'mid', 'senior'].map(level => {
+  const group = employees.filter(e => e.level === level);
+  const avgScore = group.length > 0 ? Math.round(group.reduce((sum, e) => sum + e.scores.reduce((a, b) => a + b, 0) / e.scores.length, 0) / group.length) : 0;
+  return {
+    level,
+    label: levelLabels[level],
+    avgScore,
+    employees: group.map(e => ({
+      initials: e.initials,
+      name: e.name,
+      score: Math.round(e.scores.reduce((a, b) => a + b, 0) / e.scores.length),
+    })),
+  };
+});
+
+const criteriaTitles: Record<number, string> = {
+  1: 'Foundational Knowledge',
+  2: 'Proficiency Criteria',
+  3: 'Mastery & Leadership',
+};
+
+const criteriaByLevel: Record<number, string[]> = {
+  1: [
+    'Employee understands basic concepts of the skill.',
+    'Employee can perform tasks with supervision.',
+    'Employee follows documented procedures correctly.',
+  ],
+  2: [
+    'Employee has attention to detail efficiently.',
+    'Employee can teach others how to pay attention to detail.',
+    'Employee worked efficiently for more than 3 months.',
+    'Employee demonstrated outstanding performance.',
+  ],
+  3: [
+    'Employee can independently lead projects using this skill.',
+    'Employee mentors junior team members effectively.',
+    'Employee contributes to process improvement initiatives.',
+    'Employee handles edge cases and exceptions confidently.',
+    'Employee can evaluate and adopt new methodologies.',
+  ],
+};
+
+const scoreColors: Record<number, string> = {
+  0: 'bg-neutral-100 text-neutral-400',
+  1: 'bg-violet-100 text-violet-700',
+  2: 'bg-orange-100 text-orange-700',
+  3: 'bg-sky-100 text-sky-700',
+};
+
+const avatarColor = 'bg-neutral-200 text-neutral-600';
+
+const allSkills = skillGroups.flatMap(g => g.skills);
+
+// Track cumulative column index for each group
+let colOffset = 0;
+const groupColRanges = skillGroups.map(g => {
+  const start = colOffset;
+  colOffset += g.skills.length;
+  return { name: g.name, start, end: colOffset - 1 };
+});
+
+// Pre-compute group name for each column index
+const colGroupMap = allSkills.map((_, i) => {
+  const range = groupColRanges.find(r => i >= r.start && i <= r.end);
+  return range?.name || '';
+});
+
+const summaryScores = allSkills.map((_, i) => {
+  const vals = employees.map(e => e.scores[i]);
+  return Math.round(vals.reduce((a, b) => a + b, 0) / vals.length);
+});
+
+// Set of column indices that start a new group (for separator lines), skip first group
+const groupStartCols = new Set(groupColRanges.filter(r => r.start > 0).map(r => r.start));
+
+// Target levels per skill (the goal each employee should reach)
+const targetLevels = [3,2,3,2, 2,3,2,3, 3,2,3,2, 3,3,2,3, 3,2,3,3];
+
+// Expired flags per employee (random sample for demo)
+// Each is an array of column indices where the skill has expired
+const expiredMap: Record<string, Set<number>> = {
+  'AA': new Set([2, 7, 15]),
+  'SJ': new Set([3, 10]),
+  'HE': new Set([1, 8, 18]),
+  'TJ': new Set([5, 12]),
+  'WM': new Set([9, 16]),
+  'EN': new Set([4, 13]),
+};
+---
+
+<Layout title="Dashboard" bgColor="#FFFFFF">
+  <main class="min-h-screen">
+    <!-- Top section (shared) -->
+    <div class="px-6 md:px-12 pt-6 md:pt-8">
+      <!-- Back breadcrumb (visible in employee-first mode) -->
+      <div id="back-breadcrumb" class="hidden mb-2">
+        <button id="back-to-overview" class="flex items-center gap-1.5 text-sm text-neutral-500 hover:text-neutral-900 transition-colors">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+          <span>Overview</span>
+          <span class="text-neutral-300 mx-0.5">/</span>
+          <span id="breadcrumb-emp-name" class="text-neutral-900 font-medium"></span>
+        </button>
+      </div>
+
+      <!-- Title row -->
+      <div class="flex items-center justify-between mb-6">
+        <h1 id="page-title" class="text-3xl md:text-4xl font-bold text-neutral-900">Dashboard</h1>
+        <div class="flex items-center bg-neutral-100 rounded-lg p-0.5" id="view-toggle">
+          <button data-view="overview" class="toggle-btn px-4 py-1.5 text-sm font-medium rounded-md bg-neutral-900 text-white transition-all">Overview</button>
+          <button data-view="assessment" class="toggle-btn px-4 py-1.5 text-sm font-medium rounded-md text-neutral-600 hover:text-neutral-900 transition-all">Assessment</button>
+        </div>
+      </div>
+
+      <!-- Filters row -->
+      <div id="filters-row" class="flex flex-wrap items-end justify-between gap-4 mb-6">
+        <div class="flex items-end gap-6">
+          <div class="relative" id="skill-set-wrapper">
+            <label class="block text-xs text-neutral-500 mb-1.5">Skill Set</label>
+            <button id="skill-set-trigger" type="button" class="appearance-none bg-white border border-neutral-300 rounded-lg px-4 py-2.5 pr-10 text-sm font-medium text-neutral-900 min-w-[180px] cursor-pointer hover:border-neutral-400 focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:ring-offset-1 text-left relative">
+              <span id="skill-set-label">Finance</span>
+              <svg class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-500 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div id="skill-set-dropdown" class="hidden absolute top-full left-0 mt-1 w-full bg-white border border-neutral-200 rounded-lg shadow-lg z-30 py-1">
+              {skillGroups.map((g, i) => (
+                <label class="flex items-center gap-2.5 px-3 py-2 cursor-pointer hover:bg-neutral-50 text-sm text-neutral-900">
+                  <input type="checkbox" checked={i === 0} data-group={g.name} class="skill-set-cb w-4 h-4 rounded border-neutral-300 accent-neutral-900 cursor-pointer" />
+                  {g.name}
+                </label>
+              ))}
+            </div>
+          </div>
+          <div class="relative" id="roles-wrapper">
+            <label class="block text-xs text-neutral-500 mb-1.5">Roles</label>
+            <button id="roles-trigger" type="button" class="appearance-none bg-white border border-neutral-300 rounded-lg px-4 py-2.5 pr-10 text-sm font-medium text-neutral-900 min-w-[180px] cursor-pointer hover:border-neutral-400 focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:ring-offset-1 text-left relative">
+              <span id="roles-label">3 Selected</span>
+              <svg class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-500 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div id="roles-dropdown" class="hidden absolute top-full left-0 mt-1 w-full bg-white border border-neutral-200 rounded-lg shadow-lg z-30 py-1">
+              <label class="flex items-center gap-2.5 px-3 py-2 cursor-pointer hover:bg-neutral-50 text-sm text-neutral-900">
+                <input type="checkbox" checked data-level="entry" class="roles-cb w-4 h-4 rounded border-neutral-300 accent-neutral-900 cursor-pointer" />
+                Entry Level
+              </label>
+              <label class="flex items-center gap-2.5 px-3 py-2 cursor-pointer hover:bg-neutral-50 text-sm text-neutral-900">
+                <input type="checkbox" checked data-level="mid" class="roles-cb w-4 h-4 rounded border-neutral-300 accent-neutral-900 cursor-pointer" />
+                Mid Level
+              </label>
+              <label class="flex items-center gap-2.5 px-3 py-2 cursor-pointer hover:bg-neutral-50 text-sm text-neutral-900">
+                <input type="checkbox" checked data-level="senior" class="roles-cb w-4 h-4 rounded border-neutral-300 accent-neutral-900 cursor-pointer" />
+                Senior Level
+              </label>
+            </div>
+          </div>
+          <button id="clear-btn" class="text-sm text-neutral-600 hover:text-neutral-900 underline underline-offset-2 pb-2.5">Clear</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== OVERVIEW VIEW ==================== -->
+    <div id="view-overview">
+      <!-- Table -->
+      <div class="px-6 md:px-12 pt-4 pb-12 overflow-x-auto" id="table-container">
+        <table class="border-collapse" id="overview-table">
+          <thead>
+            <tr id="group-header-row">
+              <th class="sticky left-0 bg-white z-10 text-left text-xs font-semibold text-neutral-500 uppercase tracking-wider px-3 pb-3 employee-col">
+                Employee Name
+              </th>
+              {skillGroups.map(group => (
+                <th colspan={group.skills.length} class="text-left text-xs font-semibold text-neutral-500 uppercase tracking-wider px-3 pb-3 group-header transition-colors" data-group={group.name}>
+                  {group.name}
+                </th>
+              ))}
+            </tr>
+            <!-- Target level row -->
+            <tr>
+              <td class="sticky left-0 bg-white z-10 px-3 py-2 employee-col">
+                <span class="text-sm text-emerald-700 font-semibold whitespace-nowrap">Target Level</span>
+              </td>
+              {targetLevels.map((target, si) => (
+                <td class={`px-0.5 py-2 text-center skill-col transition-opacity ${groupStartCols.has(si) ? 'border-l border-neutral-200' : ''}`} data-group={colGroupMap[si]} data-col={si}>
+                  <div class="w-7 h-7 rounded-md flex items-center justify-center text-xs font-semibold mx-auto bg-emerald-100 text-emerald-700">
+                    {target}
+                  </div>
+                </td>
+              ))}
+            </tr>
+            <tr id="skill-header-row">
+              <td class="sticky left-0 bg-white z-10 employee-col"></td>
+              {allSkills.map((skill, i) => (
+                  <td class={`px-0.5 pb-2 align-bottom skill-col transition-all ${groupStartCols.has(i) ? 'border-l border-neutral-200' : ''}`} data-group={colGroupMap[i]} data-col={i}>
+                    <div class="skill-col-inner flex flex-col items-center gap-2">
+                      <div class="skill-label-wrap">
+                        <span class="skill-label text-sm text-neutral-600 whitespace-nowrap flex items-center gap-1 cursor-pointer hover:text-neutral-900 transition-colors overview-skill-click" data-skill-name={skill.name}>
+                          {skill.name}
+                          {skill.flagged && (
+                            <svg class="flag-icon w-3 h-3 text-red-500 shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M4 21V3h9l.4 2H20v10h-7l-.4-2H6v8H4z"/></svg>
+                          )}
+                        </span>
+                      </div>
+                    </div>
+                  </td>
+              ))}
+            </tr>
+          </thead>
+          <tbody id="employee-tbody">
+            {employees.map((emp, empIdx) => (
+              <tr class="border-t border-neutral-100 hover:bg-neutral-50/50 transition-colors employee-row" data-level={emp.level}>
+                <td class="sticky left-0 bg-white z-10 px-3 py-2.5 employee-col">
+                  <div class="flex items-center gap-3 cursor-pointer hover:opacity-70 transition-opacity overview-emp-click" data-emp-name={emp.name.toLowerCase()}>
+                    <div class={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold shrink-0 ${avatarColor}`}>
+                      {emp.initials}
+                    </div>
+                    <span class="text-sm text-neutral-900 font-medium whitespace-nowrap">{emp.name}</span>
+                  </div>
+                </td>
+                {emp.scores.map((score, si) => {
+                  const isExpired = expiredMap[emp.initials]?.has(si) || false;
+                  const meetsTarget = !isExpired && score >= targetLevels[si];
+                  const badgeColor = isExpired ? 'bg-red-100 text-red-700' : meetsTarget ? 'bg-emerald-100 text-emerald-700' : scoreColors[score];
+                  const cellBg = isExpired ? 'bg-red-50' : meetsTarget ? 'bg-emerald-50' : '';
+                  return (
+                    <td class={`px-0.5 py-2.5 text-center score-cell transition-opacity ${cellBg} ${groupStartCols.has(si) ? 'border-l border-neutral-200' : ''} ${isExpired ? 'expired-cell cursor-pointer relative' : ''}`} style="width: 56px; min-width: 56px;" data-group={colGroupMap[si]} data-col={si}>
+                      <div class={`w-7 h-7 rounded-md flex items-center justify-center text-xs font-semibold mx-auto ${badgeColor}`}>
+                        {score}
+                      </div>
+                      {isExpired && <div class="tooltip">Skill expired, click to update</div>}
+                    </td>
+                  );
+                })}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ==================== ASSESSMENT VIEW ==================== -->
+    <div id="view-assessment" class="hidden">
+      <div id="assessment-container" class="flex h-[calc(100vh-220px)] min-h-[500px]">
+
+        <!-- Left sidebar: Skills -->
+        <div id="skills-panel" class="w-[260px] shrink-0 border-r border-neutral-200 px-6 md:pl-12 md:pr-6 pt-6 overflow-y-auto relative">
+          <p class="text-base font-semibold text-neutral-900 mb-4">Skills</p>
+          <div class="relative mb-4">
+            <input id="skills-search" type="text" placeholder="Search" class="w-full bg-white border border-neutral-300 rounded-lg px-3 py-2 pr-9 text-sm text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:ring-offset-1" />
+            <svg class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          </div>
+          <div id="skill-groups-container">
+            {skillGroups.map((group, gi) => (
+              <div class="mb-2 skill-group-block" data-group={group.name}>
+                <p class="text-sm text-neutral-500 px-1.5 py-1 skill-group-label">{group.name}</p>
+                <div class="flex flex-col">
+                  {group.skills.map((skill, si) => (
+                      <button class="skill-item flex items-center gap-2 px-1.5 py-1 rounded-lg text-left text-sm w-full transition-colors text-neutral-700 hover:bg-neutral-50" data-skill={skill.name} data-skill-index={groupColRanges[gi].start + si}>
+                        {skill.icon === 'feather' ? (
+                          <svg class="w-4 h-4 text-neutral-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.24 12.24a6 6 0 00-8.49-8.49L5 10.5V19h8.5z"/><line x1="16" y1="8" x2="2" y2="22" stroke-width="2"/></svg>
+                        ) : (
+                          <svg class="w-4 h-4 text-neutral-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
+                        )}
+                        <span>{skill.name}</span>
+                      </button>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+          <div id="skills-resize-handle" class="absolute top-0 right-0 w-1 h-full cursor-col-resize hover:bg-neutral-300 active:bg-neutral-400 transition-colors z-10"></div>
+        </div>
+
+        <!-- Middle column: Employees (hidden until skill selected) -->
+        <div id="employees-panel" class="w-[280px] shrink-0 border-r border-neutral-200 px-6 pt-6 overflow-y-auto hidden">
+          <p class="text-base font-semibold text-neutral-900 mb-1">Employees</p>
+          <p class="text-xs text-neutral-500 mb-4" id="employees-subtitle">Select an employee to view details</p>
+          <div class="relative mb-5">
+            <input id="employees-search" type="text" placeholder="Search" class="w-full bg-white border border-neutral-300 rounded-lg px-3 py-2 pr-9 text-sm text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:ring-offset-1" />
+            <svg class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          </div>
+
+          <div id="assessment-employees-container">
+            {assessmentByLevel.map(group => (
+              <div class="mb-6 assessment-level-group">
+                <div class="flex items-center justify-between mb-3">
+                  <p class="text-sm font-medium text-neutral-900">{group.label}</p>
+                  <span class={`level-avg-badge w-6 h-6 rounded-md flex items-center justify-center text-xs font-semibold ${scoreColors[group.avgScore]}`}>
+                    {group.avgScore}
+                  </span>
+                </div>
+                <div class="flex flex-col gap-1">
+                  {group.employees.map(emp => (
+                    <button class="assessment-emp-row flex items-center gap-2.5 px-2 py-1.5 rounded-lg cursor-pointer transition-colors hover:bg-neutral-50 w-full text-left" data-name={emp.name.toLowerCase()} data-emp-name={emp.name}>
+                      <input type="checkbox" class="emp-cb hidden w-4 h-4 rounded border-neutral-300 accent-violet-600 cursor-pointer shrink-0" />
+                      <div class={`emp-avatar w-7 h-7 rounded-full flex items-center justify-center text-[10px] font-semibold shrink-0 ${avatarColor}`}>
+                        {emp.initials}
+                      </div>
+                      <span class="text-sm text-neutral-900 flex-1 truncate">{emp.name}</span>
+                      <span class={`score-badge w-6 h-6 rounded-md flex items-center justify-center text-xs font-semibold shrink-0 ${scoreColors[emp.score]}`} data-score={emp.score}>
+                        {emp.score}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <!-- Placeholder when no skill selected -->
+        <div id="assessment-placeholder" class="flex-1 flex items-center justify-center">
+          <div class="text-center">
+            <svg class="w-12 h-12 text-neutral-300 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+            <p class="text-sm text-neutral-500">Select a skill to view employees</p>
+          </div>
+        </div>
+
+        <!-- Right panel: Skill Detail (hidden until employee selected) -->
+        <div id="detail-panel" class="flex-1 px-8 md:px-12 pt-6 overflow-y-auto hidden">
+          <h2 class="text-xl font-semibold text-neutral-900 mb-1" id="detail-skill-name"></h2>
+          <p class="text-sm text-neutral-500 mb-5" id="detail-emp-name"></p>
+
+          <div class="flex items-center gap-5 mb-6">
+            <button class="level-tab flex items-center gap-2 text-sm text-neutral-500 hover:text-neutral-700 pb-1.5" data-level="1">
+              Level 1
+              <span class="level-pct text-[11px] font-medium text-neutral-400" data-pct-level="1">0%</span>
+            </button>
+            <button class="level-tab flex items-center gap-2 text-sm text-neutral-500 hover:text-neutral-700 pb-1.5" data-level="2">
+              Level 2
+              <span class="level-pct text-[11px] font-medium text-neutral-400" data-pct-level="2">0%</span>
+            </button>
+            <button class="level-tab flex items-center gap-2 text-sm text-neutral-500 hover:text-neutral-700 pb-1.5" data-level="3">
+              Level 3
+              <span class="level-pct text-[11px] font-medium text-neutral-400" data-pct-level="3">0%</span>
+            </button>
+          </div>
+
+          <div>
+            <p class="text-sm font-medium text-neutral-900 mb-4" id="criteria-title">Proficiency Criteria</p>
+            <div class="flex flex-col gap-3.5" id="criteria-list">
+            </div>
+            <script is:inline define:vars={{ criteriaByLevel, criteriaTitles, targetLevels, employees }}>
+              window.__criteriaByLevel = criteriaByLevel;
+              window.__criteriaTitles = criteriaTitles;
+              window.__targetLevels = targetLevels;
+              window.__employees = employees;
+            </script>
+
+            <div class="mt-5 pt-4 border-t border-neutral-100">
+              <label class="flex items-center gap-3 cursor-pointer group">
+                <input id="check-all" type="checkbox" class="w-4 h-4 rounded border-neutral-300 text-neutral-900 focus:ring-neutral-900 accent-neutral-900 cursor-pointer" />
+                <span class="text-sm font-medium text-neutral-700 group-hover:text-neutral-900">Check All</span>
+              </label>
+            </div>
+
+            <div class="flex items-center gap-3 mt-8">
+              <button id="btn-down-level" class="px-5 py-2 text-sm font-medium rounded-lg border border-neutral-300 text-neutral-700 hover:bg-neutral-50 hover:border-neutral-400 transition-colors">
+                Down-level
+              </button>
+              <button id="btn-up-level" class="px-5 py-2 text-sm font-medium rounded-lg bg-neutral-900 text-white hover:bg-neutral-800 transition-colors">
+                Up-level
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+</Layout>
+
+<style>
+  .overflow-x-auto {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  td.sticky::after,
+  th.sticky::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: -8px;
+    bottom: 0;
+    width: 8px;
+    pointer-events: none;
+    background: linear-gradient(to right, rgba(0,0,0,0.03), transparent);
+  }
+
+  td.sticky,
+  th.sticky {
+    position: sticky;
+  }
+
+  .employee-col {
+    width: 212px !important;
+    min-width: 212px !important;
+    max-width: 212px !important;
+    box-sizing: border-box !important;
+    overflow: hidden;
+  }
+
+  /* Default: vertical (compact) mode */
+  .skill-col {
+    width: 56px;
+    min-width: 56px;
+  }
+  .skill-label-wrap {
+    height: 170px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .skill-label {
+    writing-mode: vertical-lr;
+    transform: rotate(180deg);
+  }
+  .flag-icon {
+    transform: rotate(180deg);
+  }
+
+  /* Horizontal (spacious) mode */
+  #overview-table.horizontal-labels .skill-col {
+    width: auto;
+    min-width: 140px;
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+  #overview-table.horizontal-labels .skill-label-wrap {
+    height: auto;
+  }
+  #overview-table.horizontal-labels .skill-label {
+    writing-mode: horizontal-tb;
+    transform: none;
+  }
+  #overview-table.horizontal-labels .flag-icon {
+    transform: none;
+  }
+  #overview-table.horizontal-labels .score-cell {
+    width: auto;
+    min-width: 140px;
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  .expired-cell .tooltip {
+    display: none;
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #171717;
+    color: white;
+    font-size: 12px;
+    white-space: nowrap;
+    padding: 6px 10px;
+    border-radius: 6px;
+    pointer-events: none;
+    z-index: 20;
+    margin-bottom: 4px;
+  }
+
+  .expired-cell .tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 4px solid transparent;
+    border-top-color: #171717;
+  }
+
+  .expired-cell:hover .tooltip {
+    display: block;
+  }
+
+  .group-header.active-group {
+    color: #171717;
+    background-color: #fefce8;
+    border-radius: 6px;
+  }
+
+  /* Employee-first mode (from overview click) */
+  #assessment-container.swapped-panels #employees-panel { order: 1; width: 280px; }
+  #assessment-container.swapped-panels #skills-panel { order: 2; }
+  #assessment-container.swapped-panels #assessment-placeholder { order: 3; }
+  #assessment-container.swapped-panels #detail-panel { order: 3; }
+  #assessment-container.swapped-panels .emp-cb { display: block; }
+  #assessment-container.swapped-panels #employees-panel > .relative.mb-5,
+  #assessment-container.swapped-panels #employees-subtitle,
+  #assessment-container.swapped-panels .assessment-level-group > .flex.items-center.justify-between { display: none; }
+  #assessment-container.swapped-panels .assessment-level-group { margin-bottom: 0.25rem; }
+  #assessment-container.swapped-panels .assessment-emp-row.emp-hidden { display: none; }
+  #assessment-container.swapped-panels .assessment-emp-row .score-badge { display: none; }
+</style>
+
+<script>
+  const scoreClasses: Record<number, string> = {
+    0: 'bg-neutral-100 text-neutral-400',
+    1: 'bg-violet-100 text-violet-700',
+    2: 'bg-orange-100 text-orange-700',
+    3: 'bg-sky-100 text-sky-700',
+  };
+
+  // ===== VIEW TOGGLE =====
+  const toggleBtns = document.querySelectorAll('.toggle-btn');
+  const overviewView = document.getElementById('view-overview');
+  const assessmentView = document.getElementById('view-assessment');
+
+  toggleBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const view = btn.getAttribute('data-view');
+      toggleBtns.forEach(b => {
+        b.classList.remove('bg-neutral-900', 'text-white');
+        b.classList.add('text-neutral-600');
+      });
+      btn.classList.add('bg-neutral-900', 'text-white');
+      btn.classList.remove('text-neutral-600');
+      if (view === 'overview') {
+        overviewView?.classList.remove('hidden');
+        assessmentView?.classList.add('hidden');
+        exitSwappedMode();
+      } else {
+        overviewView?.classList.add('hidden');
+        assessmentView?.classList.remove('hidden');
+      }
+    });
+  });
+
+  // ===== BACK BREADCRUMB =====
+  document.getElementById('back-to-overview')?.addEventListener('click', () => {
+    const overviewBtn = document.querySelector<HTMLButtonElement>('.toggle-btn[data-view="overview"]');
+    overviewBtn?.click();
+  });
+
+  // ===== OVERVIEW: ROLES MULTI-SELECT DROPDOWN =====
+  const rolesTrigger = document.getElementById('roles-trigger');
+  const rolesDropdown = document.getElementById('roles-dropdown');
+  const rolesLabel = document.getElementById('roles-label');
+  const rolesCbs = document.querySelectorAll<HTMLInputElement>('.roles-cb');
+  const employeeRows = document.querySelectorAll<HTMLTableRowElement>('.employee-row');
+  const roleNames: Record<string, string> = { entry: 'Entry Level', mid: 'Mid Level', senior: 'Senior Level' };
+
+  rolesTrigger?.addEventListener('click', () => {
+    rolesDropdown?.classList.toggle('hidden');
+  });
+
+  document.addEventListener('click', (e) => {
+    const wrapper = document.getElementById('roles-wrapper');
+    if (wrapper && !wrapper.contains(e.target as Node)) {
+      rolesDropdown?.classList.add('hidden');
+    }
+  });
+
+  function getActiveLevels(): Set<string> {
+    const active = new Set<string>();
+    rolesCbs.forEach(cb => { if (cb.checked) active.add(cb.dataset.level || ''); });
+    return active;
+  }
+
+  function filterByRoles() {
+    const active = getActiveLevels();
+    employeeRows.forEach(row => {
+      row.classList.toggle('hidden', !active.has(row.dataset.level || ''));
+    });
+    if (rolesLabel) {
+      if (active.size === rolesCbs.length) {
+        rolesLabel.textContent = 'All Levels';
+      } else if (active.size === 1) {
+        rolesLabel.textContent = roleNames[Array.from(active)[0]] || '';
+      } else {
+        rolesLabel.textContent = `${active.size} Selected`;
+      }
+    }
+  }
+
+  rolesCbs.forEach(cb => {
+    cb.addEventListener('change', () => {
+      if (getActiveLevels().size === 0) { cb.checked = true; return; }
+      filterByRoles();
+    });
+  });
+
+  filterByRoles();
+
+  // ===== OVERVIEW: SKILL SET MULTI-SELECT DROPDOWN =====
+  const skillSetTrigger = document.getElementById('skill-set-trigger');
+  const skillSetDropdown = document.getElementById('skill-set-dropdown');
+  const skillSetLabel = document.getElementById('skill-set-label');
+  const skillSetCbs = document.querySelectorAll<HTMLInputElement>('.skill-set-cb');
+  const groupHeaders = document.querySelectorAll<HTMLElement>('.group-header');
+  const skillCols = document.querySelectorAll<HTMLElement>('.skill-col');
+  const scoreCells = document.querySelectorAll<HTMLElement>('.score-cell');
+
+  // Toggle dropdown open/close
+  skillSetTrigger?.addEventListener('click', () => {
+    skillSetDropdown?.classList.toggle('hidden');
+  });
+
+  // Close dropdown when clicking outside
+  document.addEventListener('click', (e) => {
+    const wrapper = document.getElementById('skill-set-wrapper');
+    if (wrapper && !wrapper.contains(e.target as Node)) {
+      skillSetDropdown?.classList.add('hidden');
+    }
+  });
+
+  function getActiveGroups(): Set<string> {
+    const active = new Set<string>();
+    skillSetCbs.forEach(cb => { if (cb.checked) active.add(cb.dataset.group || ''); });
+    return active;
+  }
+
+  const overviewTable = document.getElementById('overview-table');
+
+  function filterBySkillSets() {
+    const active = getActiveGroups();
+    groupHeaders.forEach(h => h.classList.toggle('hidden', !active.has(h.dataset.group || '')));
+    skillCols.forEach(col => col.classList.toggle('hidden', !active.has(col.dataset.group || '')));
+    scoreCells.forEach(cell => cell.classList.toggle('hidden', !active.has(cell.dataset.group || '')));
+
+    // Switch to horizontal labels when 2 or fewer sets selected
+    overviewTable?.classList.toggle('horizontal-labels', active.size <= 2);
+
+    // Update trigger label
+    if (skillSetLabel) {
+      if (active.size === skillSetCbs.length) {
+        skillSetLabel.textContent = 'All Sets';
+      } else if (active.size === 1) {
+        skillSetLabel.textContent = Array.from(active)[0];
+      } else {
+        skillSetLabel.textContent = `${active.size} Selected`;
+      }
+    }
+  }
+
+  skillSetCbs.forEach(cb => {
+    cb.addEventListener('change', () => {
+      // Prevent unchecking the last one
+      const active = getActiveGroups();
+      if (active.size === 0) { cb.checked = true; return; }
+      filterBySkillSets();
+    });
+  });
+
+  // Initialize
+  filterBySkillSets();
+
+  // ===== CLEAR BUTTON =====
+  const clearBtn = document.getElementById('clear-btn');
+  clearBtn?.addEventListener('click', () => {
+    // Reset Skill Set to Finance only
+    skillSetCbs.forEach(cb => cb.checked = cb.dataset.group === 'Finance');
+    filterBySkillSets();
+
+    // Reset Roles to all checked
+    rolesCbs.forEach(cb => cb.checked = true);
+    filterByRoles();
+
+    // Reset Assessment searches
+    const skillsSearch = document.getElementById('skills-search') as HTMLInputElement | null;
+    const employeesSearch = document.getElementById('employees-search') as HTMLInputElement | null;
+    if (skillsSearch) { skillsSearch.value = ''; skillsSearch.dispatchEvent(new Event('input')); }
+    if (employeesSearch) { employeesSearch.value = ''; employeesSearch.dispatchEvent(new Event('input')); }
+
+    // Reset criteria checkboxes and progress
+    document.querySelectorAll<HTMLInputElement>('.criteria-cb').forEach(cb => cb.checked = false);
+    const checkAll = document.getElementById('check-all') as HTMLInputElement | null;
+    if (checkAll) checkAll.checked = false;
+    for (const lvl of [1, 2, 3]) checkedState[lvl] = new Array((criteriaData[lvl] || []).length).fill(false);
+    updateAllPcts();
+
+    // Reset assessment selection flow
+    skillItems.forEach(s => {
+      s.classList.remove('bg-neutral-100', 'border', 'border-neutral-400', 'font-medium', 'text-neutral-900');
+      s.classList.add('text-neutral-700');
+    });
+    employeesPanel?.classList.add('hidden');
+    assessmentPlaceholder?.classList.remove('hidden');
+    detailPanel?.classList.add('hidden');
+    assessmentEmpRows.forEach(r => {
+      r.classList.remove('ring-2', 'ring-neutral-900', 'bg-emerald-50', 'emp-hidden');
+      syncCheckbox(r as HTMLElement, false);
+    });
+    selectedEmpRows.clear();
+    exitSwappedMode();
+  });
+
+  // ===== ASSESSMENT: SKILLS SEARCH =====
+  const skillsSearch = document.getElementById('skills-search') as HTMLInputElement | null;
+  const skillItems = document.querySelectorAll<HTMLButtonElement>('.skill-item');
+  const skillGroupBlocks = document.querySelectorAll<HTMLElement>('.skill-group-block');
+
+  skillsSearch?.addEventListener('input', () => {
+    const query = skillsSearch.value.toLowerCase().trim();
+    skillGroupBlocks.forEach(block => {
+      const items = block.querySelectorAll<HTMLButtonElement>('.skill-item');
+      let anyVisible = false;
+      items.forEach(item => {
+        const name = (item.dataset.skill || '').toLowerCase();
+        const match = !query || name.includes(query);
+        item.classList.toggle('hidden', !match);
+        if (match) anyVisible = true;
+      });
+      // Hide group label if no skills match
+      const label = block.querySelector<HTMLElement>('.skill-group-label');
+      if (label) label.classList.toggle('hidden', !anyVisible);
+      block.classList.toggle('hidden', !anyVisible);
+    });
+  });
+
+  // ===== ASSESSMENT: SKILL SIDEBAR SELECTION =====
+  const detailName = document.getElementById('detail-skill-name');
+  const detailEmpName = document.getElementById('detail-emp-name');
+  const employeesPanel = document.getElementById('employees-panel');
+  const assessmentPlaceholder = document.getElementById('assessment-placeholder');
+  const detailPanel = document.getElementById('detail-panel');
+  const selectedEmpRows = new Set<HTMLElement>();
+  const targetLevelsData = (window as any).__targetLevels as number[];
+
+  function applyTargetColors(targetLevel: number) {
+    assessmentEmpRows.forEach(row => {
+      const badge = row.querySelector<HTMLElement>('.score-badge');
+      if (!badge) return;
+      const score = parseInt(badge.dataset.score || '0');
+      const meetsTarget = score >= targetLevel && score > 0;
+      // Reset badge colors
+      badge.className = badge.className.replace(/bg-\S+/g, '').replace(/text-\S+/g, '').trim();
+      badge.classList.add('score-badge', 'w-6', 'h-6', 'rounded-md', 'flex', 'items-center', 'justify-center', 'text-xs', 'font-semibold', 'shrink-0');
+      if (meetsTarget) {
+        badge.classList.add('bg-emerald-100', 'text-emerald-700');
+        row.classList.add('bg-emerald-50');
+      } else {
+        const colors = scoreClasses[score] || '';
+        colors.split(' ').forEach(c => badge.classList.add(c));
+        row.classList.remove('bg-emerald-50');
+      }
+    });
+  }
+
+  skillItems.forEach(item => {
+    item.addEventListener('click', () => {
+      // Highlight selected skill
+      skillItems.forEach(s => {
+        s.classList.remove('bg-neutral-100', 'border', 'border-neutral-400', 'font-medium', 'text-neutral-900');
+        s.classList.add('text-neutral-700');
+      });
+      item.classList.add('bg-neutral-100', 'border', 'border-neutral-400', 'font-medium', 'text-neutral-900');
+      item.classList.remove('text-neutral-700');
+      if (detailName) detailName.textContent = item.dataset.skill || '';
+
+      // Show employees panel, hide placeholder
+      employeesPanel?.classList.remove('hidden');
+      assessmentPlaceholder?.classList.add('hidden');
+
+      // Apply green coloring based on target level for this skill
+      const skillIdx = parseInt(item.dataset.skillIndex || '0');
+      const target = targetLevelsData[skillIdx] ?? 3;
+      applyTargetColors(target);
+
+      // In swapped mode (employee-first), keep employee selection and show detail
+      const isSwapped = document.getElementById('assessment-container')?.classList.contains('swapped-panels');
+      if (isSwapped) {
+        // Show detail panel and set level tab from selected employee's score for this skill
+        detailPanel?.classList.remove('hidden');
+        assessmentPlaceholder?.classList.add('hidden');
+        const selEmp = Array.from(selectedEmpRows)[0];
+        if (selEmp && detailEmpName) {
+          detailEmpName.textContent = selEmp.dataset.empName || '';
+        }
+        // Get score from the skill badge for this employee
+        const empData = employeesData.find(e => e.name.toLowerCase() === (selEmp?.dataset.name || ''));
+        const empScore = empData?.scores[skillIdx] ?? 1;
+        for (const lvl of [1, 2, 3]) {
+          const crit = criteriaData[lvl] || [];
+          checkedState[lvl] = new Array(crit.length).fill(lvl < empScore);
+        }
+        setActiveLevelTab(Math.max(1, empScore));
+      } else {
+        // Hide detail panel & deselect employees when switching skills
+        detailPanel?.classList.add('hidden');
+        assessmentEmpRows.forEach(r => {
+          r.classList.remove('ring-2', 'ring-neutral-900');
+          syncCheckbox(r as HTMLElement, false);
+        });
+        selectedEmpRows.clear();
+      }
+    });
+  });
+
+  // ===== ASSESSMENT: EMPLOYEES SEARCH =====
+  const employeesSearch = document.getElementById('employees-search') as HTMLInputElement | null;
+  const assessmentEmpRows = document.querySelectorAll<HTMLElement>('.assessment-emp-row');
+  const assessmentLevelGroups = document.querySelectorAll<HTMLElement>('.assessment-level-group');
+
+  employeesSearch?.addEventListener('input', () => {
+    const query = employeesSearch.value.toLowerCase().trim();
+    assessmentLevelGroups.forEach(group => {
+      const rows = group.querySelectorAll<HTMLElement>('.assessment-emp-row');
+      let anyVisible = false;
+      rows.forEach(row => {
+        const name = row.dataset.name || '';
+        const match = !query || name.includes(query);
+        row.classList.toggle('hidden', !match);
+        if (match) anyVisible = true;
+      });
+      group.classList.toggle('hidden', !anyVisible);
+    });
+  });
+
+  // ===== ASSESSMENT: EMPLOYEE CLICK → TOGGLE SELECTION (MULTI) =====
+  function updateDetailForSelection() {
+    if (selectedEmpRows.size > 0) {
+      detailPanel?.classList.remove('hidden');
+      const names = Array.from(selectedEmpRows).map(r => r.dataset.empName || '');
+      if (detailEmpName) {
+        detailEmpName.textContent = names.length === 1 ? names[0] : `${names.length} employees selected`;
+      }
+    } else {
+      detailPanel?.classList.add('hidden');
+    }
+  }
+
+  function syncCheckbox(el: HTMLElement, checked: boolean) {
+    const cb = el.querySelector<HTMLInputElement>('.emp-cb');
+    if (cb) cb.checked = checked;
+  }
+
+  assessmentEmpRows.forEach(row => {
+    row.addEventListener('click', () => {
+      const el = row as HTMLElement;
+      if (selectedEmpRows.has(el)) {
+        // Deselect
+        selectedEmpRows.delete(el);
+        el.classList.remove('ring-2', 'ring-neutral-900');
+        syncCheckbox(el, false);
+      } else {
+        // Select
+        selectedEmpRows.add(el);
+        el.classList.add('ring-2', 'ring-neutral-900');
+        syncCheckbox(el, true);
+        // Set level tab to this employee's current score
+        const badge = el.querySelector<HTMLElement>('.score-badge');
+        const score = parseInt(badge?.dataset.score || '1');
+
+        // Initialize checked state based on score:
+        // Levels below the score are fully completed (100%)
+        // Current level and above start unchecked (in progress)
+        for (const lvl of [1, 2, 3]) {
+          const criteria = criteriaData[lvl] || [];
+          if (lvl < score) {
+            checkedState[lvl] = new Array(criteria.length).fill(true);
+          } else {
+            checkedState[lvl] = new Array(criteria.length).fill(false);
+          }
+        }
+
+        setActiveLevelTab(Math.max(1, score));
+      }
+      updateDetailForSelection();
+    });
+  });
+
+  // ===== ASSESSMENT: CHECK ALL & CRITERIA =====
+  const checkAllCb = document.getElementById('check-all') as HTMLInputElement | null;
+  const criteriaList = document.getElementById('criteria-list');
+  const criteriaData = (window as any).__criteriaByLevel as Record<number, string[]>;
+  const criteriaTitleData = (window as any).__criteriaTitles as Record<number, string>;
+  const criteriaTitle = document.getElementById('criteria-title');
+  const levelPctEls = document.querySelectorAll<HTMLElement>('.level-pct');
+
+  // Track checked state per level: { 1: [false, false, ...], 2: [...], 3: [...] }
+  const checkedState: Record<number, boolean[]> = {
+    1: new Array((criteriaData[1] || []).length).fill(false),
+    2: new Array((criteriaData[2] || []).length).fill(false),
+    3: new Array((criteriaData[3] || []).length).fill(false),
+  };
+  let activeLevel = 2;
+
+  function updatePct(level: number) {
+    const states = checkedState[level] || [];
+    const total = states.length;
+    const checked = states.filter(Boolean).length;
+    const pct = total > 0 ? Math.round((checked / total) * 100) : 0;
+    levelPctEls.forEach(el => {
+      if (parseInt(el.dataset.pctLevel || '0') === level) {
+        el.textContent = `${pct}%`;
+        el.classList.toggle('text-emerald-600', pct === 100);
+        el.classList.toggle('text-neutral-400', pct !== 100);
+      }
+    });
+  }
+
+  function updateAllPcts() {
+    updatePct(1); updatePct(2); updatePct(3);
+  }
+
+  function saveCheckedState() {
+    if (!criteriaList) return;
+    const cbs = criteriaList.querySelectorAll<HTMLInputElement>('.criteria-cb');
+    checkedState[activeLevel] = Array.from(cbs).map(cb => cb.checked);
+  }
+
+  function renderCriteria(level: number) {
+    if (!criteriaList) return;
+    // Save current level state before switching
+    saveCheckedState();
+    activeLevel = level;
+
+    const items = criteriaData[level] || criteriaData[2];
+    if (criteriaTitle) criteriaTitle.textContent = criteriaTitleData[level] || 'Proficiency Criteria';
+    const states = checkedState[level] || [];
+    criteriaList.innerHTML = items.map((item, i) =>
+      `<label class="flex items-start gap-3 cursor-pointer group">
+        <input type="checkbox" class="criteria-cb w-4 h-4 mt-0.5 rounded border-neutral-300 text-neutral-900 focus:ring-neutral-900 accent-neutral-900 cursor-pointer" ${states[i] ? 'checked' : ''} />
+        <span class="text-sm text-neutral-700 group-hover:text-neutral-900">${item}</span>
+      </label>`
+    ).join('');
+    // Re-bind checkbox events
+    criteriaList.querySelectorAll<HTMLInputElement>('.criteria-cb').forEach((cb, i) => {
+      cb.addEventListener('change', () => {
+        checkedState[activeLevel][i] = cb.checked;
+        updatePct(activeLevel);
+        if (checkAllCb) {
+          checkAllCb.checked = Array.from(criteriaList.querySelectorAll<HTMLInputElement>('.criteria-cb')).every(c => c.checked);
+        }
+      });
+    });
+    if (checkAllCb) {
+      checkAllCb.checked = states.length > 0 && states.every(Boolean);
+    }
+    updateAllPcts();
+  }
+
+  checkAllCb?.addEventListener('change', () => {
+    if (!criteriaList) return;
+    criteriaList.querySelectorAll<HTMLInputElement>('.criteria-cb').forEach((cb, i) => {
+      cb.checked = checkAllCb.checked;
+      checkedState[activeLevel][i] = checkAllCb.checked;
+    });
+    updatePct(activeLevel);
+  });
+
+  // ===== ASSESSMENT: LEVEL TABS =====
+  const levelTabBtns = document.querySelectorAll<HTMLButtonElement>('.level-tab');
+
+  function setActiveLevelTab(level: number) {
+    levelTabBtns.forEach(t => {
+      const isActive = parseInt(t.dataset.level || '0') === level;
+      t.classList.toggle('font-medium', isActive);
+      t.classList.toggle('text-neutral-900', isActive);
+      t.classList.toggle('border-b-2', isActive);
+      t.classList.toggle('border-neutral-900', isActive);
+      t.classList.toggle('text-neutral-500', !isActive);
+    });
+    renderCriteria(level);
+  }
+
+  levelTabBtns.forEach(tab => {
+    tab.addEventListener('click', () => {
+      setActiveLevelTab(parseInt(tab.dataset.level || '1'));
+    });
+  });
+
+  // ===== ASSESSMENT: UP-LEVEL / DOWN-LEVEL =====
+  function updateScore(badge: HTMLElement, delta: number) {
+    let score = parseInt(badge.dataset.score || '0');
+    score = Math.max(0, Math.min(3, score + delta));
+    badge.dataset.score = String(score);
+    badge.textContent = String(score);
+    // Update color classes
+    badge.className = badge.className.replace(/bg-\S+/g, '').replace(/text-\S+/g, '').trim();
+    badge.classList.add('score-badge', 'w-6', 'h-6', 'rounded-md', 'flex', 'items-center', 'justify-center', 'text-xs', 'font-semibold', 'shrink-0');
+    (scoreClasses[score] || '').split(' ').forEach(c => badge.classList.add(c));
+  }
+
+  document.getElementById('btn-up-level')?.addEventListener('click', () => {
+    selectedEmpRows.forEach(row => {
+      const badge = row.querySelector<HTMLElement>('.score-badge');
+      if (badge) updateScore(badge, 1);
+    });
+  });
+
+  document.getElementById('btn-down-level')?.addEventListener('click', () => {
+    selectedEmpRows.forEach(row => {
+      const badge = row.querySelector<HTMLElement>('.score-badge');
+      if (badge) updateScore(badge, -1);
+    });
+  });
+
+  // ===== SKILL SCORE BADGES (for employee-first navigation) =====
+  const employeesData = (window as any).__employees as { initials: string; name: string; level: string; scores: number[] }[];
+
+  function addSkillScoreBadges(scores: number[]) {
+    skillItems.forEach(item => {
+      item.querySelector('.skill-score-badge')?.remove();
+      const idx = parseInt(item.dataset.skillIndex || '0');
+      const score = scores[idx] ?? 0;
+      const colors = scoreClasses[score] || '';
+      const badge = document.createElement('span');
+      badge.className = `skill-score-badge w-5 h-5 rounded-md flex items-center justify-center text-[10px] font-semibold shrink-0 ml-auto ${colors}`;
+      badge.textContent = String(score);
+      item.appendChild(badge);
+    });
+  }
+
+  function removeSkillScoreBadges() {
+    skillItems.forEach(item => item.querySelector('.skill-score-badge')?.remove());
+  }
+
+  function exitSwappedMode() {
+    document.getElementById('assessment-container')?.classList.remove('swapped-panels');
+    document.getElementById('back-breadcrumb')?.classList.add('hidden');
+    const pageTitle = document.getElementById('page-title');
+    if (pageTitle) pageTitle.textContent = 'Dashboard';
+    document.getElementById('filters-row')?.classList.remove('hidden');
+    document.getElementById('view-toggle')?.classList.remove('hidden');
+    removeSkillScoreBadges();
+    assessmentEmpRows.forEach(r => {
+      syncCheckbox(r as HTMLElement, false);
+      r.classList.remove('emp-hidden');
+    });
+  }
+
+  // ===== OVERVIEW: CLICKABLE EMPLOYEES → ASSESSMENT VIEW (SWAPPED) =====
+  function enterSwappedMode(empName: string) {
+    // Switch to assessment view
+    const assessmentBtn = document.querySelector<HTMLButtonElement>('.toggle-btn[data-view="assessment"]');
+    assessmentBtn?.click();
+
+    const container = document.getElementById('assessment-container');
+    container?.classList.add('swapped-panels');
+
+    // Update title and hide filters
+    const pageTitle = document.getElementById('page-title');
+    if (pageTitle) pageTitle.textContent = 'Browse Employee Skills';
+    document.getElementById('filters-row')?.classList.add('hidden');
+    document.getElementById('view-toggle')?.classList.add('hidden');
+
+    // Show employees panel & placeholder, hide detail
+    employeesPanel?.classList.remove('hidden');
+    assessmentPlaceholder?.classList.remove('hidden');
+    detailPanel?.classList.add('hidden');
+
+    // Show breadcrumb
+    const breadcrumb = document.getElementById('back-breadcrumb');
+    const breadcrumbName = document.getElementById('breadcrumb-emp-name');
+    breadcrumb?.classList.remove('hidden');
+
+    // Reset all selections
+    assessmentEmpRows.forEach(r => {
+      r.classList.remove('ring-2', 'ring-neutral-900');
+      syncCheckbox(r as HTMLElement, false);
+      r.classList.add('emp-hidden');
+    });
+    selectedEmpRows.clear();
+    skillItems.forEach(s => {
+      s.classList.remove('bg-neutral-100', 'border', 'border-neutral-400', 'font-medium', 'text-neutral-900');
+      s.classList.add('text-neutral-700');
+    });
+
+    // Show & select only the matching employee
+    const empRow = Array.from(assessmentEmpRows).find(r => (r.dataset.name || '') === empName);
+    if (breadcrumbName) breadcrumbName.textContent = empRow?.dataset.empName || empName;
+    if (empRow) {
+      empRow.classList.remove('emp-hidden');
+      selectedEmpRows.add(empRow);
+      syncCheckbox(empRow as HTMLElement, true);
+
+      // Initialize level progress based on score
+      const badge = empRow.querySelector<HTMLElement>('.score-badge');
+      const score = parseInt(badge?.dataset.score || '1');
+      for (const lvl of [1, 2, 3]) {
+        const criteria = criteriaData[lvl] || [];
+        checkedState[lvl] = new Array(criteria.length).fill(lvl < score);
+      }
+      updateAllPcts();
+    }
+
+    // Add score badges to each skill
+    const emp = employeesData.find(e => e.name.toLowerCase() === empName);
+    if (emp) addSkillScoreBadges(emp.scores);
+  }
+
+  document.querySelectorAll<HTMLElement>('.overview-emp-click').forEach(el => {
+    el.addEventListener('click', () => {
+      enterSwappedMode(el.dataset.empName || '');
+    });
+  });
+
+  // ===== OVERVIEW: CLICKABLE SKILLS → ASSESSMENT VIEW =====
+  document.querySelectorAll<HTMLElement>('.overview-skill-click').forEach(el => {
+    el.addEventListener('click', () => {
+      const skillName = el.dataset.skillName || '';
+
+      // Switch to assessment view (normal mode)
+      const assessmentBtn = document.querySelector<HTMLButtonElement>('.toggle-btn[data-view="assessment"]');
+      assessmentBtn?.click();
+      exitSwappedMode();
+
+      // Find and select the matching skill
+      const skillItem = Array.from(skillItems).find(s => s.dataset.skill === skillName);
+      skillItem?.click();
+    });
+  });
+
+  // ===== SKILLS PANEL RESIZE =====
+  const resizeHandle = document.getElementById('skills-resize-handle');
+  const skillsPanel = document.getElementById('skills-panel');
+
+  if (resizeHandle && skillsPanel) {
+    let isResizing = false;
+    let startX = 0;
+    let startWidth = 0;
+
+    resizeHandle.addEventListener('mousedown', (e) => {
+      isResizing = true;
+      startX = e.clientX;
+      startWidth = skillsPanel.offsetWidth;
+      document.body.style.cursor = 'col-resize';
+      document.body.style.userSelect = 'none';
+      e.preventDefault();
+    });
+
+    document.addEventListener('mousemove', (e) => {
+      if (!isResizing) return;
+      const delta = e.clientX - startX;
+      const newWidth = Math.max(180, Math.min(500, startWidth + delta));
+      skillsPanel.style.width = `${newWidth}px`;
+    });
+
+    document.addEventListener('mouseup', () => {
+      if (isResizing) {
+        isResizing = false;
+        document.body.style.cursor = '';
+        document.body.style.userSelect = '';
+      }
+    });
+  }
+</script>
