@@ -1,0 +1,619 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const documents = [
+  { name: 'Foundation Blueprint', category: 'Blueprints', originator: 'Tesla', status: 'Approved', project: 'Downtown Office Building', uploadedBy: 'Mike Anderson', date: '18 Jan 2026' },
+  { name: 'Building Permit 2026', category: 'Permits', originator: 'Zublin', status: 'Pending', project: 'Riverside Apartments', uploadedBy: 'Sarah Johnson', date: '20 Jan 2026' },
+  { name: 'Safety Inspection Report', category: 'Safety', originator: 'Strabag', status: 'Approved', project: 'Downtown Office Building', uploadedBy: 'John Smith', date: '17 Jan 2026' },
+  { name: 'Change Order CO-145', category: 'Change Orders', originator: 'Zublin', status: 'Pending', project: 'Riverside Apartments', uploadedBy: 'Mike Anderson', date: '16 Jan 2026' },
+  { name: 'Material Submittal - Concrete', category: 'Submittals', originator: 'Goldbeck', status: 'Approved', project: 'Downtown Office Building', uploadedBy: 'Bobby Wong', date: '15 Jan 2026' },
+  { name: 'Daily Progress Report Jan 14', category: 'Daily Reports', originator: 'Tesla', status: 'Approved', project: 'Riverside Apartments', uploadedBy: 'Sarah Johnson', date: '14 Jan 2026' },
+  { name: 'RFI - Structural Questions', category: 'RFI', originator: 'Tesla', status: 'Rejected', project: 'Downtown Office Building', uploadedBy: 'John Smith', date: '13 Jan 2026' },
+  { name: 'Contractor Agreement ABC', category: 'Contracts', originator: 'Max Boegl', status: 'Approved', project: 'Riverside Apartments', uploadedBy: 'Mike Anderson', date: '12 Jan 2026' },
+];
+
+const categories = [...new Set(documents.map(d => d.category))];
+const originators = [...new Set(documents.map(d => d.originator))];
+const projects = [...new Set(documents.map(d => d.project))];
+
+const statusColors: Record<string, string> = {
+  Approved: 'text-emerald-600',
+  Pending: 'text-orange-500',
+  Rejected: 'text-red-500',
+};
+
+// Detail metadata per document (for demo)
+const docDetails: Record<string, { status: string; uploadedBy: string; date: string; area: string; level: string; discipline: string; purpose: string; category: string; revisions: number; formats: { date: string; type: string }[] }> = {
+  'Foundation Blueprint': { status: 'In Review', uploadedBy: 'Tom Jonas (BOEGL)', date: 'Jan 24, 2026', area: 'NPM Building', level: '1st Floor', discipline: 'Architecture', purpose: 'For Construction', category: 'Drawing', revisions: 5, formats: [{ date: '25 Jan 2025', type: 'PDF' }, { date: '23 Jan 2025', type: 'DWG' }] },
+  'Building Permit 2026': { status: 'Pending', uploadedBy: 'Sarah Johnson (Zublin)', date: 'Jan 20, 2026', area: 'Riverside Apartments', level: 'All Floors', discipline: 'Legal', purpose: 'For Approval', category: 'Permit', revisions: 2, formats: [{ date: '20 Jan 2026', type: 'PDF' }] },
+  'Safety Inspection Report': { status: 'Approved', uploadedBy: 'John Smith (Strabag)', date: 'Jan 17, 2026', area: 'Downtown Office', level: 'Ground Floor', discipline: 'Safety', purpose: 'For Record', category: 'Report', revisions: 3, formats: [{ date: '17 Jan 2026', type: 'PDF' }, { date: '15 Jan 2026', type: 'PDF' }] },
+  'Change Order CO-145': { status: 'Pending', uploadedBy: 'Mike Anderson (Zublin)', date: 'Jan 16, 2026', area: 'Riverside Apartments', level: '3rd Floor', discipline: 'Structural', purpose: 'For Approval', category: 'Change Order', revisions: 1, formats: [{ date: '16 Jan 2026', type: 'PDF' }] },
+  'Material Submittal - Concrete': { status: 'Approved', uploadedBy: 'Bobby Wong (Goldbeck)', date: 'Jan 15, 2026', area: 'Downtown Office', level: 'Foundation', discipline: 'Materials', purpose: 'For Review', category: 'Submittal', revisions: 4, formats: [{ date: '15 Jan 2026', type: 'PDF' }, { date: '12 Jan 2026', type: 'PDF' }] },
+  'Daily Progress Report Jan 14': { status: 'Approved', uploadedBy: 'Sarah Johnson (Tesla)', date: 'Jan 14, 2026', area: 'Riverside Apartments', level: 'All Floors', discipline: 'General', purpose: 'For Record', category: 'Report', revisions: 1, formats: [{ date: '14 Jan 2026', type: 'PDF' }] },
+  'RFI - Structural Questions': { status: 'Rejected', uploadedBy: 'John Smith (Tesla)', date: 'Jan 13, 2026', area: 'Downtown Office', level: '2nd Floor', discipline: 'Structural', purpose: 'For Information', category: 'RFI', revisions: 2, formats: [{ date: '13 Jan 2026', type: 'PDF' }] },
+  'Contractor Agreement ABC': { status: 'Approved', uploadedBy: 'Mike Anderson (Max Boegl)', date: 'Jan 12, 2026', area: 'Riverside Apartments', level: 'N/A', discipline: 'Legal', purpose: 'For Execution', category: 'Contract', revisions: 3, formats: [{ date: '12 Jan 2026', type: 'PDF' }, { date: '10 Jan 2026', type: 'DOCX' }] },
+};
+
+const reviewLogs: Record<string, { name: string; role: string; status: string; date: string; comment?: string }[]> = {
+  'Foundation Blueprint': [
+    { name: 'Sarah Johnson', role: 'Project Manager', status: 'Approved', date: 'Jan 22, 2026', comment: 'All structural details verified.' },
+    { name: 'Mike Anderson', role: 'Lead Engineer', status: 'Approved', date: 'Jan 21, 2026', comment: 'Approved with minor annotations.' },
+    { name: 'Bobby Wong', role: 'QA Reviewer', status: 'Pending', date: 'Jan 24, 2026' },
+    { name: 'Tom Jonas', role: 'Architect', status: 'Approved', date: 'Jan 20, 2026', comment: 'Design meets all requirements.' },
+    { name: 'Lisa Chen', role: 'Safety Officer', status: 'Declined', date: 'Jan 19, 2026', comment: 'Fire exit route needs revision on level 2.' },
+  ],
+  'Building Permit 2026': [
+    { name: 'Sarah Johnson', role: 'Project Manager', status: 'Pending', date: 'Jan 20, 2026' },
+    { name: 'John Smith', role: 'Legal Advisor', status: 'Pending', date: 'Jan 20, 2026' },
+    { name: 'Mike Anderson', role: 'Lead Engineer', status: 'Approved', date: 'Jan 19, 2026', comment: 'Technical specs confirmed.' },
+  ],
+  'Safety Inspection Report': [
+    { name: 'Lisa Chen', role: 'Safety Officer', status: 'Approved', date: 'Jan 17, 2026', comment: 'Inspection passed all criteria.' },
+    { name: 'John Smith', role: 'Site Inspector', status: 'Approved', date: 'Jan 16, 2026' },
+    { name: 'Sarah Johnson', role: 'Project Manager', status: 'Approved', date: 'Jan 16, 2026' },
+  ],
+  'Change Order CO-145': [
+    { name: 'Mike Anderson', role: 'Lead Engineer', status: 'Approved', date: 'Jan 16, 2026', comment: 'Budget impact reviewed.' },
+    { name: 'Sarah Johnson', role: 'Project Manager', status: 'Pending', date: 'Jan 16, 2026' },
+    { name: 'Bobby Wong', role: 'Finance', status: 'Pending', date: 'Jan 16, 2026' },
+  ],
+  'Material Submittal - Concrete': [
+    { name: 'Bobby Wong', role: 'Materials Lead', status: 'Approved', date: 'Jan 15, 2026', comment: 'Grade and mix ratio confirmed.' },
+    { name: 'Tom Jonas', role: 'Architect', status: 'Approved', date: 'Jan 14, 2026' },
+    { name: 'Mike Anderson', role: 'Lead Engineer', status: 'Approved', date: 'Jan 13, 2026' },
+    { name: 'Lisa Chen', role: 'Safety Officer', status: 'Approved', date: 'Jan 13, 2026' },
+  ],
+  'Daily Progress Report Jan 14': [
+    { name: 'Sarah Johnson', role: 'Project Manager', status: 'Approved', date: 'Jan 14, 2026' },
+    { name: 'Mike Anderson', role: 'Lead Engineer', status: 'Approved', date: 'Jan 14, 2026' },
+  ],
+  'RFI - Structural Questions': [
+    { name: 'Tom Jonas', role: 'Architect', status: 'Declined', date: 'Jan 13, 2026', comment: 'Questions already addressed in Rev 2 drawings.' },
+    { name: 'Mike Anderson', role: 'Lead Engineer', status: 'Declined', date: 'Jan 12, 2026', comment: 'Duplicate of RFI-132.' },
+  ],
+  'Contractor Agreement ABC': [
+    { name: 'John Smith', role: 'Legal Advisor', status: 'Approved', date: 'Jan 12, 2026', comment: 'All clauses reviewed and accepted.' },
+    { name: 'Sarah Johnson', role: 'Project Manager', status: 'Approved', date: 'Jan 11, 2026' },
+    { name: 'Mike Anderson', role: 'Lead Engineer', status: 'Approved', date: 'Jan 10, 2026' },
+  ],
+};
+---
+
+<Layout title="Document List" bgColor="#FFFFFF">
+  <main class="min-h-screen">
+    <div id="doc-list-view" class="px-6 md:px-12 pt-6 md:pt-8">
+      <!-- Title row -->
+      <div class="flex items-center justify-between mb-8">
+        <h1 class="text-3xl md:text-4xl font-bold text-neutral-900">Document List</h1>
+        <button class="px-5 py-2.5 text-sm font-medium rounded-lg bg-neutral-900 text-white hover:bg-neutral-800 transition-colors">
+          Add Document
+        </button>
+      </div>
+
+      <!-- Filters row -->
+      <div class="flex flex-wrap items-end justify-between gap-4 mb-8">
+        <div class="flex items-end gap-6">
+          <!-- Category filter -->
+          <div class="relative" id="category-wrapper">
+            <label class="block text-xs text-neutral-500 mb-1.5">Category</label>
+            <button id="category-trigger" type="button" class="appearance-none bg-white border border-neutral-300 rounded-lg px-4 py-2.5 pr-10 text-sm text-neutral-400 min-w-[150px] cursor-pointer hover:border-neutral-400 focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:ring-offset-1 text-left relative">
+              <span id="category-label">Select</span>
+              <svg class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-500 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div id="category-dropdown" class="hidden absolute top-full left-0 mt-1 w-full bg-white border border-neutral-200 rounded-lg shadow-lg z-30 py-1 min-w-[180px]">
+              <button class="filter-option w-full text-left px-3 py-2 text-sm text-neutral-900 hover:bg-neutral-50" data-filter="category" data-value="">All</button>
+              {categories.map(c => (
+                <button class="filter-option w-full text-left px-3 py-2 text-sm text-neutral-900 hover:bg-neutral-50" data-filter="category" data-value={c}>{c}</button>
+              ))}
+            </div>
+          </div>
+
+          <!-- Originator filter -->
+          <div class="relative" id="originator-wrapper">
+            <label class="block text-xs text-neutral-500 mb-1.5">Originator</label>
+            <button id="originator-trigger" type="button" class="appearance-none bg-white border border-neutral-300 rounded-lg px-4 py-2.5 pr-10 text-sm text-neutral-400 min-w-[150px] cursor-pointer hover:border-neutral-400 focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:ring-offset-1 text-left relative">
+              <span id="originator-label">Select</span>
+              <svg class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-500 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div id="originator-dropdown" class="hidden absolute top-full left-0 mt-1 w-full bg-white border border-neutral-200 rounded-lg shadow-lg z-30 py-1 min-w-[180px]">
+              <button class="filter-option w-full text-left px-3 py-2 text-sm text-neutral-900 hover:bg-neutral-50" data-filter="originator" data-value="">All</button>
+              {originators.map(o => (
+                <button class="filter-option w-full text-left px-3 py-2 text-sm text-neutral-900 hover:bg-neutral-50" data-filter="originator" data-value={o}>{o}</button>
+              ))}
+            </div>
+          </div>
+
+          <!-- Project filter -->
+          <div class="relative" id="project-wrapper">
+            <label class="block text-xs text-neutral-500 mb-1.5">Project</label>
+            <button id="project-trigger" type="button" class="appearance-none bg-white border border-neutral-300 rounded-lg px-4 py-2.5 pr-10 text-sm text-neutral-400 min-w-[150px] cursor-pointer hover:border-neutral-400 focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:ring-offset-1 text-left relative">
+              <span id="project-label">Select</span>
+              <svg class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-500 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div id="project-dropdown" class="hidden absolute top-full left-0 mt-1 w-full bg-white border border-neutral-200 rounded-lg shadow-lg z-30 py-1 min-w-[220px]">
+              <button class="filter-option w-full text-left px-3 py-2 text-sm text-neutral-900 hover:bg-neutral-50" data-filter="project" data-value="">All</button>
+              {projects.map(p => (
+                <button class="filter-option w-full text-left px-3 py-2 text-sm text-neutral-900 hover:bg-neutral-50" data-filter="project" data-value={p}>{p}</button>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <!-- Right icons -->
+        <div class="flex items-center gap-3">
+          <button class="p-1.5 text-neutral-500 hover:text-neutral-900 transition-colors" title="Search">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          </button>
+          <button class="p-1.5 text-neutral-500 hover:text-neutral-900 transition-colors" title="Filter">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/></svg>
+          </button>
+          <button class="p-1.5 text-neutral-500 hover:text-neutral-900 transition-colors" title="Columns">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div class="overflow-x-auto">
+        <table class="w-full border-collapse">
+          <thead>
+            <tr class="border-b border-neutral-200">
+              <th class="w-10 px-3 py-3 text-left">
+                <input type="checkbox" id="select-all" class="w-4 h-4 rounded border-neutral-300 accent-neutral-900 cursor-pointer" />
+              </th>
+              <th class="px-3 py-3 text-left text-sm font-semibold text-neutral-900">Document Name</th>
+              <th class="px-3 py-3 text-left text-sm font-semibold text-neutral-900">Category</th>
+              <th class="px-3 py-3 text-left text-sm font-semibold text-neutral-900">Originator</th>
+              <th class="px-3 py-3 text-left text-sm font-semibold text-neutral-900">Status</th>
+              <th class="px-3 py-3 text-left text-sm font-semibold text-neutral-900">Project</th>
+              <th class="px-3 py-3 text-left text-sm font-semibold text-neutral-900">Uploaded By</th>
+              <th class="w-10 px-3 py-3"></th>
+            </tr>
+          </thead>
+          <tbody id="doc-tbody">
+            {documents.map(doc => (
+              <tr class="doc-row border-b border-neutral-100 hover:bg-neutral-50/50 transition-colors" data-category={doc.category} data-originator={doc.originator} data-project={doc.project}>
+                <td class="px-3 py-3.5">
+                  <input type="checkbox" class="doc-cb w-4 h-4 rounded border-neutral-300 accent-neutral-900 cursor-pointer" />
+                </td>
+                <td class="px-3 py-3.5 text-sm text-neutral-900">
+                  <button class="doc-name-link hover:underline underline-offset-2 text-left" data-doc-name={doc.name}>{doc.name}</button>
+                </td>
+                <td class="px-3 py-3.5 text-sm text-neutral-700">{doc.category}</td>
+                <td class="px-3 py-3.5 text-sm text-neutral-700">{doc.originator}</td>
+                <td class="px-3 py-3.5">
+                  <span class={`text-sm font-medium ${statusColors[doc.status]}`}>{doc.status}</span>
+                </td>
+                <td class="px-3 py-3.5 text-sm text-neutral-700">{doc.project}</td>
+                <td class="px-3 py-3.5 text-sm text-neutral-500">{doc.uploadedBy} on {doc.date}</td>
+                <td class="px-3 py-3.5 text-center">
+                  <button class="text-neutral-400 hover:text-neutral-700 transition-colors">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg>
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pagination -->
+      <div class="flex items-center justify-center gap-2 py-8">
+        <button class="flex items-center gap-1 text-sm text-neutral-400 cursor-not-allowed">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+          Previous
+        </button>
+        <button class="w-8 h-8 rounded-md flex items-center justify-center text-sm font-medium bg-neutral-900 text-white">1</button>
+        <button class="w-8 h-8 rounded-md flex items-center justify-center text-sm text-neutral-700 hover:bg-neutral-100">2</button>
+        <span class="text-sm text-neutral-400 px-1">...</span>
+        <button class="w-8 h-8 rounded-md flex items-center justify-center text-sm text-neutral-700 hover:bg-neutral-100">4</button>
+        <button class="flex items-center gap-1 text-sm text-neutral-700 hover:text-neutral-900">
+          Next
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- ==================== DOCUMENT DETAIL VIEW ==================== -->
+    <div id="doc-detail-view" class="hidden px-6 md:px-12 pt-6 md:pt-8">
+      <!-- Back breadcrumb -->
+      <div class="mb-2">
+        <button id="doc-back" class="flex items-center gap-1.5 text-sm text-neutral-500 hover:text-neutral-900 transition-colors">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+          <span>Documents</span>
+        </button>
+      </div>
+
+      <!-- Title row -->
+      <div class="flex items-center justify-between mb-1">
+        <h1 id="detail-doc-title" class="text-3xl md:text-4xl font-bold text-neutral-900"></h1>
+        <div class="flex items-center gap-2">
+          <button id="review-log-btn" class="px-4 py-2 text-sm font-medium rounded-lg border border-neutral-300 text-neutral-700 hover:bg-neutral-50 transition-colors">Review Log</button>
+          <button class="px-4 py-2 text-sm font-medium rounded-lg bg-neutral-900 text-white hover:bg-neutral-800 transition-colors">Edit</button>
+        </div>
+      </div>
+
+      <!-- Status & upload info -->
+      <div class="flex items-center gap-3 mb-8">
+        <span id="detail-status-badge" class="text-xs font-medium px-2 py-0.5 rounded-full"></span>
+        <span id="detail-upload-info" class="text-sm text-neutral-500"></span>
+      </div>
+
+      <!-- 3-column layout -->
+      <div class="flex gap-0 min-h-[500px]">
+        <!-- Left: Revisions -->
+        <div id="detail-revisions" class="w-[150px] shrink-0 pr-4">
+        </div>
+
+        <!-- Center: Document viewer -->
+        <div class="flex-1 border border-neutral-200 rounded-lg overflow-hidden">
+          <!-- Viewer toolbar -->
+          <div class="flex items-center justify-between px-4 py-2 border-b border-neutral-200 bg-white">
+            <div class="flex items-center gap-3">
+              <button class="text-neutral-500 hover:text-neutral-900">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+              </button>
+              <button class="text-neutral-500 hover:text-neutral-900">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+              </button>
+            </div>
+            <div class="flex items-center gap-2">
+              <button class="text-neutral-500 hover:text-neutral-900">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM13 10H7"/></svg>
+              </button>
+              <span class="text-sm text-neutral-600 font-medium">100%</span>
+              <button class="text-neutral-500 hover:text-neutral-900">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7"/></svg>
+              </button>
+              <div class="w-px h-5 bg-neutral-200 mx-1"></div>
+              <button class="text-neutral-500 hover:text-neutral-900">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg>
+              </button>
+            </div>
+          </div>
+          <!-- Viewer content -->
+          <div class="bg-neutral-200 overflow-auto" style="height: 420px;">
+            <img src="/documents/blueprint.svg" alt="Document preview" class="w-full h-full object-contain" />
+          </div>
+        </div>
+
+        <!-- Right: Metadata sidebar -->
+        <div class="w-[260px] shrink-0 pl-6">
+          <!-- Tabs -->
+          <div class="flex items-center gap-4 mb-6 border-b border-neutral-200">
+            <button class="detail-tab text-sm font-medium text-neutral-900 pb-2 border-b-2 border-neutral-900" data-tab="general">General</button>
+            <button class="detail-tab text-sm text-neutral-500 hover:text-neutral-700 pb-2" data-tab="linked">Linked</button>
+            <button class="detail-tab text-sm text-neutral-500 hover:text-neutral-700 pb-2" data-tab="activity">Activity Log</button>
+          </div>
+
+          <!-- General tab content -->
+          <div id="tab-general">
+            <p class="text-base font-semibold text-neutral-900 mb-4">Metadata</p>
+            <div class="flex flex-col gap-3" id="metadata-list">
+            </div>
+
+            <p class="text-base font-semibold text-neutral-900 mt-6 mb-4">Formats</p>
+            <div class="flex flex-col gap-2.5" id="formats-list">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== REVIEW LOG SIDE SHEET ==================== -->
+    <!-- Backdrop -->
+    <div id="review-backdrop" class="fixed inset-0 bg-black/30 z-40 hidden transition-opacity"></div>
+    <!-- Sheet -->
+    <div id="review-sheet" class="fixed top-0 right-0 h-full w-[420px] max-w-full bg-white shadow-2xl z-50 translate-x-full transition-transform duration-300 ease-in-out flex flex-col">
+      <!-- Header -->
+      <div class="flex items-center justify-between px-6 py-5 border-b border-neutral-200">
+        <h2 class="text-lg font-semibold text-neutral-900">Review Log</h2>
+        <button id="review-close" class="p-1 text-neutral-400 hover:text-neutral-900 transition-colors rounded-lg hover:bg-neutral-100">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <!-- Summary counts -->
+      <div class="flex items-center gap-4 px-6 py-4 border-b border-neutral-100">
+        <span id="review-count-approved" class="flex items-center gap-1.5 text-sm font-medium text-emerald-600">
+          <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+          <span>0</span> Approved
+        </span>
+        <span id="review-count-declined" class="flex items-center gap-1.5 text-sm font-medium text-red-500">
+          <span class="w-2 h-2 rounded-full bg-red-500"></span>
+          <span>0</span> Declined
+        </span>
+        <span id="review-count-pending" class="flex items-center gap-1.5 text-sm font-medium text-orange-500">
+          <span class="w-2 h-2 rounded-full bg-orange-400"></span>
+          <span>0</span> Pending
+        </span>
+      </div>
+
+      <!-- Reviewer list -->
+      <div id="review-list" class="flex-1 overflow-y-auto px-6 py-4">
+      </div>
+    </div>
+
+    <script is:inline define:vars={{ docDetails, reviewLogs }}>
+      window.__docDetails = docDetails;
+      window.__reviewLogs = reviewLogs;
+    </script>
+  </main>
+</Layout>
+
+<script>
+  // ===== DROPDOWN FILTERS =====
+  const filters: Record<string, string> = { category: '', originator: '', project: '' };
+
+  ['category', 'originator', 'project'].forEach(key => {
+    const trigger = document.getElementById(`${key}-trigger`);
+    const dropdown = document.getElementById(`${key}-dropdown`);
+    const label = document.getElementById(`${key}-label`);
+    const wrapper = document.getElementById(`${key}-wrapper`);
+
+    trigger?.addEventListener('click', () => dropdown?.classList.toggle('hidden'));
+
+    document.addEventListener('click', (e) => {
+      if (wrapper && !wrapper.contains(e.target as Node)) {
+        dropdown?.classList.add('hidden');
+      }
+    });
+  });
+
+  // Filter option clicks
+  document.querySelectorAll<HTMLButtonElement>('.filter-option').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const key = btn.dataset.filter || '';
+      const value = btn.dataset.value || '';
+      filters[key] = value;
+
+      const label = document.getElementById(`${key}-label`);
+      const trigger = document.getElementById(`${key}-trigger`);
+      if (label) {
+        label.textContent = value || 'Select';
+        trigger?.classList.toggle('text-neutral-400', !value);
+        trigger?.classList.toggle('text-neutral-900', !!value);
+      }
+
+      document.getElementById(`${key}-dropdown`)?.classList.add('hidden');
+      filterRows();
+    });
+  });
+
+  function filterRows() {
+    document.querySelectorAll<HTMLTableRowElement>('.doc-row').forEach(row => {
+      const matchCategory = !filters.category || row.dataset.category === filters.category;
+      const matchOriginator = !filters.originator || row.dataset.originator === filters.originator;
+      const matchProject = !filters.project || row.dataset.project === filters.project;
+      row.classList.toggle('hidden', !(matchCategory && matchOriginator && matchProject));
+    });
+  }
+
+  // ===== SELECT ALL CHECKBOX =====
+  const selectAll = document.getElementById('select-all') as HTMLInputElement | null;
+  const docCbs = document.querySelectorAll<HTMLInputElement>('.doc-cb');
+
+  selectAll?.addEventListener('change', () => {
+    docCbs.forEach(cb => {
+      const row = cb.closest('.doc-row');
+      if (row && !row.classList.contains('hidden')) {
+        cb.checked = selectAll.checked;
+      }
+    });
+  });
+
+  docCbs.forEach(cb => {
+    cb.addEventListener('change', () => {
+      if (selectAll) {
+        const visibleCbs = Array.from(docCbs).filter(c => !c.closest('.doc-row')?.classList.contains('hidden'));
+        selectAll.checked = visibleCbs.length > 0 && visibleCbs.every(c => c.checked);
+      }
+    });
+  });
+
+  // ===== DOCUMENT DETAIL VIEW =====
+  const listView = document.getElementById('doc-list-view');
+  const detailView = document.getElementById('doc-detail-view');
+  const docDetails = (window as any).__docDetails as Record<string, any>;
+  let currentDocName = '';
+
+  const statusBadgeColors: Record<string, { bg: string; text: string }> = {
+    'In Review': { bg: 'bg-blue-50', text: 'text-blue-600' },
+    'Approved': { bg: 'bg-emerald-50', text: 'text-emerald-600' },
+    'Pending': { bg: 'bg-orange-50', text: 'text-orange-500' },
+    'Rejected': { bg: 'bg-red-50', text: 'text-red-500' },
+  };
+
+  function openDocDetail(docName: string) {
+    const detail = docDetails[docName];
+    if (!detail) return;
+
+    currentDocName = docName;
+
+    // Hide list, show detail
+    listView?.classList.add('hidden');
+    detailView?.classList.remove('hidden');
+
+    // Title
+    const titleEl = document.getElementById('detail-doc-title');
+    if (titleEl) titleEl.textContent = docName;
+
+    // Status badge
+    const badge = document.getElementById('detail-status-badge');
+    if (badge) {
+      const colors = statusBadgeColors[detail.status] || { bg: 'bg-neutral-100', text: 'text-neutral-600' };
+      badge.className = `text-xs font-medium px-2 py-0.5 rounded-full ${colors.bg} ${colors.text}`;
+      badge.textContent = detail.status;
+    }
+
+    // Upload info
+    const uploadInfo = document.getElementById('detail-upload-info');
+    if (uploadInfo) uploadInfo.textContent = `Uploaded by ${detail.uploadedBy} on ${detail.date}`;
+
+    // Revisions
+    renderRevisions(detail.revisions);
+
+    // Metadata
+    renderMetadata(detail);
+
+    // Formats
+    renderFormats(detail.formats);
+
+    // Reset to General tab
+    activateTab('general');
+  }
+
+  function renderRevisions(count: number) {
+    const container = document.getElementById('detail-revisions');
+    if (!container) return;
+    container.innerHTML = '';
+
+    for (let i = 1; i <= count; i++) {
+      const isActive = i === count;
+      const btn = document.createElement('button');
+      btn.className = `revision-btn flex items-center gap-2 w-full px-3 py-2 rounded-lg text-sm transition-colors ${isActive ? 'bg-neutral-100 font-medium text-neutral-900' : 'text-neutral-600 hover:bg-neutral-50'}`;
+      btn.dataset.rev = String(i);
+      btn.innerHTML = `
+        <span class="w-2 h-2 rounded-full shrink-0 ${isActive ? 'bg-emerald-500' : 'bg-neutral-300'}"></span>
+        Rev ${i}
+      `;
+      btn.addEventListener('click', () => {
+        container.querySelectorAll('.revision-btn').forEach(b => {
+          b.className = 'revision-btn flex items-center gap-2 w-full px-3 py-2 rounded-lg text-sm transition-colors text-neutral-600 hover:bg-neutral-50';
+          b.querySelector('span')!.className = 'w-2 h-2 rounded-full shrink-0 bg-neutral-300';
+        });
+        btn.className = 'revision-btn flex items-center gap-2 w-full px-3 py-2 rounded-lg text-sm transition-colors bg-neutral-100 font-medium text-neutral-900';
+        btn.querySelector('span')!.className = 'w-2 h-2 rounded-full shrink-0 bg-emerald-500';
+      });
+      container.appendChild(btn);
+    }
+  }
+
+  function renderMetadata(detail: any) {
+    const list = document.getElementById('metadata-list');
+    if (!list) return;
+
+    const fields = [
+      { label: 'Area', value: detail.area },
+      { label: 'Level', value: detail.level },
+      { label: 'Discipline', value: detail.discipline },
+      { label: 'Purpose', value: detail.purpose },
+      { label: 'Category', value: detail.category },
+    ];
+
+    list.innerHTML = fields.map(f => `
+      <div class="flex items-center justify-between">
+        <span class="text-sm text-neutral-500">${f.label}</span>
+        <span class="text-sm text-neutral-900 font-medium">${f.value}</span>
+      </div>
+    `).join('');
+  }
+
+  function renderFormats(formats: { date: string; type: string }[]) {
+    const list = document.getElementById('formats-list');
+    if (!list) return;
+
+    list.innerHTML = formats.map(f => `
+      <div class="flex items-center justify-between py-1.5">
+        <span class="text-sm text-neutral-500">${f.date}</span>
+        <span class="text-xs font-medium px-2 py-0.5 rounded bg-neutral-100 text-neutral-700">${f.type}</span>
+      </div>
+    `).join('');
+  }
+
+  // Tab switching
+  function activateTab(tab: string) {
+    document.querySelectorAll<HTMLButtonElement>('.detail-tab').forEach(t => {
+      const isActive = t.dataset.tab === tab;
+      t.className = `detail-tab text-sm pb-2 ${isActive ? 'font-medium text-neutral-900 border-b-2 border-neutral-900' : 'text-neutral-500 hover:text-neutral-700'}`;
+    });
+
+    const general = document.getElementById('tab-general');
+    if (general) general.classList.toggle('hidden', tab !== 'general');
+  }
+
+  document.querySelectorAll<HTMLButtonElement>('.detail-tab').forEach(t => {
+    t.addEventListener('click', () => activateTab(t.dataset.tab || 'general'));
+  });
+
+  // Document name link clicks
+  document.querySelectorAll<HTMLButtonElement>('.doc-name-link').forEach(link => {
+    link.addEventListener('click', () => {
+      const docName = link.dataset.docName || '';
+      openDocDetail(docName);
+    });
+  });
+
+  // Back button
+  document.getElementById('doc-back')?.addEventListener('click', () => {
+    detailView?.classList.add('hidden');
+    listView?.classList.remove('hidden');
+  });
+
+  // ===== REVIEW LOG SIDE SHEET =====
+  const reviewLogs = (window as any).__reviewLogs as Record<string, any[]>;
+  const reviewSheet = document.getElementById('review-sheet');
+  const reviewBackdrop = document.getElementById('review-backdrop');
+
+  function openReviewSheet() {
+    const entries = reviewLogs[currentDocName] || [];
+
+    // Update counts
+    const approved = entries.filter((e: any) => e.status === 'Approved').length;
+    const declined = entries.filter((e: any) => e.status === 'Declined').length;
+    const pending = entries.filter((e: any) => e.status === 'Pending').length;
+
+    const countApproved = document.querySelector('#review-count-approved span:nth-child(2)');
+    const countDeclined = document.querySelector('#review-count-declined span:nth-child(2)');
+    const countPending = document.querySelector('#review-count-pending span:nth-child(2)');
+    if (countApproved) countApproved.textContent = String(approved);
+    if (countDeclined) countDeclined.textContent = String(declined);
+    if (countPending) countPending.textContent = String(pending);
+
+    // Render list
+    const list = document.getElementById('review-list');
+    if (list) {
+      const statusConfig: Record<string, { dot: string; badge: string; badgeBg: string }> = {
+        Approved: { dot: 'bg-emerald-500', badge: 'text-emerald-700', badgeBg: 'bg-emerald-50' },
+        Declined: { dot: 'bg-red-500', badge: 'text-red-700', badgeBg: 'bg-red-50' },
+        Pending: { dot: 'bg-orange-400', badge: 'text-orange-700', badgeBg: 'bg-orange-50' },
+      };
+
+      list.innerHTML = entries.map((e: any) => {
+        const cfg = statusConfig[e.status] || statusConfig.Pending;
+        const initials = e.name.split(' ').map((w: string) => w[0]).join('');
+        const colors = ['bg-violet-100 text-violet-700', 'bg-blue-100 text-blue-700', 'bg-amber-100 text-amber-700', 'bg-rose-100 text-rose-700', 'bg-teal-100 text-teal-700'];
+        const color = colors[e.name.length % colors.length];
+        return `
+          <div class="flex gap-3 py-4 border-b border-neutral-100 last:border-0">
+            <div class="w-9 h-9 rounded-full ${color} flex items-center justify-center text-xs font-semibold shrink-0">${initials}</div>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center justify-between mb-0.5">
+                <span class="text-sm font-medium text-neutral-900">${e.name}</span>
+                <span class="text-xs font-medium px-2 py-0.5 rounded-full ${cfg.badgeBg} ${cfg.badge}">${e.status}</span>
+              </div>
+              <p class="text-xs text-neutral-500 mb-1">${e.role} &middot; ${e.date}</p>
+              ${e.comment ? `<p class="text-sm text-neutral-600 mt-1.5">${e.comment}</p>` : ''}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Show
+    reviewBackdrop?.classList.remove('hidden');
+    requestAnimationFrame(() => {
+      reviewSheet?.classList.remove('translate-x-full');
+    });
+  }
+
+  function closeReviewSheet() {
+    reviewSheet?.classList.add('translate-x-full');
+    reviewBackdrop?.classList.add('hidden');
+  }
+
+  document.getElementById('review-log-btn')?.addEventListener('click', openReviewSheet);
+  document.getElementById('review-close')?.addEventListener('click', closeReviewSheet);
+  reviewBackdrop?.addEventListener('click', closeReviewSheet);
+
+</script>

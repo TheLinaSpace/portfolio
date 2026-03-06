@@ -1,0 +1,218 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" fill="none">
+  <!-- Background -->
+  <rect width="1200" height="800" fill="#f5f5f0"/>
+
+  <!-- Border frame -->
+  <rect x="30" y="30" width="1140" height="740" stroke="#2d2d2d" stroke-width="2" fill="none"/>
+  <rect x="35" y="35" width="1130" height="730" stroke="#2d2d2d" stroke-width="0.5" fill="none"/>
+
+  <!-- Title block (bottom right) -->
+  <rect x="880" y="640" width="285" height="125" stroke="#2d2d2d" stroke-width="1.5" fill="#fff"/>
+  <line x1="880" y1="670" x2="1165" y2="670" stroke="#2d2d2d" stroke-width="0.8"/>
+  <line x1="880" y1="700" x2="1165" y2="700" stroke="#2d2d2d" stroke-width="0.8"/>
+  <line x1="880" y1="730" x2="1165" y2="730" stroke="#2d2d2d" stroke-width="0.8"/>
+  <line x1="1020" y1="640" x2="1020" y2="730" stroke="#2d2d2d" stroke-width="0.8"/>
+
+  <!-- Title block text -->
+  <rect x="885" y="645" width="90" height="22" rx="2" fill="#444"/>
+  <text x="930" y="660" font-family="sans-serif" font-size="9" fill="#fff" text-anchor="middle" font-weight="bold">FONTAN</text>
+  <text x="930" y="690" font-family="sans-serif" font-size="7" fill="#666" text-anchor="middle">ARCHITECTURE</text>
+  <text x="1090" y="660" font-family="sans-serif" font-size="8" fill="#444" text-anchor="middle">FIRST FLOOR PLANS</text>
+  <text x="1090" y="690" font-family="sans-serif" font-size="7" fill="#888" text-anchor="middle">NPM BUILDING</text>
+  <text x="930" y="718" font-family="sans-serif" font-size="7" fill="#888" text-anchor="middle">SCALE: 1:100</text>
+  <text x="1090" y="718" font-family="sans-serif" font-size="7" fill="#888" text-anchor="middle">DATE: JAN 2026</text>
+  <text x="930" y="750" font-family="sans-serif" font-size="7" fill="#888" text-anchor="middle">DRAWN BY: TJ</text>
+  <text x="1090" y="750" font-family="sans-serif" font-size="7" fill="#888" text-anchor="middle">REV 5</text>
+  <text x="1020" y="755" font-family="sans-serif" font-size="14" fill="#333" text-anchor="middle" font-weight="bold">A101.00</text>
+
+  <!-- ======= UPPER FLOOR PLAN ======= -->
+  <!-- Outer walls -->
+  <rect x="80" y="70" width="700" height="260" stroke="#2d2d2d" stroke-width="3" fill="none"/>
+
+  <!-- Interior walls - horizontal -->
+  <line x1="80" y1="190" x2="380" y2="190" stroke="#2d2d2d" stroke-width="2.5"/>
+  <line x1="420" y1="190" x2="780" y2="190" stroke="#2d2d2d" stroke-width="2.5"/>
+
+  <!-- Interior walls - vertical -->
+  <line x1="280" y1="70" x2="280" y2="190" stroke="#2d2d2d" stroke-width="2.5"/>
+  <line x1="480" y1="70" x2="480" y2="190" stroke="#2d2d2d" stroke-width="2.5"/>
+  <line x1="620" y1="70" x2="620" y2="330" stroke="#2d2d2d" stroke-width="2.5"/>
+  <line x1="380" y1="190" x2="380" y2="330" stroke="#2d2d2d" stroke-width="2.5"/>
+
+  <!-- Door openings (gaps in walls) -->
+  <!-- Door arcs -->
+  <path d="M 380 190 Q 395 175 410 190" stroke="#999" stroke-width="0.8" fill="none"/>
+  <path d="M 280 140 Q 295 140 295 155" stroke="#999" stroke-width="0.8" fill="none"/>
+  <path d="M 480 140 Q 465 140 465 155" stroke="#999" stroke-width="0.8" fill="none"/>
+  <path d="M 380 260 Q 395 260 395 275" stroke="#999" stroke-width="0.8" fill="none"/>
+
+  <!-- Windows (double lines on exterior walls) -->
+  <line x1="130" y1="70" x2="220" y2="70" stroke="#2d2d2d" stroke-width="1"/>
+  <line x1="130" y1="67" x2="220" y2="67" stroke="#2d2d2d" stroke-width="1"/>
+  <line x1="330" y1="70" x2="430" y2="70" stroke="#2d2d2d" stroke-width="1"/>
+  <line x1="330" y1="67" x2="430" y2="67" stroke="#2d2d2d" stroke-width="1"/>
+  <line x1="530" y1="70" x2="590" y2="70" stroke="#2d2d2d" stroke-width="1"/>
+  <line x1="530" y1="67" x2="590" y2="67" stroke="#2d2d2d" stroke-width="1"/>
+
+  <!-- Room labels - upper -->
+  <text x="170" y="140" font-family="sans-serif" font-size="10" fill="#555" text-anchor="middle">OFFICE 1</text>
+  <text x="170" y="155" font-family="sans-serif" font-size="7" fill="#999" text-anchor="middle">18.5 m²</text>
+  <text x="380" y="140" font-family="sans-serif" font-size="10" fill="#555" text-anchor="middle">OFFICE 2</text>
+  <text x="380" y="155" font-family="sans-serif" font-size="7" fill="#999" text-anchor="middle">22.0 m²</text>
+  <text x="550" y="140" font-family="sans-serif" font-size="10" fill="#555" text-anchor="middle">MEETING</text>
+  <text x="550" y="155" font-family="sans-serif" font-size="7" fill="#999" text-anchor="middle">15.8 m²</text>
+
+  <!-- Room labels - lower -->
+  <text x="220" y="270" font-family="sans-serif" font-size="10" fill="#555" text-anchor="middle">LOBBY</text>
+  <text x="220" y="285" font-family="sans-serif" font-size="7" fill="#999" text-anchor="middle">32.4 m²</text>
+  <text x="500" y="270" font-family="sans-serif" font-size="10" fill="#555" text-anchor="middle">CORRIDOR</text>
+  <text x="700" y="200" font-family="sans-serif" font-size="10" fill="#555" text-anchor="middle">STAIR</text>
+  <text x="700" y="215" font-family="sans-serif" font-size="7" fill="#999" text-anchor="middle">12.0 m²</text>
+
+  <!-- Stairs representation -->
+  <line x1="640" y1="200" x2="760" y2="200" stroke="#aaa" stroke-width="0.5"/>
+  <line x1="640" y1="210" x2="760" y2="210" stroke="#aaa" stroke-width="0.5"/>
+  <line x1="640" y1="220" x2="760" y2="220" stroke="#aaa" stroke-width="0.5"/>
+  <line x1="640" y1="230" x2="760" y2="230" stroke="#aaa" stroke-width="0.5"/>
+  <line x1="640" y1="240" x2="760" y2="240" stroke="#aaa" stroke-width="0.5"/>
+  <line x1="640" y1="250" x2="760" y2="250" stroke="#aaa" stroke-width="0.5"/>
+  <line x1="640" y1="260" x2="760" y2="260" stroke="#aaa" stroke-width="0.5"/>
+  <line x1="640" y1="270" x2="760" y2="270" stroke="#aaa" stroke-width="0.5"/>
+  <line x1="640" y1="280" x2="760" y2="280" stroke="#aaa" stroke-width="0.5"/>
+  <line x1="640" y1="290" x2="760" y2="290" stroke="#aaa" stroke-width="0.5"/>
+  <line x1="640" y1="300" x2="760" y2="300" stroke="#aaa" stroke-width="0.5"/>
+
+  <!-- Dimension lines - upper plan -->
+  <line x1="80" y1="55" x2="280" y2="55" stroke="#888" stroke-width="0.5"/>
+  <line x1="80" y1="52" x2="80" y2="58" stroke="#888" stroke-width="0.5"/>
+  <line x1="280" y1="52" x2="280" y2="58" stroke="#888" stroke-width="0.5"/>
+  <text x="180" y="52" font-family="sans-serif" font-size="7" fill="#888" text-anchor="middle">5,000</text>
+
+  <line x1="280" y1="55" x2="480" y2="55" stroke="#888" stroke-width="0.5"/>
+  <line x1="480" y1="52" x2="480" y2="58" stroke="#888" stroke-width="0.5"/>
+  <text x="380" y="52" font-family="sans-serif" font-size="7" fill="#888" text-anchor="middle">5,000</text>
+
+  <line x1="480" y1="55" x2="620" y2="55" stroke="#888" stroke-width="0.5"/>
+  <line x1="620" y1="52" x2="620" y2="58" stroke="#888" stroke-width="0.5"/>
+  <text x="550" y="52" font-family="sans-serif" font-size="7" fill="#888" text-anchor="middle">3,500</text>
+
+  <line x1="620" y1="55" x2="780" y2="55" stroke="#888" stroke-width="0.5"/>
+  <line x1="780" y1="52" x2="780" y2="58" stroke="#888" stroke-width="0.5"/>
+  <text x="700" y="52" font-family="sans-serif" font-size="7" fill="#888" text-anchor="middle">4,000</text>
+
+  <!-- Vertical dimensions -->
+  <line x1="65" y1="70" x2="65" y2="190" stroke="#888" stroke-width="0.5"/>
+  <line x1="62" y1="70" x2="68" y2="70" stroke="#888" stroke-width="0.5"/>
+  <line x1="62" y1="190" x2="68" y2="190" stroke="#888" stroke-width="0.5"/>
+  <text x="58" y="135" font-family="sans-serif" font-size="7" fill="#888" text-anchor="middle" transform="rotate(-90,58,135)">3,000</text>
+
+  <line x1="65" y1="190" x2="65" y2="330" stroke="#888" stroke-width="0.5"/>
+  <line x1="62" y1="330" x2="68" y2="330" stroke="#888" stroke-width="0.5"/>
+  <text x="58" y="265" font-family="sans-serif" font-size="7" fill="#888" text-anchor="middle" transform="rotate(-90,58,265)">3,500</text>
+
+  <!-- Bathroom fixtures (small room) -->
+  <rect x="632" y="80" width="30" height="20" rx="2" stroke="#aaa" stroke-width="0.5" fill="none"/>
+  <circle cx="720" cy="95" r="10" stroke="#aaa" stroke-width="0.5" fill="none"/>
+  <rect x="740" y="80" width="25" height="15" rx="2" stroke="#aaa" stroke-width="0.5" fill="none"/>
+
+  <!-- ======= LOWER FLOOR PLAN ======= -->
+  <rect x="80" y="400" width="700" height="230" stroke="#2d2d2d" stroke-width="3" fill="none"/>
+
+  <!-- Interior walls -->
+  <line x1="80" y1="500" x2="320" y2="500" stroke="#2d2d2d" stroke-width="2.5"/>
+  <line x1="360" y1="500" x2="780" y2="500" stroke="#2d2d2d" stroke-width="2.5"/>
+  <line x1="320" y1="400" x2="320" y2="500" stroke="#2d2d2d" stroke-width="2.5"/>
+  <line x1="520" y1="400" x2="520" y2="500" stroke="#2d2d2d" stroke-width="2.5"/>
+  <line x1="520" y1="500" x2="520" y2="630" stroke="#2d2d2d" stroke-width="2.5"/>
+  <line x1="320" y1="500" x2="320" y2="630" stroke="#2d2d2d" stroke-width="2.5"/>
+  <line x1="620" y1="400" x2="620" y2="630" stroke="#2d2d2d" stroke-width="2.5"/>
+
+  <!-- Door arcs lower -->
+  <path d="M 320 500 Q 340 485 355 500" stroke="#999" stroke-width="0.8" fill="none"/>
+  <path d="M 320 560 Q 335 560 335 575" stroke="#999" stroke-width="0.8" fill="none"/>
+  <path d="M 520 560 Q 505 560 505 575" stroke="#999" stroke-width="0.8" fill="none"/>
+
+  <!-- Windows lower -->
+  <line x1="130" y1="400" x2="250" y2="400" stroke="#2d2d2d" stroke-width="1"/>
+  <line x1="130" y1="397" x2="250" y2="397" stroke="#2d2d2d" stroke-width="1"/>
+  <line x1="370" y1="400" x2="470" y2="400" stroke="#2d2d2d" stroke-width="1"/>
+  <line x1="370" y1="397" x2="470" y2="397" stroke="#2d2d2d" stroke-width="1"/>
+
+  <!-- Room labels - lower plan -->
+  <text x="190" y="460" font-family="sans-serif" font-size="10" fill="#555" text-anchor="middle">OFFICE 3</text>
+  <text x="190" y="475" font-family="sans-serif" font-size="7" fill="#999" text-anchor="middle">20.2 m²</text>
+  <text x="420" y="460" font-family="sans-serif" font-size="10" fill="#555" text-anchor="middle">OFFICE 4</text>
+  <text x="420" y="475" font-family="sans-serif" font-size="7" fill="#999" text-anchor="middle">22.0 m²</text>
+  <text x="570" y="460" font-family="sans-serif" font-size="10" fill="#555" text-anchor="middle">PANTRY</text>
+  <text x="570" y="475" font-family="sans-serif" font-size="7" fill="#999" text-anchor="middle">8.5 m²</text>
+  <text x="700" y="460" font-family="sans-serif" font-size="10" fill="#555" text-anchor="middle">STAIR</text>
+
+  <text x="190" y="575" font-family="sans-serif" font-size="10" fill="#555" text-anchor="middle">RECEPTION</text>
+  <text x="190" y="590" font-family="sans-serif" font-size="7" fill="#999" text-anchor="middle">25.0 m²</text>
+  <text x="420" y="575" font-family="sans-serif" font-size="10" fill="#555" text-anchor="middle">OPEN AREA</text>
+  <text x="420" y="590" font-family="sans-serif" font-size="7" fill="#999" text-anchor="middle">28.3 m²</text>
+  <text x="570" y="575" font-family="sans-serif" font-size="10" fill="#555" text-anchor="middle">STORAGE</text>
+  <text x="570" y="590" font-family="sans-serif" font-size="7" fill="#999" text-anchor="middle">9.0 m²</text>
+
+  <!-- Stairs lower -->
+  <line x1="640" y1="510" x2="760" y2="510" stroke="#aaa" stroke-width="0.5"/>
+  <line x1="640" y1="520" x2="760" y2="520" stroke="#aaa" stroke-width="0.5"/>
+  <line x1="640" y1="530" x2="760" y2="530" stroke="#aaa" stroke-width="0.5"/>
+  <line x1="640" y1="540" x2="760" y2="540" stroke="#aaa" stroke-width="0.5"/>
+  <line x1="640" y1="550" x2="760" y2="550" stroke="#aaa" stroke-width="0.5"/>
+  <line x1="640" y1="560" x2="760" y2="560" stroke="#aaa" stroke-width="0.5"/>
+  <line x1="640" y1="570" x2="760" y2="570" stroke="#aaa" stroke-width="0.5"/>
+  <line x1="640" y1="580" x2="760" y2="580" stroke="#aaa" stroke-width="0.5"/>
+  <line x1="640" y1="590" x2="760" y2="590" stroke="#aaa" stroke-width="0.5"/>
+  <line x1="640" y1="600" x2="760" y2="600" stroke="#aaa" stroke-width="0.5"/>
+  <line x1="640" y1="610" x2="760" y2="610" stroke="#aaa" stroke-width="0.5"/>
+
+  <!-- Dimension lines - lower plan -->
+  <line x1="80" y1="385" x2="320" y2="385" stroke="#888" stroke-width="0.5"/>
+  <line x1="80" y1="382" x2="80" y2="388" stroke="#888" stroke-width="0.5"/>
+  <line x1="320" y1="382" x2="320" y2="388" stroke="#888" stroke-width="0.5"/>
+  <text x="200" y="382" font-family="sans-serif" font-size="7" fill="#888" text-anchor="middle">6,000</text>
+
+  <line x1="320" y1="385" x2="520" y2="385" stroke="#888" stroke-width="0.5"/>
+  <line x1="520" y1="382" x2="520" y2="388" stroke="#888" stroke-width="0.5"/>
+  <text x="420" y="382" font-family="sans-serif" font-size="7" fill="#888" text-anchor="middle">5,000</text>
+
+  <!-- Grid reference markers -->
+  <circle cx="80" cy="45" r="8" stroke="#888" stroke-width="0.8" fill="none"/>
+  <text x="80" y="48" font-family="sans-serif" font-size="8" fill="#888" text-anchor="middle">A</text>
+  <circle cx="280" cy="45" r="8" stroke="#888" stroke-width="0.8" fill="none"/>
+  <text x="280" y="48" font-family="sans-serif" font-size="8" fill="#888" text-anchor="middle">B</text>
+  <circle cx="480" cy="45" r="8" stroke="#888" stroke-width="0.8" fill="none"/>
+  <text x="480" y="48" font-family="sans-serif" font-size="8" fill="#888" text-anchor="middle">C</text>
+  <circle cx="620" cy="45" r="8" stroke="#888" stroke-width="0.8" fill="none"/>
+  <text x="620" y="48" font-family="sans-serif" font-size="8" fill="#888" text-anchor="middle">D</text>
+  <circle cx="780" cy="45" r="8" stroke="#888" stroke-width="0.8" fill="none"/>
+  <text x="780" y="48" font-family="sans-serif" font-size="8" fill="#888" text-anchor="middle">E</text>
+
+  <!-- Submission stamp -->
+  <rect x="830" y="400" width="180" height="80" stroke="#888" stroke-width="0.8" fill="none"/>
+  <text x="920" y="425" font-family="sans-serif" font-size="8" fill="#666" text-anchor="middle" font-weight="bold">SUBMISSION TO THE</text>
+  <text x="920" y="440" font-family="sans-serif" font-size="8" fill="#666" text-anchor="middle" font-weight="bold">DEPARTMENT OF</text>
+  <text x="920" y="455" font-family="sans-serif" font-size="8" fill="#666" text-anchor="middle" font-weight="bold">BUILDINGS</text>
+  <text x="920" y="472" font-family="sans-serif" font-size="7" fill="#999" text-anchor="middle">JONES FONTAN AIA</text>
+
+  <!-- North arrow -->
+  <g transform="translate(860, 200)">
+    <line x1="0" y1="30" x2="0" y2="-30" stroke="#444" stroke-width="1.5"/>
+    <polygon points="0,-30 -6,-18 6,-18" fill="#444"/>
+    <text x="0" y="-35" font-family="sans-serif" font-size="9" fill="#444" text-anchor="middle" font-weight="bold">N</text>
+  </g>
+
+  <!-- Scale bar -->
+  <g transform="translate(840, 300)">
+    <line x1="0" y1="0" x2="100" y2="0" stroke="#444" stroke-width="1"/>
+    <line x1="0" y1="-3" x2="0" y2="3" stroke="#444" stroke-width="1"/>
+    <line x1="25" y1="-3" x2="25" y2="3" stroke="#444" stroke-width="1"/>
+    <line x1="50" y1="-3" x2="50" y2="3" stroke="#444" stroke-width="1"/>
+    <line x1="75" y1="-3" x2="75" y2="3" stroke="#444" stroke-width="1"/>
+    <line x1="100" y1="-3" x2="100" y2="3" stroke="#444" stroke-width="1"/>
+    <text x="0" y="12" font-family="sans-serif" font-size="6" fill="#888" text-anchor="middle">0</text>
+    <text x="50" y="12" font-family="sans-serif" font-size="6" fill="#888" text-anchor="middle">5m</text>
+    <text x="100" y="12" font-family="sans-serif" font-size="6" fill="#888" text-anchor="middle">10m</text>
+  </g>
+</svg>
