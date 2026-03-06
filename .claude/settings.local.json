@@ -9,7 +9,8 @@
       "mcp__figma-desktop__get_screenshot",
       "mcp__figma-desktop__get_metadata",
       "Bash(python:*)",
-      "Bash(npx astro:*)"
+      "Bash(npx astro:*)",
+      "WebFetch(domain:linacharara.com)"
     ]
   }
 }
