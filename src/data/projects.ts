@@ -12,6 +12,16 @@ export interface Project {
 
 export const projects: Project[] = [
   {
+    slug: 'alblatta',
+    title: "Al'Blatta",
+    description: "A south lebanese community where food, culture, and heritage is shared.",
+    body: '',
+    tags: [],
+    year: '2025',
+    defaultImage: '/Skills Default.png',
+    hoverImage: '/Skills Hover.png',
+  },
+  {
     slug: 'career-track',
     title: 'Career Track',
     description: 'Enabling managers and employees to track skill development and career advancement pathways.',
@@ -20,7 +30,7 @@ export const projects: Project[] = [
     year: '2024',
   },
   {
-    slug: 'project-one',
+    slug: 'construct',
     title: 'Construct',
     description: 'Construction management application.',
     body: `This is a longer write-up about the project. What was the problem? How did you approach it? What did you learn?
@@ -30,33 +40,6 @@ You can describe the architecture, interesting technical decisions, and any chal
     year: '2025',
     defaultImage: '/Construct default.PNG',
     hoverImage: '/Construct Hover.PNG',
-    links: [
-      { label: 'GitHub', href: 'https://github.com' },
-      { label: 'Live', href: 'https://example.com' },
-    ],
-  },
-  {
-    slug: 'project-two',
-    title: 'Project Two',
-    description: 'A short description of what this project does and the problem it solves.',
-    body: `This is a longer write-up about the project. What was the problem? How did you approach it? What did you learn?
-
-You can describe the architecture, interesting technical decisions, and any challenges you faced along the way.`,
-    tags: ['Python', 'FastAPI', 'PostgreSQL'],
-    year: '2024',
-    links: [
-      { label: 'GitHub', href: 'https://github.com' },
-    ],
-  },
-  {
-    slug: 'project-three',
-    title: 'Project Three',
-    description: 'A short description of what this project does and the problem it solves.',
-    body: `This is a longer write-up about the project. What was the problem? How did you approach it? What did you learn?
-
-You can describe the architecture, interesting technical decisions, and any challenges you faced along the way.`,
-    tags: ['Astro', 'Tailwind'],
-    year: '2024',
     links: [
       { label: 'GitHub', href: 'https://github.com' },
       { label: 'Live', href: 'https://example.com' },

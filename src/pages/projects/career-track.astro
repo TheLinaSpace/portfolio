@@ -15,7 +15,11 @@ import Layout from '../../layouts/Layout.astro';
     <header class="mb-10">
       <div class="flex items-start justify-between gap-4 mb-2">
         <h1 class="font-semibold text-neutral-900" style="font-size: 32px;">Career Track</h1>
-        <span class="text-neutral-700 text-sm shrink-0 mt-1">2024</span>
+        <div class="flex items-center gap-3 shrink-0 mt-1">
+          <a href="https://linacharara.com/dashboard" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-sm text-neutral-700 border border-neutral-300 rounded px-3 py-1 hover:bg-neutral-100 transition-colors">
+            View Prototype →
+          </a>
+        </div>
       </div>
       <p class="text-xs text-neutral-500 italic mb-8">Real product modified for confidentiality using Figma's design system.</p>
       <p class="text-neutral-700 leading-relaxed">
@@ -39,27 +43,9 @@ import Layout from '../../layouts/Layout.astro';
       </div>
     </dl>
 
+    <div class="mt-10"></div>
 
-    <hr class="border-neutral-200 mb-10" />
-
-    <!-- Challenge -->
-    <section class="mb-10">
-      <h2 class="font-semibold text-neutral-900 mb-3" style="font-size: 20px;">Challenge</h2>
-      <p class="text-neutral-700 text-sm leading-7">
-        "Design a new product based on the collected user problems in the company."
-      </p>
-    </section>
-
-    <!-- Design Strategy -->
-    <section class="mb-10">
-      <h2 class="font-semibold text-neutral-900 mb-3" style="font-size: 20px;">Design Strategy</h2>
-      <p class="text-neutral-700 text-sm leading-7 mb-6">
-        There is never a strict design process to follow. The design strategy would change and adapt depending on the project scope, user problem, business requirements, and the team.
-      </p>
-      <img src="/career-track/process.jpg" alt="Design process" class="w-full" />
-    </section>
-
-    <!-- User Problems -->
+<!-- User Problems -->
     <section class="mb-10">
       <h2 class="font-semibold text-neutral-900 mb-4" style="font-size: 20px;">User Problems</h2>
       <div class="flex flex-col gap-5">
@@ -72,6 +58,15 @@ import Layout from '../../layouts/Layout.astro';
           <p class="text-neutral-700 text-sm leading-7">Absence of unified documentation tracking employee skill progression and career development guidance.</p>
         </div>
       </div>
+    </section>
+
+    <!-- Design Strategy -->
+    <section class="mb-10">
+      <h2 class="font-semibold text-neutral-900 mb-3" style="font-size: 20px;">Design Strategy</h2>
+      <p class="text-neutral-700 text-sm leading-7 mb-6">
+        There is never a strict design process to follow. The design strategy would change and adapt depending on the project scope, user problem, business requirements, and the team.
+      </p>
+      <img src="/career-track/process.jpg" alt="Design process" class="w-full" />
     </section>
 
     <!-- Product Background -->
@@ -106,18 +101,20 @@ import Layout from '../../layouts/Layout.astro';
         <h3 class="text-sm font-medium text-neutral-900 mb-2">Assignment Module</h3>
         <p class="text-neutral-700 text-sm leading-7 mb-5">The setup interface for the dashboard experience where skill sets combining roles and skills are established for teams or role groups.</p>
         <img src="/career-track/assignment-page.jpg" alt="Assignment page" class="w-full mb-4" />
-        <img src="/career-track/in-between-1.jpg" alt="Assignment module evolution" class="w-full" />
+        <img src="/career-track/in-between-1.jpg" alt="Assignment module evolution" class="w-full mb-4" />
+        <video src="/career-track/Assignment.mp4" autoplay loop muted playsinline class="w-full"></video>
       </div>
 
       <!-- Dashboard -->
       <div class="mb-8">
         <h3 class="text-sm font-medium text-neutral-900 mb-2">Dashboard</h3>
         <p class="text-neutral-700 text-sm leading-7 mb-5">The most-used module accessible to admins, managers, and trainers. Functions as employee qualification documentation enabling manager task assignment based on demonstrated competencies. Designs evolved through user testing and real-world usage patterns.</p>
+        <img src="/career-track/in-between-3.jpg" alt="Dashboard final" class="w-full mb-4" />
         <img src="/career-track/dash-1.jpg" alt="Dashboard" class="w-full mb-4" />
         <img src="/career-track/in-between-4.jpg" alt="Dashboard evolution" class="w-full mb-4" />
         <img src="/career-track/dash-2.png" alt="Dashboard refined" class="w-full mb-4" />
         <img src="/career-track/in-between-5.jpg" alt="Dashboard iteration" class="w-full mb-4" />
-        <img src="/career-track/in-between-3.jpg" alt="Dashboard final" class="w-full" />
+        <video src="/career-track/Dashb.mp4" autoplay loop muted playsinline class="w-full"></video>
       </div>
     </section>
 
@@ -132,18 +129,18 @@ import Layout from '../../layouts/Layout.astro';
 
     <!-- Key Learnings -->
     <section class="mb-12">
-      <h2 class="font-semibold text-neutral-900 mb-5" style="font-size: 20px;">Key Learnings</h2>
+      <h2 class="font-semibold text-neutral-900 mb-5" style="font-size: 20px;">Impact</h2>
       <ol class="flex flex-col gap-5">
         <li class="flex gap-4">
-          <span class="text-xs text-neutral-400 mt-0.5 shrink-0 font-[Chillax,sans-serif]">01</span>
+          <span class="text-xs text-neutral-400 shrink-0 font-[Chillax,sans-serif] leading-7">01</span>
           <p class="text-neutral-700 text-sm leading-7">Products continuously evolve through user interaction and feedback — no final design exists.</p>
         </li>
         <li class="flex gap-4">
-          <span class="text-xs text-neutral-400 mt-0.5 shrink-0 font-[Chillax,sans-serif]">02</span>
+          <span class="text-xs text-neutral-400 shrink-0 font-[Chillax,sans-serif] leading-7">02</span>
           <p class="text-neutral-700 text-sm leading-7">Business requirements must be grounded in actual user problems rather than assumptions.</p>
         </li>
         <li class="flex gap-4">
-          <span class="text-xs text-neutral-400 mt-0.5 shrink-0 font-[Chillax,sans-serif]">03</span>
+          <span class="text-xs text-neutral-400 shrink-0 font-[Chillax,sans-serif] leading-7">03</span>
           <p class="text-neutral-700 text-sm leading-7">Exceptional UX reflects strong team collaboration across product, design, and engineering.</p>
         </li>
       </ol>
