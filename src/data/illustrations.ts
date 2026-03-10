@@ -25,6 +25,8 @@ export const illustrations: Illustration[] = [
     slug: 'em-kees',
     title: 'Em Kees',
     description: 'Concept art for a Lebanese folkloric character and her haunted Beiruti house.',
+    defaultImage: '/em kees default.png',
+    hoverImage: '/em kees hover.png',
   },
   {
     slug: 'leila',

@@ -15,7 +15,7 @@ import Layout from '../../layouts/Layout.astro';
     <header class="mb-10">
       <div class="flex items-start justify-between gap-4 mb-2">
         <h1 class="font-semibold text-neutral-900" style="font-size: 32px;">Al'Blatta</h1>
-        <a href="https://www.alblatta.com" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-sm text-neutral-700 border border-neutral-300 rounded px-3 py-1 hover:bg-neutral-100 transition-colors shrink-0 mt-1">
+        <a href="https://www.alblatta.com" target="_blank" rel="noopener noreferrer" class="visit-btn inline-flex items-center gap-1.5 text-sm text-neutral-700 border border-neutral-300 rounded px-3 py-1 transition-colors shrink-0 mt-1">
           Visit Site →
         </a>
       </div>
@@ -34,13 +34,127 @@ import Layout from '../../layouts/Layout.astro';
         <dt class="text-xs text-neutral-500 mb-1">Timeline</dt>
         <dd class="text-neutral-900">2026 — Ongoing</dd>
       </div>
-      <div>
-        <dt class="text-xs text-neutral-500 mb-1">Team</dt>
-        <dd class="text-neutral-900">—</dd>
-      </div>
     </dl>
 
     <div class="mt-10"></div>
 
+    <!-- User Problem -->
+    <section class="mb-10">
+      <h2 class="font-semibold text-neutral-900 mb-4" style="font-size: 20px;">User Problem</h2>
+      <p class="text-neutral-700 text-sm leading-7">There is no recorded archive of South Lebanese native food. Traditional dishes from the south are frequently misattributed to Lebanese cuisine broadly, erasing the distinct culinary identity of the region. Without a dedicated space, recipes passed down through generations risk being lost, undocumented, uncredited, and forgotten.</p>
+    </section>
+
+    <!-- User Types -->
+    <section class="mb-10">
+      <h2 class="font-semibold text-neutral-900 mb-4" style="font-size: 20px;">User Types</h2>
+      <div class="flex flex-col gap-5">
+        <div>
+          <p class="text-xs text-neutral-500 mb-1.5">1. Recipe Submitter</p>
+          <p class="text-neutral-700 text-sm leading-7">A South Lebanese woman, aged 40 and above, who submits a recipe along with the story behind it.</p>
+        </div>
+        <div>
+          <p class="text-xs text-neutral-500 mb-1.5">2. Storyteller</p>
+          <p class="text-neutral-700 text-sm leading-7">Any individual who would like to share a blog post about their experience in South Lebanon and the role food plays in it.</p>
+        </div>
+        <div>
+          <p class="text-xs text-neutral-500 mb-1.5">3. Browser</p>
+          <p class="text-neutral-700 text-sm leading-7">Users who discover and read recipes and stories on the platform.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Context -->
+    <section class="mb-10">
+      <h2 class="font-semibold text-neutral-900 mb-4" style="font-size: 20px;">Context</h2>
+      <p class="text-neutral-700 text-sm leading-7 mb-4">The South of Lebanon comprises 7 distinctive districts, each carrying a long and layered history. Over centuries, many empires settled in the region, leaving behind a cuisine that is as diverse as it is rich. Despite its small geographic footprint, the south offers an abundance of remarkable dishes that deserve to be known.</p>
+      <p class="text-neutral-700 text-sm leading-7 mb-4">South Lebanese cuisine is defined by its closeness to the land. Recipes are built around ingredients that grow locally, and the food itself has been shaped over time by the climate, regional conflicts, and trade routes passing through the area.</p>
+      <p class="text-neutral-700 text-sm leading-7 mb-4">While the starting point was a digital recipe-sharing platform, Al'Blatta was built to be something more. It is a community — one that connects South Lebanese individuals first, and the wider world second.</p>
+      <p class="text-neutral-700 text-sm leading-7">Food has always brought people together. We cook together and tell stories. We eat together and tell more. These tables, dishes, and tastes carry not only the memories of the people around them, but the memory of an entire region.</p>
+    </section>
+
+    <!-- Design -->
+    <section class="mb-10">
+      <h2 class="font-semibold text-neutral-900 mb-6" style="font-size: 20px;">Design</h2>
+
+      <!-- Recipes and Homepage -->
+      <div class="mb-8">
+        <h3 class="text-sm font-medium text-neutral-900 mb-2">1. Recipes and Homepage</h3>
+        <p class="text-neutral-700 text-sm leading-7 mb-4">The homepage currently displays recipes with the ability to search. Each recipe is submitted by a South Lebanese woman.</p>
+        <p class="text-neutral-700 text-sm leading-7 mb-4">The first design iteration focuses on full recipe visibility, as recipes are the core component of the product. As the website evolves and its user base grows, future iterations will introduce greater visibility for stories, saving features, and recent blog posts.</p>
+        <img src="/Al Blatta/Homepage.jpg" alt="Homepage" class="w-full mb-4" />
+        <img src="/Al Blatta/Homepage 2.jpg" alt="Homepage 2" class="w-full mb-8" />
+
+        <h4 class="text-sm font-medium text-neutral-900 mb-2">Recipe Page</h4>
+        <p class="text-neutral-700 text-sm leading-7 mb-4">The recipe page includes three parts: the recipe instructions, Story Time, and other recipes.</p>
+        <img src="/Al Blatta/Recipe Page.jpg" alt="Recipe Page" class="w-full mb-4" />
+        <p class="text-neutral-700 text-sm leading-7 mb-4">Story Time sheds more light on the recipe submitter, giving women aged 40 and above a space to express themselves and share their experiences, a space they have never had before.</p>
+        <img src="/Al Blatta/story time.png" alt="Story Time" class="w-full" />
+      </div>
+
+      <!-- Our Story -->
+      <div class="mb-8">
+        <h3 class="text-sm font-medium text-neutral-900 mb-2">2. Our Story</h3>
+        <p class="text-neutral-700 text-sm leading-7 mb-4">The Our Story section introduces the purpose of the product and why it matters.</p>
+        <img src="/Al Blatta/our story.jpg" alt="Our Story" class="w-full" />
+      </div>
+
+      <!-- Our South -->
+      <div class="mb-8">
+        <h3 class="text-sm font-medium text-neutral-900 mb-2">3. Our South</h3>
+        <p class="text-neutral-700 text-sm leading-7 mb-4">As food brings people together, this page is dedicated to sharing blog posts about the south. Currently, blogs are submitted via email, but as the product grows, a dedicated space for submitting both blogs and recipes directly within the platform will be introduced.</p>
+        <img src="/Al Blatta/blogs page.png" alt="Blogs Page" class="w-full mb-4" />
+        <img src="/Al Blatta/blog detail 1.png" alt="Blog Detail 1" class="w-full" />
+        <img src="/Al Blatta/blog detail 2.png" alt="Blog Detail 2" class="w-full" />
+      </div>
+
+    </section>
+
+    <!-- User Testing -->
+    <section class="mb-10">
+      <h2 class="font-semibold text-neutral-900 mb-4" style="font-size: 20px;">User Testing</h2>
+      <p class="text-neutral-700 text-sm leading-7 mb-5">This product is new and still under user testing, with the goal of iterating on current features and their usability. I assembled a small group of users who will use the product for two weeks. The users are from the following groups:</p>
+      <div class="flex flex-col gap-5">
+        <div>
+          <p class="text-xs text-neutral-500 mb-1.5">1. Recipe Submitters</p>
+          <p class="text-neutral-700 text-sm leading-7">The goal is to connect with more women and encourage them to submit their recipes to the platform.</p>
+        </div>
+        <div>
+          <p class="text-xs text-neutral-500 mb-1.5">2. Recipe Viewers</p>
+          <p class="text-neutral-700 text-sm leading-7">Users who will use the recipe page and try the recipes, helping identify how to make the experience more digestible and readable.</p>
+        </div>
+        <div>
+          <p class="text-xs text-neutral-500 mb-1.5">3. Blog Writers</p>
+          <p class="text-neutral-700 text-sm leading-7">Individuals who will submit stories to be featured in the Our South section.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Impact -->
+    <section class="mb-12">
+      <h2 class="font-semibold text-neutral-900 mb-5" style="font-size: 20px;">Impact</h2>
+      <ol class="flex flex-col gap-5">
+        <li class="flex gap-4">
+          <span class="text-xs text-neutral-400 shrink-0 font-[Chillax,sans-serif] leading-7">01</span>
+          <p class="text-neutral-700 text-sm leading-7">Al'Blatta creates the first dedicated digital archive of South Lebanese cuisine, preserving recipes that have been passed down through generations and were at risk of being lost.</p>
+        </li>
+        <li class="flex gap-4">
+          <span class="text-xs text-neutral-400 shrink-0 font-[Chillax,sans-serif] leading-7">02</span>
+          <p class="text-neutral-700 text-sm leading-7">It gives South Lebanese women aged 40 and above a platform to share their recipes and stories, offering a space for self-expression that many of them have never had access to before.</p>
+        </li>
+        <li class="flex gap-4">
+          <span class="text-xs text-neutral-400 shrink-0 font-[Chillax,sans-serif] leading-7">03</span>
+          <p class="text-neutral-700 text-sm leading-7">By building a community around food, Al'Blatta connects South Lebanese individuals to their heritage and opens that connection to the wider world, giving the region's distinct culinary identity the recognition it deserves.</p>
+        </li>
+      </ol>
+    </section>
+
   </main>
 </Layout>
+
+<style>
+  .visit-btn:hover {
+    background-color: #B1B6DF;
+    color: #000;
+    font-weight: 600;
+  }
+</style>

@@ -15,9 +15,12 @@ import Layout from '../../layouts/Layout.astro';
     <header class="mb-10">
       <div class="flex items-start justify-between gap-4 mb-2">
         <h1 class="font-semibold text-neutral-900" style="font-size: 32px;">Construct</h1>
+        <a href="https://linacharara.com/documents" target="_blank" rel="noopener noreferrer" class="visit-btn inline-flex items-center gap-1.5 text-sm text-neutral-700 border border-neutral-300 rounded px-3 py-1 transition-colors shrink-0 mt-1">
+          View Prototype →
+        </a>
       </div>
       <p class="text-neutral-700 leading-relaxed">
-        Construction management application.
+        Construction management application for a company that specialises in constructing factories.
       </p>
     </header>
 
@@ -33,7 +36,7 @@ import Layout from '../../layouts/Layout.astro';
       </div>
       <div>
         <dt class="text-xs text-neutral-500 mb-1">Team</dt>
-        <dd class="text-neutral-900">—</dd>
+        <dd class="text-neutral-900">Product Managers, Software Engineers, UX/UI Designer</dd>
       </div>
     </dl>
 
@@ -44,8 +47,24 @@ import Layout from '../../layouts/Layout.astro';
       <h2 class="font-semibold text-neutral-900 mb-4" style="font-size: 20px;">User Problems</h2>
       <div class="flex flex-col gap-5">
         <div>
-          <p class="text-xs text-neutral-500 mb-1.5">User type</p>
-          <p class="text-neutral-700 text-sm leading-7">User problem description.</p>
+          <p class="text-xs text-neutral-500 mb-1.5">Procurement</p>
+          <p class="text-neutral-700 text-sm leading-7"></p>
+        </div>
+        <div>
+          <p class="text-xs text-neutral-500 mb-1.5">Design Managers</p>
+          <p class="text-neutral-700 text-sm leading-7"></p>
+        </div>
+        <div>
+          <p class="text-xs text-neutral-500 mb-1.5">Construction Managers</p>
+          <p class="text-neutral-700 text-sm leading-7"></p>
+        </div>
+        <div>
+          <p class="text-xs text-neutral-500 mb-1.5">Contractor Companies</p>
+          <p class="text-neutral-700 text-sm leading-7"></p>
+        </div>
+        <div>
+          <p class="text-xs text-neutral-500 mb-1.5">Quality Managers</p>
+          <p class="text-neutral-700 text-sm leading-7"></p>
         </div>
       </div>
     </section>
@@ -61,3 +80,11 @@ import Layout from '../../layouts/Layout.astro';
 
   </main>
 </Layout>
+
+<style>
+  .visit-btn:hover {
+    background-color: #B1B6DF;
+    color: #000;
+    font-weight: 600;
+  }
+</style>

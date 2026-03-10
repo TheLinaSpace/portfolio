@@ -18,8 +18,8 @@ export const projects: Project[] = [
     body: '',
     tags: [],
     year: '2025',
-    defaultImage: '/Skills Default.png',
-    hoverImage: '/Skills Hover.png',
+    defaultImage: '/alblatta default.png',
+    hoverImage: '/alblatta hover.png',
   },
   {
     slug: 'career-track',
