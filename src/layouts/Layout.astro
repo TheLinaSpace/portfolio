@@ -5,9 +5,10 @@ import Header from '../components/Header.astro';
 interface Props {
   title?: string;
   bgColor?: string;
+  hideHeader?: boolean;
 }
 
-const { title = 'Lina - Portfolio', bgColor = '#F5F5F0' } = Astro.props;
+const { title = 'Lina - Portfolio', bgColor = '#F5F5F0', hideHeader = false } = Astro.props;
 
 ---
 
@@ -29,7 +30,7 @@ const { title = 'Lina - Portfolio', bgColor = '#F5F5F0' } = Astro.props;
     </script>
   </head>
   <body class="text-neutral-900 min-h-screen font-[Inter,sans-serif]" style={`background-color: ${bgColor}; --page-bg: ${bgColor};`}>
-    <Header />
+    {!hideHeader && <Header />}
     <slot />
     <footer class="border-t border-neutral-200 mt-10 md:mt-20">
       <div class="px-12 h-14 flex items-center justify-center">

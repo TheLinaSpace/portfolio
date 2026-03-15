@@ -10,7 +10,8 @@
       "mcp__figma-desktop__get_metadata",
       "Bash(python:*)",
       "Bash(npx astro:*)",
-      "WebFetch(domain:linacharara.com)"
+      "WebFetch(domain:linacharara.com)",
+      "WebFetch(domain:simpleicons.org)"
     ]
   }
 }

@@ -1,0 +1,542 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const projects = [
+  { name: 'Downtown Office Building', client: 'Siemens', location: 'Downtown', manager: 'Sarah Johnson', status: 'In Progress', type: 'Commercial', start: '01 Mar 2025' },
+  { name: 'Riverside Apartments', client: 'Zublin', location: 'Riverside', manager: 'Mike Anderson', status: 'In Progress', type: 'Residential', start: '15 Jun 2025' },
+  { name: 'North Warehouse Expansion', client: 'Max Boegl', location: 'North Zone', manager: 'Bobby Wong', status: 'Pending', type: 'Industrial', start: '01 Feb 2026' },
+  { name: 'East Wing Renovation', client: 'Goldbeck', location: 'East District', manager: 'John Smith', status: 'On Hold', type: 'Renovation', start: '10 Nov 2025' },
+  { name: 'Harbour Bridge Overpass', client: 'Strabag', location: 'Harbour', manager: 'Tom Jonas', status: 'Completed', type: 'Infrastructure', start: '01 Jan 2024' },
+  { name: 'Central Plaza Tower', client: 'Siemens', location: 'City Centre', manager: 'Sarah Johnson', status: 'In Progress', type: 'Commercial', start: '20 Sep 2025' },
+  { name: 'Green Valley Residences', client: 'Goldbeck', location: 'Valley Road', manager: 'Lisa Chen', status: 'Pending', type: 'Residential', start: '01 Apr 2026' },
+  { name: 'Industrial Park – Phase 2', client: 'Max Boegl', location: 'South Zone', manager: 'Mike Anderson', status: 'Completed', type: 'Industrial', start: '05 Mar 2024' },
+];
+
+const projectTypes = [...new Set(projects.map(p => p.type))];
+const projectClients = [...new Set(projects.map(p => p.client))];
+
+const projectStatusColors: Record<string, string> = {
+  'In Progress': 'text-blue-600',
+  'Pending': 'text-orange-500',
+  'Completed': 'text-emerald-600',
+  'On Hold': 'text-neutral-400',
+};
+
+const projectDetails: Record<string, { badge: string; createdBy: string; date: string; contractor: string; area: string; level: string; discipline: string; purpose: string; category: string; description: string; activityLog: { date: string; action: string }[]; poItems: { label: string; amount: string }[] }> = {
+  'Downtown Office Building': { badge: 'In Progress', createdBy: 'Sarah Johnson', date: 'Mar 1, 2025', contractor: 'Siemens', area: 'Block A', level: 'All Floors', discipline: 'Architecture', purpose: 'For Construction', category: 'Commercial', description: 'A modern multi-storey commercial office building located in the heart of the downtown district. The project encompasses full structural, MEP, and interior fit-out works across 12 floors, targeting LEED Gold certification upon completion.', activityLog: [{ date: '20 Jan 2026', action: 'Uploaded Foundation Blueprint' }, { date: '17 Jan 2026', action: 'Approved Safety Inspection' }, { date: '10 Jan 2026', action: 'Submitted Change Order CO-145' }], poItems: [{ label: 'Structural Works', amount: '320,000$' }, { label: 'MEP Systems', amount: '180,000$' }, { label: 'Interior Fit-Out', amount: '95,000$' }, { label: 'Facade & Glazing', amount: '74,000$' }, { label: 'Contingency', amount: '31,000$' }] },
+  'Riverside Apartments': { badge: 'In Progress', createdBy: 'Mike Anderson', date: 'Jun 15, 2025', contractor: 'Zublin', area: 'Riverside Block', level: 'Floors 1–8', discipline: 'Structural', purpose: 'For Approval', category: 'Residential', description: 'A residential apartment complex comprising 64 units spread across 8 floors, including underground parking and rooftop amenities.', activityLog: [{ date: '16 Jan 2026', action: 'Reviewed Change Order CO-145' }, { date: '14 Jan 2026', action: 'Approved Daily Progress Report' }, { date: '12 Jan 2026', action: 'Signed Contractor Agreement ABC' }], poItems: [{ label: 'Foundation & Structure', amount: '210,000$' }, { label: 'MEP Rough-In', amount: '88,000$' }, { label: 'Finishes', amount: '112,000$' }, { label: 'Landscaping', amount: '34,000$' }, { label: 'Contingency', amount: '16,000$' }] },
+  'North Warehouse Expansion': { badge: 'Pending', createdBy: 'Bobby Wong', date: 'Feb 1, 2026', contractor: 'Max Boegl', area: 'North Zone', level: 'Ground', discipline: 'Civil', purpose: 'For Review', category: 'Industrial', description: 'Expansion of an existing warehouse facility to increase storage capacity by 40%, including new structural steel bays and fire suppression upgrades.', activityLog: [{ date: '01 Feb 2026', action: 'Project Created' }, { date: '28 Jan 2026', action: 'Scope Document Submitted' }], poItems: [{ label: 'Structural Steel', amount: '145,000$' }, { label: 'Civil Works', amount: '62,000$' }, { label: 'Fire Suppression', amount: '41,000$' }, { label: 'Drainage', amount: '28,000$' }, { label: 'Contingency', amount: '24,000$' }] },
+  'East Wing Renovation': { badge: 'On Hold', createdBy: 'John Smith', date: 'Nov 10, 2025', contractor: 'Goldbeck', area: 'East Wing', level: 'Floors 1–3', discipline: 'Architecture', purpose: 'For Record', category: 'Renovation', description: 'Full renovation of the east wing covering strip-out, structural strengthening, new MEP infrastructure and modern interior finishes. Currently on hold pending client approval.', activityLog: [{ date: '05 Jan 2026', action: 'Scope Revision Submitted' }, { date: '20 Dec 2025', action: 'Project Placed On Hold' }, { date: '10 Nov 2025', action: 'Project Initiated' }], poItems: [{ label: 'Strip-Out Works', amount: '38,000$' }, { label: 'Structural Strengthening', amount: '95,000$' }, { label: 'MEP Upgrade', amount: '67,000$' }, { label: 'Interior Finishes', amount: '54,000$' }, { label: 'Contingency', amount: '21,000$' }] },
+  'Harbour Bridge Overpass': { badge: 'Released', createdBy: 'Tom Jonas', date: 'Jan 1, 2024', contractor: 'Strabag', area: 'Harbour Zone', level: 'Ground + Elevated', discipline: 'Civil', purpose: 'For Construction', category: 'Infrastructure', description: 'A 220-metre elevated pedestrian and light vehicle overpass connecting the harbour district to the city centre. Completed and handed over to the municipal authority.', activityLog: [{ date: '15 Dec 2024', action: 'Handover Certificate Issued' }, { date: '01 Dec 2024', action: 'Final Inspection Approved' }, { date: '20 Nov 2024', action: 'Snag List Cleared' }], poItems: [{ label: 'Civil & Structural', amount: '580,000$' }, { label: 'Surfacing & Finishes', amount: '94,000$' }, { label: 'Lighting & Signage', amount: '47,000$' }, { label: 'Traffic Management', amount: '31,000$' }, { label: 'Contingency', amount: '48,000$' }] },
+  'Central Plaza Tower': { badge: 'In Progress', createdBy: 'Sarah Johnson', date: 'Sep 20, 2025', contractor: 'Siemens', area: 'City Centre', level: 'Floors 1–20', discipline: 'Architecture', purpose: 'For Construction', category: 'Commercial', description: 'A landmark 20-storey mixed-use tower featuring retail, office space, and premium residences. Currently in the structural frame phase.', activityLog: [{ date: '18 Jan 2026', action: 'Steel Frame – Level 4 Started' }, { date: '10 Jan 2026', action: 'Foundation Works Completed' }, { date: '20 Sep 2025', action: 'Project Initiated' }], poItems: [{ label: 'Structural Frame', amount: '740,000$' }, { label: 'Facade System', amount: '210,000$' }, { label: 'MEP Systems', amount: '195,000$' }, { label: 'Interior Works', amount: '260,000$' }, { label: 'Contingency', amount: '95,000$' }] },
+  'Green Valley Residences': { badge: 'Pending', createdBy: 'Lisa Chen', date: 'Apr 1, 2026', contractor: 'Goldbeck', area: 'Valley Road', level: 'Floors 1–5', discipline: 'Architecture', purpose: 'For Approval', category: 'Residential', description: 'A sustainable residential development of 40 low-rise units with passive design strategies, solar energy, and water recycling systems. Currently in pre-construction approvals.', activityLog: [{ date: '01 Apr 2026', action: 'Project Created' }, { date: '25 Mar 2026', action: 'Planning Permit Submitted' }], poItems: [{ label: 'Substructure', amount: '98,000$' }, { label: 'Superstructure', amount: '175,000$' }, { label: 'Sustainable Systems', amount: '63,000$' }, { label: 'Landscaping', amount: '44,000$' }, { label: 'Contingency', amount: '20,000$' }] },
+  'Industrial Park – Phase 2': { badge: 'Released', createdBy: 'Mike Anderson', date: 'Mar 5, 2024', contractor: 'Max Boegl', area: 'South Zone', level: 'Ground', discipline: 'Civil', purpose: 'For Record', category: 'Industrial', description: 'Second phase of the South Zone industrial park adding six new factory units and supporting infrastructure. Completed and handed over.', activityLog: [{ date: '10 Nov 2024', action: 'Handover Certificate Issued' }, { date: '01 Nov 2024', action: 'Final Snag List Cleared' }, { date: '15 Oct 2024', action: 'Client Walkthrough Completed' }], poItems: [{ label: 'Civil Infrastructure', amount: '290,000$' }, { label: 'Factory Units', amount: '420,000$' }, { label: 'Roads & Paving', amount: '75,000$' }, { label: 'Utilities', amount: '58,000$' }, { label: 'Contingency', amount: '57,000$' }] },
+};
+---
+
+<Layout title="Projects" bgColor="#FFFFFF" hideHeader={true}>
+  <main class="min-h-screen flex">
+
+    <!-- Side Navigation -->
+    <nav class="fixed top-0 left-0 h-full w-56 bg-white border-r border-neutral-200 flex flex-col pt-8 pb-6 z-20">
+      <div class="px-5 mb-8">
+        <span class="text-sm font-semibold text-neutral-900">Construct</span>
+        <div class="relative mt-2">
+          <button type="button" id="workspace-trigger" class="w-full flex items-center justify-between gap-2 px-3 py-2 rounded-lg border border-neutral-200 text-sm text-neutral-700">
+            <div class="flex items-center gap-2 min-w-0">
+              <span class="w-2 h-2 rounded-full bg-emerald-500 shrink-0"></span>
+              <span id="workspace-label" class="truncate">Building Z</span>
+            </div>
+            <svg class="w-3.5 h-3.5 text-neutral-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div id="workspace-dropdown" class="hidden absolute top-full left-0 mt-1 w-full bg-white border border-neutral-200 rounded-lg shadow-lg z-30 py-1">
+            <button class="workspace-option w-full flex items-center gap-2 px-3 py-2 text-sm text-neutral-900 hover:bg-neutral-50 font-medium">
+              <span class="w-2 h-2 rounded-full bg-emerald-500 shrink-0"></span>
+              Building Z
+            </button>
+            <button class="workspace-option w-full flex items-center gap-2 px-3 py-2 text-sm text-neutral-500 hover:bg-neutral-50">
+              <span class="w-2 h-2 rounded-full bg-neutral-300 shrink-0"></span>
+              Building A
+            </button>
+            <button class="workspace-option w-full flex items-center gap-2 px-3 py-2 text-sm text-neutral-500 hover:bg-neutral-50">
+              <span class="w-2 h-2 rounded-full bg-neutral-300 shrink-0"></span>
+              Building B
+            </button>
+          </div>
+        </div>
+      </div>
+      <ul class="flex flex-col gap-1 px-3">
+        <li>
+          <a href="/construct-prototype" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-neutral-500 hover:bg-neutral-50 hover:text-neutral-900 transition-colors">
+            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+            Tasks
+          </a>
+        </li>
+        <li>
+          <a href="/construct-projects" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium bg-neutral-100 text-neutral-900">
+            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7h18M3 12h18M3 17h18"/></svg>
+            Projects
+          </a>
+        </li>
+        <li>
+          <a href="/documents" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-neutral-500 hover:bg-neutral-50 hover:text-neutral-900 transition-colors">
+            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+            Documents
+          </a>
+        </li>
+        <li>
+          <a href="/construct-requests" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-neutral-500 hover:bg-neutral-50 hover:text-neutral-900 transition-colors">
+            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
+            Requests
+          </a>
+        </li>
+        <li>
+          <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-neutral-500 hover:bg-neutral-50 hover:text-neutral-900 transition-colors">
+            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            Inspections
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- Main content offset by nav width -->
+    <div class="flex-1 ml-56">
+
+      <!-- ==================== PROJECT LIST VIEW ==================== -->
+      <div id="proj-list-view" class="px-6 md:px-12 pt-6 md:pt-8">
+        <!-- Back -->
+        <a href="/" class="inline-flex items-center gap-2 text-sm text-neutral-700 hover:text-neutral-900 transition-colors mb-8">
+          ← Back
+        </a>
+
+        <!-- Title row -->
+        <div class="flex items-center justify-between mb-8">
+          <h1 class="text-3xl md:text-4xl font-bold text-neutral-900">Projects</h1>
+          <button class="px-5 py-2.5 text-sm font-medium rounded-lg bg-neutral-900 text-white hover:bg-neutral-800 transition-colors">
+            Add Project
+          </button>
+        </div>
+
+        <!-- Filters row -->
+        <div class="flex flex-wrap items-end justify-between gap-4 mb-8">
+          <div class="flex items-end gap-6">
+            <!-- Type filter -->
+            <div class="relative" id="ptype-wrapper">
+              <label class="block text-xs text-neutral-500 mb-1.5">Type</label>
+              <button id="ptype-trigger" type="button" class="appearance-none bg-white border border-neutral-300 rounded-lg px-4 py-2.5 pr-10 text-sm text-neutral-400 min-w-[150px] cursor-pointer hover:border-neutral-400 focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:ring-offset-1 text-left relative">
+                <span id="ptype-label">Select</span>
+                <svg class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-500 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+              </button>
+              <div id="ptype-dropdown" class="hidden absolute top-full left-0 mt-1 w-full bg-white border border-neutral-200 rounded-lg shadow-lg z-30 py-1 min-w-[180px]">
+                <button class="pfilter-option w-full text-left px-3 py-2 text-sm text-neutral-900 hover:bg-neutral-50" data-pfilter="type" data-value="">All</button>
+                {projectTypes.map(t => (
+                  <button class="pfilter-option w-full text-left px-3 py-2 text-sm text-neutral-900 hover:bg-neutral-50" data-pfilter="type" data-value={t}>{t}</button>
+                ))}
+              </div>
+            </div>
+
+            <!-- Client filter -->
+            <div class="relative" id="pclient-wrapper">
+              <label class="block text-xs text-neutral-500 mb-1.5">Client</label>
+              <button id="pclient-trigger" type="button" class="appearance-none bg-white border border-neutral-300 rounded-lg px-4 py-2.5 pr-10 text-sm text-neutral-400 min-w-[150px] cursor-pointer hover:border-neutral-400 focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:ring-offset-1 text-left relative">
+                <span id="pclient-label">Select</span>
+                <svg class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-500 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+              </button>
+              <div id="pclient-dropdown" class="hidden absolute top-full left-0 mt-1 w-full bg-white border border-neutral-200 rounded-lg shadow-lg z-30 py-1 min-w-[180px]">
+                <button class="pfilter-option w-full text-left px-3 py-2 text-sm text-neutral-900 hover:bg-neutral-50" data-pfilter="client" data-value="">All</button>
+                {projectClients.map(c => (
+                  <button class="pfilter-option w-full text-left px-3 py-2 text-sm text-neutral-900 hover:bg-neutral-50" data-pfilter="client" data-value={c}>{c}</button>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <!-- Right icons -->
+          <div class="flex items-center gap-3">
+            <button class="p-1.5 text-neutral-500 hover:text-neutral-900 transition-colors" title="Search">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            </button>
+            <button class="p-1.5 text-neutral-500 hover:text-neutral-900 transition-colors" title="Filter">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/></svg>
+            </button>
+            <button class="p-1.5 text-neutral-500 hover:text-neutral-900 transition-colors" title="Columns">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Table -->
+        <div class="overflow-x-auto">
+          <table class="w-full border-collapse">
+            <thead>
+              <tr class="border-b border-neutral-200">
+                <th class="w-10 px-3 py-3 text-left">
+                  <input type="checkbox" id="proj-select-all" class="w-4 h-4 rounded border-neutral-300 accent-neutral-900 cursor-pointer" />
+                </th>
+                <th class="px-3 py-3 text-left text-sm font-semibold text-neutral-900">Project Name</th>
+                <th class="px-3 py-3 text-left text-sm font-semibold text-neutral-900">Type</th>
+                <th class="px-3 py-3 text-left text-sm font-semibold text-neutral-900">Client</th>
+                <th class="px-3 py-3 text-left text-sm font-semibold text-neutral-900">Location</th>
+                <th class="px-3 py-3 text-left text-sm font-semibold text-neutral-900">Status</th>
+                <th class="px-3 py-3 text-left text-sm font-semibold text-neutral-900">Manager</th>
+                <th class="px-3 py-3 text-left text-sm font-semibold text-neutral-900">Start Date</th>
+                <th class="w-10 px-3 py-3"></th>
+              </tr>
+            </thead>
+            <tbody id="proj-tbody">
+              {projects.map(p => (
+                <tr class="project-row border-b border-neutral-100 hover:bg-neutral-50/50 transition-colors" data-ptype={p.type} data-pclient={p.client}>
+                  <td class="px-3 py-3.5">
+                    <input type="checkbox" class="proj-cb w-4 h-4 rounded border-neutral-300 accent-neutral-900 cursor-pointer" />
+                  </td>
+                  <td class="px-3 py-3.5 text-sm text-neutral-900 font-medium">
+                    <button class="project-name-link hover:underline underline-offset-2 text-left" data-project-name={p.name}>{p.name}</button>
+                  </td>
+                  <td class="px-3 py-3.5 text-sm text-neutral-700">{p.type}</td>
+                  <td class="px-3 py-3.5 text-sm text-neutral-700">{p.client}</td>
+                  <td class="px-3 py-3.5 text-sm text-neutral-700">{p.location}</td>
+                  <td class="px-3 py-3.5">
+                    <span class={`text-sm font-medium ${projectStatusColors[p.status]}`}>{p.status}</span>
+                  </td>
+                  <td class="px-3 py-3.5 text-sm text-neutral-500">{p.manager}</td>
+                  <td class="px-3 py-3.5 text-sm text-neutral-500">{p.start}</td>
+                  <td class="px-3 py-3.5 text-center">
+                    <button class="text-neutral-400 hover:text-neutral-700 transition-colors">
+                      <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg>
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="flex items-center justify-center gap-2 py-8">
+          <button class="flex items-center gap-1 text-sm text-neutral-400 cursor-not-allowed">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+            Previous
+          </button>
+          <button class="w-8 h-8 rounded-md flex items-center justify-center text-sm font-medium bg-neutral-900 text-white">1</button>
+          <button class="w-8 h-8 rounded-md flex items-center justify-center text-sm text-neutral-700 hover:bg-neutral-100">2</button>
+          <span class="text-sm text-neutral-400 px-1">...</span>
+          <button class="w-8 h-8 rounded-md flex items-center justify-center text-sm text-neutral-700 hover:bg-neutral-100">4</button>
+          <button class="flex items-center gap-1 text-sm text-neutral-700 hover:text-neutral-900">
+            Next
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- ==================== PROJECT DETAIL VIEW ==================== -->
+      <div id="proj-detail-view" class="hidden px-6 md:px-12 pt-6 md:pt-8 pb-12">
+        <!-- Back -->
+        <button id="proj-back" class="inline-flex items-center gap-2 text-sm text-neutral-500 hover:text-neutral-900 transition-colors mb-6">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+          Projects
+        </button>
+
+        <!-- Header -->
+        <div class="flex items-start justify-between gap-6 mb-2">
+          <h1 id="proj-title" class="text-3xl md:text-4xl font-bold text-neutral-900"></h1>
+          <div class="flex items-center gap-2 shrink-0 mt-1">
+            <button class="px-4 py-2 text-sm font-medium rounded-lg bg-neutral-900 text-white hover:bg-neutral-800 transition-colors">Complete Construction</button>
+            <button class="px-4 py-2 text-sm font-medium rounded-lg border border-neutral-300 text-neutral-700 hover:bg-neutral-50 transition-colors">Edit</button>
+          </div>
+        </div>
+        <div class="flex items-center gap-4 mb-8">
+          <span id="proj-badge" class="text-xs font-medium px-2.5 py-0.5 rounded-full"></span>
+          <span id="proj-meta" class="text-sm text-neutral-500"></span>
+        </div>
+
+        <!-- Body: left tab nav + main content + right PO card -->
+        <div class="flex gap-10">
+
+          <!-- Left tab nav -->
+          <nav class="w-32 shrink-0 flex flex-col gap-1">
+            <button class="proj-tab text-left px-3 py-2 text-sm font-medium text-neutral-900 border border-neutral-200 rounded-lg bg-white" data-ptab="overview">Overview</button>
+            <button class="proj-tab text-left px-3 py-2 text-sm text-neutral-500 hover:text-neutral-900 transition-colors" data-ptab="documents">Documents</button>
+            <button class="proj-tab text-left px-3 py-2 text-sm text-neutral-500 hover:text-neutral-900 transition-colors" data-ptab="requests">Requests</button>
+            <button class="proj-tab text-left px-3 py-2 text-sm text-neutral-500 hover:text-neutral-900 transition-colors" data-ptab="savings">Savings</button>
+          </nav>
+
+          <!-- Main content -->
+          <div class="flex-1 min-w-0">
+
+            <!-- Overview tab -->
+            <div id="ptab-overview">
+              <!-- General Information -->
+              <div class="mb-8" style="width: 486px;">
+                <h2 class="text-base font-semibold text-neutral-900 mb-4">General Information</h2>
+                <div class="flex flex-col gap-3" id="proj-general-info"></div>
+              </div>
+
+              <!-- Description -->
+              <div class="mb-8" style="width: 486px;">
+                <h2 class="text-base font-semibold text-neutral-900 mb-3">Description</h2>
+                <p id="proj-description" class="text-sm text-neutral-600 leading-7"></p>
+              </div>
+
+              <!-- Activity Log -->
+              <div style="width: 486px;">
+                <h2 class="text-base font-semibold text-neutral-900 mb-3">Activity Log</h2>
+                <div class="flex flex-col gap-3" id="proj-activity-log"></div>
+              </div>
+            </div>
+
+            <!-- Documents tab -->
+            <div id="ptab-documents" class="hidden">
+              <p class="text-sm text-neutral-400 mt-6">Coming soon.</p>
+            </div>
+
+            <!-- Requests tab -->
+            <div id="ptab-requests" class="hidden">
+              <p class="text-sm text-neutral-400 mt-6">Coming soon.</p>
+            </div>
+
+            <!-- Savings tab -->
+            <div id="ptab-savings" class="hidden">
+              <p class="text-sm text-neutral-400 mt-6">Coming soon.</p>
+            </div>
+
+          </div>
+
+          <!-- Right: PO Information -->
+          <div class="shrink-0" style="width: 432px;">
+            <div class="border border-neutral-200 rounded-xl p-5">
+              <h3 class="text-sm font-semibold text-neutral-900 mb-4">PO Information</h3>
+              <div class="flex flex-col gap-3 mb-4" id="proj-po-items"></div>
+              <div class="border-t border-neutral-200 pt-3 flex items-center justify-between">
+                <span class="text-sm text-neutral-500">Total</span>
+                <span id="proj-po-total" class="text-sm font-semibold text-neutral-900"></span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <script is:inline define:vars={{ projectDetails }}>
+        window.__projectDetails = projectDetails;
+      </script>
+
+    </div> <!-- end ml-56 wrapper -->
+  </main>
+</Layout>
+
+<style>
+  .visit-btn:hover {
+    background-color: rgb(229 229 229);
+  }
+</style>
+
+<script>
+  // ===== WORKSPACE DROPDOWN (cosmetic only) =====
+  const workspaceTrigger = document.getElementById('workspace-trigger');
+  const workspaceDropdown = document.getElementById('workspace-dropdown');
+
+  workspaceTrigger?.addEventListener('click', () => workspaceDropdown?.classList.toggle('hidden'));
+  document.addEventListener('click', (e) => {
+    if (workspaceTrigger && !workspaceTrigger.contains(e.target as Node) && workspaceDropdown && !workspaceDropdown.contains(e.target as Node)) {
+      workspaceDropdown?.classList.add('hidden');
+    }
+  });
+
+  document.querySelectorAll<HTMLButtonElement>('.workspace-option').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const label = document.getElementById('workspace-label');
+      if (label) label.textContent = btn.textContent?.trim() || '';
+      workspaceDropdown?.classList.add('hidden');
+    });
+  });
+
+  // ===== PROJECT FILTERS =====
+  const pfilters: Record<string, string> = { type: '', client: '' };
+
+  ['ptype', 'pclient'].forEach(key => {
+    const trigger = document.getElementById(`${key}-trigger`);
+    const dropdown = document.getElementById(`${key}-dropdown`);
+    const wrapper = document.getElementById(`${key}-wrapper`);
+    trigger?.addEventListener('click', () => dropdown?.classList.toggle('hidden'));
+    document.addEventListener('click', (e) => {
+      if (wrapper && !wrapper.contains(e.target as Node)) dropdown?.classList.add('hidden');
+    });
+  });
+
+  document.querySelectorAll<HTMLButtonElement>('.pfilter-option').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const key = btn.dataset.pfilter || '';
+      const value = btn.dataset.value || '';
+      pfilters[key] = value;
+
+      const labelKey = key === 'type' ? 'ptype' : 'pclient';
+      const label = document.getElementById(`${labelKey}-label`);
+      const trigger = document.getElementById(`${labelKey}-trigger`);
+      if (label) {
+        label.textContent = value || 'Select';
+        trigger?.classList.toggle('text-neutral-400', !value);
+        trigger?.classList.toggle('text-neutral-900', !!value);
+      }
+      document.getElementById(`${labelKey}-dropdown`)?.classList.add('hidden');
+      filterProjectRows();
+    });
+  });
+
+  function filterProjectRows() {
+    document.querySelectorAll<HTMLTableRowElement>('.project-row').forEach(row => {
+      const matchType = !pfilters.type || row.dataset.ptype === pfilters.type;
+      const matchClient = !pfilters.client || row.dataset.pclient === pfilters.client;
+      row.classList.toggle('hidden', !(matchType && matchClient));
+    });
+  }
+
+  // ===== SELECT ALL CHECKBOX =====
+  const selectAll = document.getElementById('proj-select-all') as HTMLInputElement | null;
+  const projCbs = document.querySelectorAll<HTMLInputElement>('.proj-cb');
+
+  selectAll?.addEventListener('change', () => {
+    projCbs.forEach(cb => {
+      const row = cb.closest('.project-row');
+      if (row && !row.classList.contains('hidden')) {
+        cb.checked = selectAll.checked;
+      }
+    });
+  });
+
+  projCbs.forEach(cb => {
+    cb.addEventListener('change', () => {
+      if (selectAll) {
+        const visibleCbs = Array.from(projCbs).filter(c => !c.closest('.project-row')?.classList.contains('hidden'));
+        selectAll.checked = visibleCbs.length > 0 && visibleCbs.every(c => c.checked);
+      }
+    });
+  });
+
+  // ===== PROJECT DETAIL VIEW =====
+  const listView = document.getElementById('proj-list-view');
+  const detailView = document.getElementById('proj-detail-view');
+  const projectDetails = (window as any).__projectDetails as Record<string, any>;
+
+  const badgeColors: Record<string, { bg: string; text: string }> = {
+    'Released':    { bg: 'bg-emerald-100', text: 'text-emerald-700' },
+    'In Progress': { bg: 'bg-blue-50',     text: 'text-blue-600' },
+    'Pending':     { bg: 'bg-orange-50',   text: 'text-orange-500' },
+    'On Hold':     { bg: 'bg-neutral-100', text: 'text-neutral-500' },
+    'Completed':   { bg: 'bg-emerald-50',  text: 'text-emerald-600' },
+  };
+
+  function openProjectDetail(name: string) {
+    const detail = projectDetails[name];
+    if (!detail) return;
+
+    listView?.classList.add('hidden');
+    detailView?.classList.remove('hidden');
+
+    // Title
+    const titleEl = document.getElementById('proj-title');
+    if (titleEl) titleEl.textContent = name;
+
+    // Badge
+    const badge = document.getElementById('proj-badge');
+    if (badge) {
+      const colors = badgeColors[detail.badge] || { bg: 'bg-neutral-100', text: 'text-neutral-600' };
+      badge.className = `text-xs font-medium px-2.5 py-0.5 rounded-full ${colors.bg} ${colors.text}`;
+      badge.textContent = detail.badge;
+    }
+
+    // Meta
+    const meta = document.getElementById('proj-meta');
+    if (meta) meta.textContent = `Created By ${detail.createdBy}  ·  Contractor: ${detail.contractor}`;
+
+    // General info
+    const generalInfo = document.getElementById('proj-general-info');
+    if (generalInfo) {
+      const fields = [
+        { label: 'Area', value: detail.area },
+        { label: 'Level', value: detail.level },
+        { label: 'Discipline', value: detail.discipline },
+        { label: 'Purpose', value: detail.purpose },
+        { label: 'Category', value: detail.category },
+      ];
+      generalInfo.innerHTML = fields.map(f => `
+        <div class="flex items-center justify-between">
+          <span class="text-sm text-neutral-500">${f.label}</span>
+          <span class="text-sm text-neutral-900 font-medium">${f.value}</span>
+        </div>
+      `).join('');
+    }
+
+    // Description
+    const desc = document.getElementById('proj-description');
+    if (desc) desc.textContent = detail.description;
+
+    // Activity log
+    const log = document.getElementById('proj-activity-log');
+    if (log) {
+      log.innerHTML = detail.activityLog.map((entry: any) => `
+        <div class="flex items-start gap-3">
+          <span class="text-xs text-neutral-400 pt-0.5 shrink-0 w-24">${entry.date}</span>
+          <span class="text-sm text-neutral-700">${entry.action}</span>
+        </div>
+      `).join('');
+    }
+
+    // PO items
+    const poItems = document.getElementById('proj-po-items');
+    if (poItems) {
+      poItems.innerHTML = detail.poItems.map((item: any) => `
+        <div class="flex items-center justify-between">
+          <span class="text-sm text-neutral-500">${item.label}</span>
+          <span class="text-sm text-neutral-900 font-medium">${item.amount}</span>
+        </div>
+      `).join('');
+    }
+
+    // PO total
+    const poTotal = document.getElementById('proj-po-total');
+    if (poTotal) {
+      const total = detail.poItems.reduce((sum: number, item: any) => {
+        const num = parseFloat(item.amount.replace(/[^0-9.]/g, ''));
+        return sum + (isNaN(num) ? 0 : num);
+      }, 0);
+      poTotal.textContent = total.toLocaleString('en-US') + '$';
+    }
+
+    // Reset tabs
+    activateProjTab('overview');
+  }
+
+  function activateProjTab(tab: string) {
+    const tabs = ['overview', 'documents', 'requests', 'savings'];
+    tabs.forEach(t => {
+      const panel = document.getElementById(`ptab-${t}`);
+      if (panel) panel.classList.toggle('hidden', t !== tab);
+    });
+
+    document.querySelectorAll<HTMLButtonElement>('.proj-tab').forEach(btn => {
+      const isActive = btn.dataset.ptab === tab;
+      btn.className = isActive
+        ? 'proj-tab text-left px-3 py-2 text-sm font-medium text-neutral-900 border border-neutral-200 rounded-lg bg-white'
+        : 'proj-tab text-left px-3 py-2 text-sm text-neutral-500 hover:text-neutral-900 transition-colors';
+    });
+  }
+
+  // Project name link clicks
+  document.querySelectorAll<HTMLButtonElement>('.project-name-link').forEach(link => {
+    link.addEventListener('click', () => {
+      const name = link.dataset.projectName || '';
+      openProjectDetail(name);
+    });
+  });
+
+  // Tab button clicks
+  document.querySelectorAll<HTMLButtonElement>('.proj-tab').forEach(btn => {
+    btn.addEventListener('click', () => activateProjTab(btn.dataset.ptab || 'overview'));
+  });
+
+  // Back button
+  document.getElementById('proj-back')?.addEventListener('click', () => {
+    detailView?.classList.add('hidden');
+    listView?.classList.remove('hidden');
+  });
+</script>

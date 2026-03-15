@@ -1,0 +1,303 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const requests = [
+  { title: 'RFI-001 – Structural Column Spacing', type: 'RFI', status: 'Open', project: 'Downtown Office Building', submittedBy: 'Mike Anderson', contractor: 'Siemens', date: '20 Jan 2026' },
+  { title: 'DCR-014 – HVAC Routing Change', type: 'DCR', status: 'Pending', project: 'Riverside Apartments', submittedBy: 'Sarah Johnson', contractor: 'Zublin', date: '19 Jan 2026' },
+  { title: 'CR-007 – Window Specification Update', type: 'CR', status: 'Approved', project: 'Downtown Office Building', submittedBy: 'Bobby Wong', contractor: 'Goldbeck', date: '17 Jan 2026' },
+  { title: 'WR-023 – Waterproofing Membrane Repair', type: 'WR', status: 'In Progress', project: 'Riverside Apartments', submittedBy: 'John Smith', contractor: 'Strabag', date: '16 Jan 2026' },
+  { title: 'RFI-002 – Pile Foundation Depth Clarification', type: 'RFI', status: 'Open', project: 'Central Plaza Tower', submittedBy: 'Tom Jonas', contractor: 'Siemens', date: '15 Jan 2026' },
+  { title: 'DCR-015 – Stairwell Width Adjustment', type: 'DCR', status: 'Rejected', project: 'Downtown Office Building', submittedBy: 'Lisa Chen', contractor: 'Max Boegl', date: '14 Jan 2026' },
+  { title: 'CR-008 – Facade Material Substitution', type: 'CR', status: 'Pending', project: 'Central Plaza Tower', submittedBy: 'Mike Anderson', contractor: 'Goldbeck', date: '13 Jan 2026' },
+  { title: 'WR-024 – Drainage Blockage – North Zone', type: 'WR', status: 'Approved', project: 'Riverside Apartments', submittedBy: 'Sarah Johnson', contractor: 'Strabag', date: '12 Jan 2026' },
+  { title: 'RFI-003 – Beam Depth at Grid C4', type: 'RFI', status: 'Open', project: 'Downtown Office Building', submittedBy: 'Bobby Wong', contractor: 'Siemens', date: '11 Jan 2026' },
+  { title: 'CR-009 – Door Hardware Substitution', type: 'CR', status: 'Pending', project: 'East Wing Renovation', submittedBy: 'John Smith', contractor: 'Goldbeck', date: '10 Jan 2026' },
+];
+
+const requestTypes = ['RFI', 'DCR', 'CR', 'WR'];
+const requestProjects = [...new Set(requests.map(r => r.project))];
+
+const requestStatusColors: Record<string, string> = {
+  'Open': 'text-blue-600',
+  'Pending': 'text-orange-500',
+  'In Progress': 'text-blue-500',
+  'Approved': 'text-emerald-600',
+  'Rejected': 'text-red-500',
+};
+---
+
+<Layout title="Requests" bgColor="#FFFFFF" hideHeader={true}>
+  <main class="min-h-screen flex">
+
+    <!-- Side Navigation -->
+    <nav class="fixed top-0 left-0 h-full w-56 bg-white border-r border-neutral-200 flex flex-col pt-8 pb-6 z-20">
+      <div class="px-5 mb-8">
+        <span class="text-sm font-semibold text-neutral-900">Construct</span>
+        <div class="relative mt-2">
+          <button type="button" id="workspace-trigger" class="w-full flex items-center justify-between gap-2 px-3 py-2 rounded-lg border border-neutral-200 text-sm text-neutral-700">
+            <div class="flex items-center gap-2 min-w-0">
+              <span class="w-2 h-2 rounded-full bg-emerald-500 shrink-0"></span>
+              <span id="workspace-label" class="truncate">Building Z</span>
+            </div>
+            <svg class="w-3.5 h-3.5 text-neutral-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div id="workspace-dropdown" class="hidden absolute top-full left-0 mt-1 w-full bg-white border border-neutral-200 rounded-lg shadow-lg z-30 py-1">
+            <button class="workspace-option w-full flex items-center gap-2 px-3 py-2 text-sm text-neutral-900 hover:bg-neutral-50 font-medium">
+              <span class="w-2 h-2 rounded-full bg-emerald-500 shrink-0"></span>
+              Building Z
+            </button>
+            <button class="workspace-option w-full flex items-center gap-2 px-3 py-2 text-sm text-neutral-500 hover:bg-neutral-50">
+              <span class="w-2 h-2 rounded-full bg-neutral-300 shrink-0"></span>
+              Building A
+            </button>
+            <button class="workspace-option w-full flex items-center gap-2 px-3 py-2 text-sm text-neutral-500 hover:bg-neutral-50">
+              <span class="w-2 h-2 rounded-full bg-neutral-300 shrink-0"></span>
+              Building B
+            </button>
+          </div>
+        </div>
+      </div>
+      <ul class="flex flex-col gap-1 px-3">
+        <li>
+          <a href="/construct-prototype" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-neutral-500 hover:bg-neutral-50 hover:text-neutral-900 transition-colors">
+            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+            Tasks
+          </a>
+        </li>
+        <li>
+          <a href="/construct-projects" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-neutral-500 hover:bg-neutral-50 hover:text-neutral-900 transition-colors">
+            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7h18M3 12h18M3 17h18"/></svg>
+            Projects
+          </a>
+        </li>
+        <li>
+          <a href="/documents" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-neutral-500 hover:bg-neutral-50 hover:text-neutral-900 transition-colors">
+            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+            Documents
+          </a>
+        </li>
+        <li>
+          <a href="/construct-requests" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium bg-neutral-100 text-neutral-900">
+            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
+            Requests
+          </a>
+        </li>
+        <li>
+          <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-neutral-500 hover:bg-neutral-50 hover:text-neutral-900 transition-colors">
+            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            Inspections
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- Main content offset by nav width -->
+    <div class="flex-1 ml-56">
+      <div id="request-list-view" class="px-6 md:px-12 pt-6 md:pt-8">
+        <!-- Back -->
+        <a href="/" class="inline-flex items-center gap-2 text-sm text-neutral-700 hover:text-neutral-900 transition-colors mb-8">
+          ← Back
+        </a>
+
+        <!-- Title row -->
+        <div class="flex items-center justify-between mb-8">
+          <h1 class="text-3xl md:text-4xl font-bold text-neutral-900">Requests</h1>
+          <button class="px-5 py-2.5 text-sm font-medium rounded-lg bg-neutral-900 text-white hover:bg-neutral-800 transition-colors">
+            New Request
+          </button>
+        </div>
+
+        <!-- Filters row -->
+        <div class="flex flex-wrap items-end justify-between gap-4 mb-8">
+          <div class="flex items-end gap-6">
+            <!-- Type filter -->
+            <div class="relative" id="rtype-wrapper">
+              <label class="block text-xs text-neutral-500 mb-1.5">Type</label>
+              <button id="rtype-trigger" type="button" class="appearance-none bg-white border border-neutral-300 rounded-lg px-4 py-2.5 pr-10 text-sm text-neutral-400 min-w-[150px] cursor-pointer hover:border-neutral-400 focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:ring-offset-1 text-left relative">
+                <span id="rtype-label">Select</span>
+                <svg class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-500 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+              </button>
+              <div id="rtype-dropdown" class="hidden absolute top-full left-0 mt-1 w-full bg-white border border-neutral-200 rounded-lg shadow-lg z-30 py-1 min-w-[150px]">
+                <button class="rfilter-option w-full text-left px-3 py-2 text-sm text-neutral-900 hover:bg-neutral-50" data-rfilter="type" data-value="">All</button>
+                {requestTypes.map(t => (
+                  <button class="rfilter-option w-full text-left px-3 py-2 text-sm text-neutral-900 hover:bg-neutral-50" data-rfilter="type" data-value={t}>{t}</button>
+                ))}
+              </div>
+            </div>
+
+            <!-- Project filter -->
+            <div class="relative" id="rproject-wrapper">
+              <label class="block text-xs text-neutral-500 mb-1.5">Project</label>
+              <button id="rproject-trigger" type="button" class="appearance-none bg-white border border-neutral-300 rounded-lg px-4 py-2.5 pr-10 text-sm text-neutral-400 min-w-[180px] cursor-pointer hover:border-neutral-400 focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:ring-offset-1 text-left relative">
+                <span id="rproject-label">Select</span>
+                <svg class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-500 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+              </button>
+              <div id="rproject-dropdown" class="hidden absolute top-full left-0 mt-1 w-full bg-white border border-neutral-200 rounded-lg shadow-lg z-30 py-1 min-w-[220px]">
+                <button class="rfilter-option w-full text-left px-3 py-2 text-sm text-neutral-900 hover:bg-neutral-50" data-rfilter="project" data-value="">All</button>
+                {requestProjects.map(p => (
+                  <button class="rfilter-option w-full text-left px-3 py-2 text-sm text-neutral-900 hover:bg-neutral-50" data-rfilter="project" data-value={p}>{p}</button>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <!-- Right icons -->
+          <div class="flex items-center gap-3">
+            <button class="p-1.5 text-neutral-500 hover:text-neutral-900 transition-colors" title="Search">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            </button>
+            <button class="p-1.5 text-neutral-500 hover:text-neutral-900 transition-colors" title="Filter">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/></svg>
+            </button>
+            <button class="p-1.5 text-neutral-500 hover:text-neutral-900 transition-colors" title="Columns">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Table -->
+        <div class="overflow-x-auto">
+          <table class="w-full border-collapse">
+            <thead>
+              <tr class="border-b border-neutral-200">
+                <th class="w-10 px-3 py-3 text-left">
+                  <input type="checkbox" id="req-select-all" class="w-4 h-4 rounded border-neutral-300 accent-neutral-900 cursor-pointer" />
+                </th>
+                <th class="px-3 py-3 text-left text-sm font-semibold text-neutral-900">Title</th>
+                <th class="px-3 py-3 text-left text-sm font-semibold text-neutral-900">Type</th>
+                <th class="px-3 py-3 text-left text-sm font-semibold text-neutral-900">Project</th>
+                <th class="px-3 py-3 text-left text-sm font-semibold text-neutral-900">Status</th>
+                <th class="px-3 py-3 text-left text-sm font-semibold text-neutral-900">Contractor</th>
+                <th class="px-3 py-3 text-left text-sm font-semibold text-neutral-900">Submitted By</th>
+                <th class="w-10 px-3 py-3"></th>
+              </tr>
+            </thead>
+            <tbody id="req-tbody">
+              {requests.map(r => (
+                <tr class="request-row border-b border-neutral-100 hover:bg-neutral-50/50 transition-colors" data-rtype={r.type} data-rproject={r.project}>
+                  <td class="px-3 py-3.5">
+                    <input type="checkbox" class="req-cb w-4 h-4 rounded border-neutral-300 accent-neutral-900 cursor-pointer" />
+                  </td>
+                  <td class="px-3 py-3.5 text-sm text-neutral-900 font-medium">{r.title}</td>
+                  <td class="px-3 py-3.5">
+                    <span class="text-xs font-medium px-2 py-0.5 rounded bg-neutral-100 text-neutral-700">{r.type}</span>
+                  </td>
+                  <td class="px-3 py-3.5 text-sm text-neutral-700">{r.project}</td>
+                  <td class="px-3 py-3.5">
+                    <span class={`text-sm font-medium ${requestStatusColors[r.status]}`}>{r.status}</span>
+                  </td>
+                  <td class="px-3 py-3.5 text-sm text-neutral-700">{r.contractor}</td>
+                  <td class="px-3 py-3.5 text-sm text-neutral-500">{r.submittedBy} on {r.date}</td>
+                  <td class="px-3 py-3.5 text-center">
+                    <button class="text-neutral-400 hover:text-neutral-700 transition-colors">
+                      <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg>
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="flex items-center justify-center gap-2 py-8">
+          <button class="flex items-center gap-1 text-sm text-neutral-400 cursor-not-allowed">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+            Previous
+          </button>
+          <button class="w-8 h-8 rounded-md flex items-center justify-center text-sm font-medium bg-neutral-900 text-white">1</button>
+          <button class="w-8 h-8 rounded-md flex items-center justify-center text-sm text-neutral-700 hover:bg-neutral-100">2</button>
+          <span class="text-sm text-neutral-400 px-1">...</span>
+          <button class="w-8 h-8 rounded-md flex items-center justify-center text-sm text-neutral-700 hover:bg-neutral-100">4</button>
+          <button class="flex items-center gap-1 text-sm text-neutral-700 hover:text-neutral-900">
+            Next
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+      </div>
+    </div> <!-- end ml-56 wrapper -->
+  </main>
+</Layout>
+
+<script>
+  // ===== WORKSPACE DROPDOWN (cosmetic only) =====
+  const workspaceTrigger = document.getElementById('workspace-trigger');
+  const workspaceDropdown = document.getElementById('workspace-dropdown');
+
+  workspaceTrigger?.addEventListener('click', () => workspaceDropdown?.classList.toggle('hidden'));
+  document.addEventListener('click', (e) => {
+    if (workspaceTrigger && !workspaceTrigger.contains(e.target as Node) && workspaceDropdown && !workspaceDropdown.contains(e.target as Node)) {
+      workspaceDropdown?.classList.add('hidden');
+    }
+  });
+
+  document.querySelectorAll<HTMLButtonElement>('.workspace-option').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const label = document.getElementById('workspace-label');
+      if (label) label.textContent = btn.textContent?.trim() || '';
+      workspaceDropdown?.classList.add('hidden');
+    });
+  });
+
+  // ===== REQUEST FILTERS =====
+  const rfilters: Record<string, string> = { type: '', project: '' };
+
+  ['rtype', 'rproject'].forEach(key => {
+    const trigger = document.getElementById(`${key}-trigger`);
+    const dropdown = document.getElementById(`${key}-dropdown`);
+    const wrapper = document.getElementById(`${key}-wrapper`);
+    trigger?.addEventListener('click', () => dropdown?.classList.toggle('hidden'));
+    document.addEventListener('click', (e) => {
+      if (wrapper && !wrapper.contains(e.target as Node)) dropdown?.classList.add('hidden');
+    });
+  });
+
+  document.querySelectorAll<HTMLButtonElement>('.rfilter-option').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const key = btn.dataset.rfilter || '';
+      const value = btn.dataset.value || '';
+      rfilters[key] = value;
+
+      const labelKey = key === 'type' ? 'rtype' : 'rproject';
+      const label = document.getElementById(`${labelKey}-label`);
+      const trigger = document.getElementById(`${labelKey}-trigger`);
+      if (label) {
+        label.textContent = value || 'Select';
+        trigger?.classList.toggle('text-neutral-400', !value);
+        trigger?.classList.toggle('text-neutral-900', !!value);
+      }
+      document.getElementById(`${labelKey}-dropdown`)?.classList.add('hidden');
+      filterRequestRows();
+    });
+  });
+
+  function filterRequestRows() {
+    document.querySelectorAll<HTMLTableRowElement>('.request-row').forEach(row => {
+      const matchType = !rfilters.type || row.dataset.rtype === rfilters.type;
+      const matchProject = !rfilters.project || row.dataset.rproject === rfilters.project;
+      row.classList.toggle('hidden', !(matchType && matchProject));
+    });
+  }
+
+  // ===== SELECT ALL CHECKBOX =====
+  const selectAll = document.getElementById('req-select-all') as HTMLInputElement | null;
+  const reqCbs = document.querySelectorAll<HTMLInputElement>('.req-cb');
+
+  selectAll?.addEventListener('change', () => {
+    reqCbs.forEach(cb => {
+      const row = cb.closest('.request-row');
+      if (row && !row.classList.contains('hidden')) {
+        cb.checked = selectAll.checked;
+      }
+    });
+  });
+
+  reqCbs.forEach(cb => {
+    cb.addEventListener('change', () => {
+      if (selectAll) {
+        const visibleCbs = Array.from(reqCbs).filter(c => !c.closest('.request-row')?.classList.contains('hidden'));
+        selectAll.checked = visibleCbs.length > 0 && visibleCbs.every(c => c.checked);
+      }
+    });
+  });
+</script>

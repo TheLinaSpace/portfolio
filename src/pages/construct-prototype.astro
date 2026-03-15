@@ -1,0 +1,1518 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const projects = [
+  { name: 'Downtown Office Building', client: 'Siemens', location: 'Downtown', manager: 'Sarah Johnson', status: 'In Progress', type: 'Commercial', start: '01 Mar 2025' },
+  { name: 'Riverside Apartments', client: 'Zublin', location: 'Riverside', manager: 'Mike Anderson', status: 'In Progress', type: 'Residential', start: '15 Jun 2025' },
+  { name: 'North Warehouse Expansion', client: 'Max Boegl', location: 'North Zone', manager: 'Bobby Wong', status: 'Pending', type: 'Industrial', start: '01 Feb 2026' },
+  { name: 'East Wing Renovation', client: 'Goldbeck', location: 'East District', manager: 'John Smith', status: 'On Hold', type: 'Renovation', start: '10 Nov 2025' },
+  { name: 'Harbour Bridge Overpass', client: 'Strabag', location: 'Harbour', manager: 'Tom Jonas', status: 'Completed', type: 'Infrastructure', start: '01 Jan 2024' },
+  { name: 'Central Plaza Tower', client: 'Siemens', location: 'City Centre', manager: 'Sarah Johnson', status: 'In Progress', type: 'Commercial', start: '20 Sep 2025' },
+  { name: 'Green Valley Residences', client: 'Goldbeck', location: 'Valley Road', manager: 'Lisa Chen', status: 'Pending', type: 'Residential', start: '01 Apr 2026' },
+  { name: 'Industrial Park – Phase 2', client: 'Max Boegl', location: 'South Zone', manager: 'Mike Anderson', status: 'Completed', type: 'Industrial', start: '05 Mar 2024' },
+];
+
+const projectTypes = [...new Set(projects.map(p => p.type))];
+const projectClients = [...new Set(projects.map(p => p.client))];
+
+const projectStatusColors: Record<string, string> = {
+  'In Progress': 'text-blue-600',
+  'Pending': 'text-orange-500',
+  'Completed': 'text-emerald-600',
+  'On Hold': 'text-neutral-400',
+};
+
+const projectDetails: Record<string, { badge: string; createdBy: string; date: string; contractor: string; area: string; level: string; discipline: string; purpose: string; category: string; description: string; activityLog: { date: string; action: string }[]; poItems: { label: string; amount: string }[] }> = {
+  'Downtown Office Building': { badge: 'In Progress', createdBy: 'Sarah Johnson', date: 'Mar 1, 2025', contractor: 'Siemens', area: 'Block A', level: 'All Floors', discipline: 'Architecture', purpose: 'For Construction', category: 'Commercial', description: 'A modern multi-storey commercial office building located in the heart of the downtown district. The project encompasses full structural, MEP, and interior fit-out works across 12 floors, targeting LEED Gold certification upon completion.', activityLog: [{ date: '20 Jan 2026', action: 'Uploaded Foundation Blueprint' }, { date: '17 Jan 2026', action: 'Approved Safety Inspection' }, { date: '10 Jan 2026', action: 'Submitted Change Order CO-145' }], poItems: [{ label: 'Structural Works', amount: '320,000$' }, { label: 'MEP Systems', amount: '180,000$' }, { label: 'Interior Fit-Out', amount: '95,000$' }, { label: 'Facade & Glazing', amount: '74,000$' }, { label: 'Contingency', amount: '31,000$' }] },
+  'Riverside Apartments': { badge: 'In Progress', createdBy: 'Mike Anderson', date: 'Jun 15, 2025', contractor: 'Zublin', area: 'Riverside Block', level: 'Floors 1–8', discipline: 'Structural', purpose: 'For Approval', category: 'Residential', description: 'A residential apartment complex comprising 64 units spread across 8 floors. The development includes underground parking, landscaped communal areas, and rooftop amenities. Construction is currently at the structural phase with MEP rough-in scheduled for Q2 2026.', activityLog: [{ date: '16 Jan 2026', action: 'Reviewed Change Order CO-145' }, { date: '14 Jan 2026', action: 'Approved Daily Progress Report' }, { date: '12 Jan 2026', action: 'Signed Contractor Agreement ABC' }], poItems: [{ label: 'Foundation & Structure', amount: '210,000$' }, { label: 'MEP Rough-In', amount: '88,000$' }, { label: 'Finishes', amount: '112,000$' }, { label: 'Landscaping', amount: '34,000$' }, { label: 'Contingency', amount: '16,000$' }] },
+  'North Warehouse Expansion': { badge: 'Pending', createdBy: 'Bobby Wong', date: 'Feb 1, 2026', contractor: 'Max Boegl', area: 'North Zone', level: 'Ground', discipline: 'Civil', purpose: 'For Review', category: 'Industrial', description: 'Expansion of an existing warehouse facility to increase storage capacity by 40%. Works include new structural steel bays, loading dock extensions, fire suppression upgrades, and site drainage improvements.', activityLog: [{ date: '01 Feb 2026', action: 'Project Created' }, { date: '28 Jan 2026', action: 'Scope Document Submitted' }], poItems: [{ label: 'Structural Steel', amount: '145,000$' }, { label: 'Civil Works', amount: '62,000$' }, { label: 'Fire Suppression', amount: '41,000$' }, { label: 'Drainage', amount: '28,000$' }, { label: 'Contingency', amount: '24,000$' }] },
+  'East Wing Renovation': { badge: 'On Hold', createdBy: 'John Smith', date: 'Nov 10, 2025', contractor: 'Goldbeck', area: 'East Wing', level: 'Floors 1–3', discipline: 'Architecture', purpose: 'For Record', category: 'Renovation', description: 'Full renovation of the east wing of an existing commercial building, covering strip-out, structural strengthening, new MEP infrastructure, and modern interior finishes. Project is currently on hold pending client approval on revised scope.', activityLog: [{ date: '05 Jan 2026', action: 'Scope Revision Submitted' }, { date: '20 Dec 2025', action: 'Project Placed On Hold' }, { date: '10 Nov 2025', action: 'Project Initiated' }], poItems: [{ label: 'Strip-Out Works', amount: '38,000$' }, { label: 'Structural Strengthening', amount: '95,000$' }, { label: 'MEP Upgrade', amount: '67,000$' }, { label: 'Interior Finishes', amount: '54,000$' }, { label: 'Contingency', amount: '21,000$' }] },
+  'Harbour Bridge Overpass': { badge: 'Released', createdBy: 'Tom Jonas', date: 'Jan 1, 2024', contractor: 'Strabag', area: 'Harbour Zone', level: 'Ground + Elevated', discipline: 'Civil', purpose: 'For Construction', category: 'Infrastructure', description: 'Design and construction of a 220-metre elevated pedestrian and light vehicle overpass connecting the harbour district to the city centre. The project was completed on schedule and has since been handed over to the municipal authority.', activityLog: [{ date: '15 Dec 2024', action: 'Handover Certificate Issued' }, { date: '01 Dec 2024', action: 'Final Inspection Approved' }, { date: '20 Nov 2024', action: 'Snag List Cleared' }], poItems: [{ label: 'Civil & Structural', amount: '580,000$' }, { label: 'Surfacing & Finishes', amount: '94,000$' }, { label: 'Lighting & Signage', amount: '47,000$' }, { label: 'Traffic Management', amount: '31,000$' }, { label: 'Contingency', amount: '48,000$' }] },
+  'Central Plaza Tower': { badge: 'In Progress', createdBy: 'Sarah Johnson', date: 'Sep 20, 2025', contractor: 'Siemens', area: 'City Centre', level: 'Floors 1–20', discipline: 'Architecture', purpose: 'For Construction', category: 'Commercial', description: 'A landmark 20-storey mixed-use tower at the centre of the city, featuring retail on the ground floor, office space on floors 2–15, and premium residences on floors 16–20. Currently in the structural frame phase.', activityLog: [{ date: '18 Jan 2026', action: 'Steel Frame – Level 4 Started' }, { date: '10 Jan 2026', action: 'Foundation Works Completed' }, { date: '20 Sep 2025', action: 'Project Initiated' }], poItems: [{ label: 'Structural Frame', amount: '740,000$' }, { label: 'Facade System', amount: '210,000$' }, { label: 'MEP Systems', amount: '195,000$' }, { label: 'Interior Works', amount: '260,000$' }, { label: 'Contingency', amount: '95,000$' }] },
+  'Green Valley Residences': { badge: 'Pending', createdBy: 'Lisa Chen', date: 'Apr 1, 2026', contractor: 'Goldbeck', area: 'Valley Road', level: 'Floors 1–5', discipline: 'Architecture', purpose: 'For Approval', category: 'Residential', description: 'A sustainable residential development of 40 low-rise units set within a landscaped valley setting. The project prioritises passive design strategies, solar energy, and water recycling systems. Currently in the pre-construction approvals stage.', activityLog: [{ date: '01 Apr 2026', action: 'Project Created' }, { date: '25 Mar 2026', action: 'Planning Permit Submitted' }], poItems: [{ label: 'Substructure', amount: '98,000$' }, { label: 'Superstructure', amount: '175,000$' }, { label: 'Sustainable Systems', amount: '63,000$' }, { label: 'Landscaping', amount: '44,000$' }, { label: 'Contingency', amount: '20,000$' }] },
+  'Industrial Park – Phase 2': { badge: 'Released', createdBy: 'Mike Anderson', date: 'Mar 5, 2024', contractor: 'Max Boegl', area: 'South Zone', level: 'Ground', discipline: 'Civil', purpose: 'For Record', category: 'Industrial', description: 'Second phase of the South Zone industrial park development, adding six new factory units and supporting infrastructure including roads, utilities, and perimeter security. The project has been completed and handed over to the client.', activityLog: [{ date: '10 Nov 2024', action: 'Handover Certificate Issued' }, { date: '01 Nov 2024', action: 'Final Snag List Cleared' }, { date: '15 Oct 2024', action: 'Client Walkthrough Completed' }], poItems: [{ label: 'Civil Infrastructure', amount: '290,000$' }, { label: 'Factory Units', amount: '420,000$' }, { label: 'Roads & Paving', amount: '75,000$' }, { label: 'Utilities', amount: '58,000$' }, { label: 'Contingency', amount: '57,000$' }] },
+};
+
+const tasks = [
+  { name: 'Review Foundation Blueprint', discipline: 'Structural', contractor: 'Siemens', priority: 'High', status: 'Pending', project: 'Downtown Office Building', assignedTo: 'Mike Anderson', date: '18 Jan 2026' },
+  { name: 'Review Building Permit 2026', discipline: 'Legal', contractor: 'Zublin', priority: 'Medium', status: 'Pending', project: 'Riverside Apartments', assignedTo: 'Sarah Johnson', date: '20 Jan 2026' },
+  { name: 'Review Safety Inspection Report', discipline: 'Safety', contractor: 'Strabag', priority: 'High', status: 'Pending', project: 'Downtown Office Building', assignedTo: 'John Smith', date: '17 Jan 2026' },
+  { name: 'Review Change Order CO-145', discipline: 'Structural', contractor: 'Zublin', priority: 'High', status: 'Pending', project: 'Riverside Apartments', assignedTo: 'Mike Anderson', date: '16 Jan 2026' },
+  { name: 'Review Material Submittal – Concrete', discipline: 'Materials', contractor: 'Goldbeck', priority: 'Medium', status: 'Pending', project: 'Downtown Office Building', assignedTo: 'Bobby Wong', date: '15 Jan 2026' },
+  { name: 'Review Daily Progress Report Jan 14', discipline: 'General', contractor: 'Siemens', priority: 'Low', status: 'Pending', project: 'Riverside Apartments', assignedTo: 'Sarah Johnson', date: '14 Jan 2026' },
+  { name: 'Review RFI – Structural Questions', discipline: 'Structural', contractor: 'Siemens', priority: 'High', status: 'Pending', project: 'Downtown Office Building', assignedTo: 'John Smith', date: '13 Jan 2026' },
+  { name: 'Review Contractor Agreement ABC', discipline: 'Legal', contractor: 'Max Boegl', priority: 'Medium', status: 'Pending', project: 'Riverside Apartments', assignedTo: 'Mike Anderson', date: '12 Jan 2026' },
+  { name: 'Review Request RFI #567478', discipline: 'Architecture', contractor: 'Goldbeck', priority: 'High', status: 'Pending', project: 'Downtown Office Building', assignedTo: 'Tom Jonas', date: '21 Jan 2026' },
+];
+
+const disciplines = [...new Set(tasks.map(t => t.discipline))];
+const contractors = [...new Set(tasks.map(t => t.contractor))];
+const taskProjects = [...new Set(tasks.map(t => t.project))];
+
+const requests = [
+  { title: 'RFI-001 – Structural Column Spacing', type: 'RFI', status: 'Open', project: 'Downtown Office Building', submittedBy: 'Mike Anderson', contractor: 'Siemens', date: '20 Jan 2026' },
+  { title: 'DCR-014 – HVAC Routing Change', type: 'DCR', status: 'Pending', project: 'Riverside Apartments', submittedBy: 'Sarah Johnson', contractor: 'Zublin', date: '19 Jan 2026' },
+  { title: 'CR-007 – Window Specification Update', type: 'CR', status: 'Approved', project: 'Downtown Office Building', submittedBy: 'Bobby Wong', contractor: 'Goldbeck', date: '17 Jan 2026' },
+  { title: 'WR-023 – Waterproofing Membrane Repair', type: 'WR', status: 'In Progress', project: 'Riverside Apartments', submittedBy: 'John Smith', contractor: 'Strabag', date: '16 Jan 2026' },
+  { title: 'RFI-002 – Pile Foundation Depth Clarification', type: 'RFI', status: 'Open', project: 'Central Plaza Tower', submittedBy: 'Tom Jonas', contractor: 'Siemens', date: '15 Jan 2026' },
+  { title: 'DCR-015 – Stairwell Width Adjustment', type: 'DCR', status: 'Rejected', project: 'Downtown Office Building', submittedBy: 'Lisa Chen', contractor: 'Max Boegl', date: '14 Jan 2026' },
+  { title: 'CR-008 – Facade Material Substitution', type: 'CR', status: 'Pending', project: 'Central Plaza Tower', submittedBy: 'Mike Anderson', contractor: 'Goldbeck', date: '13 Jan 2026' },
+  { title: 'WR-024 – Drainage Blockage – North Zone', type: 'WR', status: 'Approved', project: 'Riverside Apartments', submittedBy: 'Sarah Johnson', contractor: 'Strabag', date: '12 Jan 2026' },
+];
+
+const requestTypes = ['RFI', 'DCR', 'CR', 'WR'];
+const requestProjects = [...new Set(requests.map(r => r.project))];
+
+const requestStatusColors: Record<string, string> = {
+  'Open': 'text-blue-600',
+  'Pending': 'text-orange-500',
+  'In Progress': 'text-blue-500',
+  'Approved': 'text-emerald-600',
+  'Rejected': 'text-red-500',
+};
+
+const workspaceData: Record<string, { tasks: typeof tasks; projects: typeof projects }> = {
+  'Building Z': { tasks, projects },
+  'Building A': {
+    tasks: [
+      { name: 'Review Structural Report – Zone B', discipline: 'Structural', contractor: 'Strabag', priority: 'High', status: 'Pending', project: 'Building A Tower', assignedTo: 'Tom Jonas', date: '22 Jan 2026' },
+      { name: 'Review MEP Layout – Level 2', discipline: 'MEP', contractor: 'Zublin', priority: 'Medium', status: 'Pending', project: 'South Block Offices', assignedTo: 'Lisa Chen', date: '21 Jan 2026' },
+      { name: 'Review Site Safety Plan', discipline: 'Safety', contractor: 'Siemens', priority: 'High', status: 'Pending', project: 'Building A Tower', assignedTo: 'Mike Anderson', date: '20 Jan 2026' },
+      { name: 'Review Subcontractor Proposal', discipline: 'Legal', contractor: 'Max Boegl', priority: 'Low', status: 'Pending', project: 'Parking Structure – Phase 1', assignedTo: 'Sarah Johnson', date: '19 Jan 2026' },
+      { name: 'Review Electrical Schematics', discipline: 'MEP', contractor: 'Goldbeck', priority: 'Medium', status: 'Pending', project: 'South Block Offices', assignedTo: 'Bobby Wong', date: '18 Jan 2026' },
+      { name: 'Review Concrete Pour Plan', discipline: 'Structural', contractor: 'Strabag', priority: 'High', status: 'Pending', project: 'Building A Tower', assignedTo: 'John Smith', date: '17 Jan 2026' },
+      { name: 'Review Facade Design Update', discipline: 'Architecture', contractor: 'Goldbeck', priority: 'Medium', status: 'Pending', project: 'Lobby Renovation', assignedTo: 'Tom Jonas', date: '16 Jan 2026' },
+      { name: 'Review Weekly Progress Report', discipline: 'General', contractor: 'Siemens', priority: 'Low', status: 'Pending', project: 'South Block Offices', assignedTo: 'Sarah Johnson', date: '15 Jan 2026' },
+    ],
+    projects: [
+      { name: 'Building A Tower', client: 'Siemens', location: 'City Centre', manager: 'Sarah Johnson', status: 'In Progress', type: 'Commercial', start: '01 Aug 2025' },
+      { name: 'South Block Offices', client: 'Zublin', location: 'South District', manager: 'Mike Anderson', status: 'In Progress', type: 'Commercial', start: '15 Sep 2025' },
+      { name: 'Parking Structure – Phase 1', client: 'Max Boegl', location: 'Underground', manager: 'Bobby Wong', status: 'Pending', type: 'Infrastructure', start: '01 Mar 2026' },
+      { name: 'Lobby Renovation', client: 'Goldbeck', location: 'Ground Floor', manager: 'John Smith', status: 'Completed', type: 'Renovation', start: '01 Jun 2025' },
+      { name: 'Roof Garden Installation', client: 'Strabag', location: 'Rooftop', manager: 'Lisa Chen', status: 'On Hold', type: 'Residential', start: '01 Dec 2025' },
+      { name: 'Server Room Upgrade', client: 'Siemens', location: '5th Floor', manager: 'Tom Jonas', status: 'In Progress', type: 'Commercial', start: '10 Oct 2025' },
+    ],
+  },
+  'Building B': {
+    tasks: [
+      { name: 'Review Procurement Order #1023', discipline: 'Legal', contractor: 'Siemens', priority: 'High', status: 'Pending', project: 'Building B Extension', assignedTo: 'Mike Anderson', date: '21 Jan 2026' },
+      { name: 'Review Design Change – Stairwell', discipline: 'Architecture', contractor: 'Goldbeck', priority: 'Medium', status: 'Pending', project: 'West Wing Fit-Out', assignedTo: 'Sarah Johnson', date: '20 Jan 2026' },
+      { name: 'Review Drainage Plan', discipline: 'Civil', contractor: 'Max Boegl', priority: 'High', status: 'Pending', project: 'Basement Car Park', assignedTo: 'Bobby Wong', date: '19 Jan 2026' },
+      { name: 'Review QA Checklist', discipline: 'Safety', contractor: 'Strabag', priority: 'High', status: 'Pending', project: 'Building B Extension', assignedTo: 'John Smith', date: '18 Jan 2026' },
+      { name: 'Review Insurance Certificate', discipline: 'Legal', contractor: 'Zublin', priority: 'Low', status: 'Pending', project: 'West Wing Fit-Out', assignedTo: 'Lisa Chen', date: '17 Jan 2026' },
+      { name: 'Review Budget Revision', discipline: 'General', contractor: 'Siemens', priority: 'Medium', status: 'Pending', project: 'Cafeteria Renovation', assignedTo: 'Mike Anderson', date: '16 Jan 2026' },
+      { name: 'Review Fire Safety Report', discipline: 'Safety', contractor: 'Strabag', priority: 'High', status: 'Pending', project: 'Building B Extension', assignedTo: 'John Smith', date: '15 Jan 2026' },
+      { name: 'Review Handover Documents', discipline: 'Legal', contractor: 'Max Boegl', priority: 'Medium', status: 'Pending', project: 'Security System Upgrade', assignedTo: 'Tom Jonas', date: '14 Jan 2026' },
+    ],
+    projects: [
+      { name: 'Building B Extension', client: 'Siemens', location: 'North Block', manager: 'Mike Anderson', status: 'In Progress', type: 'Commercial', start: '01 Jul 2025' },
+      { name: 'West Wing Fit-Out', client: 'Goldbeck', location: 'West Wing', manager: 'Sarah Johnson', status: 'In Progress', type: 'Renovation', start: '01 Oct 2025' },
+      { name: 'Basement Car Park', client: 'Max Boegl', location: 'Basement', manager: 'Bobby Wong', status: 'Pending', type: 'Infrastructure', start: '01 Apr 2026' },
+      { name: 'Cafeteria Renovation', client: 'Strabag', location: 'Ground Floor', manager: 'Lisa Chen', status: 'Completed', type: 'Renovation', start: '01 May 2025' },
+      { name: 'Security System Upgrade', client: 'Siemens', location: 'All Floors', manager: 'Tom Jonas', status: 'Completed', type: 'Commercial', start: '15 Aug 2024' },
+      { name: 'Emergency Exit Redesign', client: 'Zublin', location: 'All Floors', manager: 'John Smith', status: 'On Hold', type: 'Safety', start: '01 Feb 2026' },
+    ],
+  },
+};
+
+const statusColors: Record<string, string> = {
+  'In Progress': 'text-blue-600',
+  'Pending': 'text-orange-500',
+  'Completed': 'text-emerald-600',
+  'Blocked': 'text-red-500',
+};
+
+const taskDetails: Record<string, { status: string; assignedTo: string; date: string; location: string; level: string; discipline: string; priority: string; type: string; revisions: number; attachments: { date: string; type: string }[] }> = {
+  'Review Foundation Blueprint': { status: 'In Progress', assignedTo: 'Mike Anderson (Siemens)', date: 'Jan 18, 2026', location: 'NPM Building', level: '1st Floor', discipline: 'Structural', priority: 'High', type: 'Document Review', revisions: 5, attachments: [{ date: '18 Jan 2026', type: 'PDF' }, { date: '15 Jan 2026', type: 'DWG' }] },
+  'Review Building Permit 2026': { status: 'Pending', assignedTo: 'Sarah Johnson (Zublin)', date: 'Jan 20, 2026', location: 'Riverside Apartments', level: 'All Floors', discipline: 'Legal', priority: 'Medium', type: 'Document Review', revisions: 2, attachments: [{ date: '20 Jan 2026', type: 'PDF' }] },
+  'Review Safety Inspection Report': { status: 'Completed', assignedTo: 'John Smith (Strabag)', date: 'Jan 17, 2026', location: 'Downtown Office', level: 'Ground Floor', discipline: 'Safety', priority: 'High', type: 'Document Review', revisions: 3, attachments: [{ date: '17 Jan 2026', type: 'PDF' }, { date: '15 Jan 2026', type: 'PDF' }] },
+  'Review Change Order CO-145': { status: 'Pending', assignedTo: 'Mike Anderson (Zublin)', date: 'Jan 16, 2026', location: 'Riverside Apartments', level: '3rd Floor', discipline: 'Structural', priority: 'High', type: 'Document Review', revisions: 1, attachments: [{ date: '16 Jan 2026', type: 'PDF' }] },
+  'Review Material Submittal – Concrete': { status: 'Completed', assignedTo: 'Bobby Wong (Goldbeck)', date: 'Jan 15, 2026', location: 'Downtown Office', level: 'Foundation', discipline: 'Materials', priority: 'Medium', type: 'Document Review', revisions: 4, attachments: [{ date: '15 Jan 2026', type: 'PDF' }, { date: '12 Jan 2026', type: 'PDF' }] },
+  'Review Daily Progress Report Jan 14': { status: 'Completed', assignedTo: 'Sarah Johnson (Siemens)', date: 'Jan 14, 2026', location: 'Riverside Apartments', level: 'All Floors', discipline: 'General', priority: 'Low', type: 'Document Review', revisions: 1, attachments: [{ date: '14 Jan 2026', type: 'PDF' }] },
+  'Review RFI – Structural Questions': { status: 'Blocked', assignedTo: 'John Smith (Siemens)', date: 'Jan 13, 2026', location: 'Downtown Office', level: '2nd Floor', discipline: 'Structural', priority: 'High', type: 'Document Review', revisions: 2, attachments: [{ date: '13 Jan 2026', type: 'PDF' }] },
+  'Review Contractor Agreement ABC': { status: 'Completed', assignedTo: 'Mike Anderson (Max Boegl)', date: 'Jan 12, 2026', location: 'Riverside Apartments', level: 'N/A', discipline: 'Legal', priority: 'Medium', type: 'Document Review', revisions: 3, attachments: [{ date: '12 Jan 2026', type: 'PDF' }, { date: '10 Jan 2026', type: 'DOCX' }] },
+  'Review Request RFI #567478': { status: 'Pending', assignedTo: 'Tom Jonas (Goldbeck)', date: 'Jan 21, 2026', location: 'Downtown Office', level: '3rd Floor', discipline: 'Architecture', priority: 'High', type: 'Document Review', revisions: 1, attachments: [{ date: '21 Jan 2026', type: 'PDF' }] },
+};
+
+const reviewLogs: Record<string, { name: string; role: string; status: string; date: string; comment?: string }[]> = {
+  'Review Foundation Blueprint': [
+    { name: 'Sarah Johnson', role: 'Project Manager', status: 'Approved', date: 'Jan 17, 2026', comment: 'All structural details verified.' },
+    { name: 'Mike Anderson', role: 'Lead Engineer', status: 'Approved', date: 'Jan 16, 2026', comment: 'Approved with minor annotations.' },
+    { name: 'Bobby Wong', role: 'QA Reviewer', status: 'Pending', date: 'Jan 18, 2026' },
+  ],
+  'Review Building Permit 2026': [
+    { name: 'Sarah Johnson', role: 'Project Manager', status: 'Pending', date: 'Jan 20, 2026' },
+    { name: 'John Smith', role: 'Legal Advisor', status: 'Pending', date: 'Jan 20, 2026' },
+    { name: 'Mike Anderson', role: 'Lead Engineer', status: 'Approved', date: 'Jan 19, 2026', comment: 'Technical specs confirmed.' },
+  ],
+  'Review Safety Inspection Report': [
+    { name: 'Lisa Chen', role: 'Safety Officer', status: 'Approved', date: 'Jan 17, 2026', comment: 'Inspection passed all criteria.' },
+    { name: 'John Smith', role: 'Site Inspector', status: 'Approved', date: 'Jan 16, 2026' },
+    { name: 'Sarah Johnson', role: 'Project Manager', status: 'Approved', date: 'Jan 16, 2026' },
+  ],
+  'Review Change Order CO-145': [
+    { name: 'Mike Anderson', role: 'Lead Engineer', status: 'Approved', date: 'Jan 16, 2026', comment: 'Budget impact reviewed.' },
+    { name: 'Sarah Johnson', role: 'Project Manager', status: 'Pending', date: 'Jan 16, 2026' },
+    { name: 'Bobby Wong', role: 'Finance', status: 'Pending', date: 'Jan 16, 2026' },
+  ],
+  'Review Material Submittal – Concrete': [
+    { name: 'Bobby Wong', role: 'Materials Lead', status: 'Approved', date: 'Jan 15, 2026', comment: 'Grade and mix ratio confirmed.' },
+    { name: 'Tom Jonas', role: 'Architect', status: 'Approved', date: 'Jan 14, 2026' },
+    { name: 'Mike Anderson', role: 'Lead Engineer', status: 'Approved', date: 'Jan 13, 2026' },
+  ],
+  'Review Daily Progress Report Jan 14': [
+    { name: 'Sarah Johnson', role: 'Project Manager', status: 'Approved', date: 'Jan 14, 2026' },
+    { name: 'Mike Anderson', role: 'Lead Engineer', status: 'Approved', date: 'Jan 14, 2026' },
+  ],
+  'Review RFI – Structural Questions': [
+    { name: 'Tom Jonas', role: 'Architect', status: 'Declined', date: 'Jan 13, 2026', comment: 'Questions already addressed in Rev 2 drawings.' },
+    { name: 'Mike Anderson', role: 'Lead Engineer', status: 'Declined', date: 'Jan 12, 2026', comment: 'Duplicate of RFI-132.' },
+  ],
+  'Review Contractor Agreement ABC': [
+    { name: 'John Smith', role: 'Legal Advisor', status: 'Approved', date: 'Jan 12, 2026', comment: 'All clauses reviewed and accepted.' },
+    { name: 'Sarah Johnson', role: 'Project Manager', status: 'Approved', date: 'Jan 11, 2026' },
+    { name: 'Mike Anderson', role: 'Lead Engineer', status: 'Approved', date: 'Jan 10, 2026' },
+  ],
+  'Review Request RFI #567478': [
+    { name: 'Tom Jonas', role: 'Architect', status: 'Pending', date: 'Jan 21, 2026' },
+    { name: 'Lisa Chen', role: 'Safety Officer', status: 'Pending', date: 'Jan 21, 2026' },
+    { name: 'Sarah Johnson', role: 'Project Manager', status: 'Pending', date: 'Jan 21, 2026' },
+  ],
+};
+---
+
+<Layout title="Site Tasks - Construct" bgColor="#FFFFFF" hideHeader={true}>
+  <main class="min-h-screen flex">
+
+    <!-- Side Navigation -->
+    <nav class="fixed top-0 left-0 h-full w-56 bg-white border-r border-neutral-200 flex flex-col pt-8 pb-6 z-20">
+      <div class="px-5 mb-8">
+        <span class="text-sm font-semibold text-neutral-900">Construct</span>
+        <div class="relative mt-2" id="workspace-wrapper">
+          <button id="workspace-trigger" type="button" class="w-full flex items-center justify-between gap-2 px-3 py-2 rounded-lg border border-neutral-200 text-sm text-neutral-700 hover:border-neutral-300 hover:bg-neutral-50 transition-colors">
+            <div class="flex items-center gap-2 min-w-0">
+              <span class="w-2 h-2 rounded-full bg-emerald-500 shrink-0"></span>
+              <span class="truncate">Building Z</span>
+            </div>
+            <svg class="w-3.5 h-3.5 text-neutral-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div id="workspace-dropdown" class="hidden absolute top-full left-0 mt-1 w-full bg-white border border-neutral-200 rounded-lg shadow-lg z-30 py-1">
+            <button class="workspace-option w-full flex items-center gap-2 px-3 py-2 text-sm text-neutral-900 hover:bg-neutral-50 font-medium">
+              <span class="w-2 h-2 rounded-full bg-emerald-500 shrink-0"></span>
+              Building Z
+            </button>
+            <button class="workspace-option w-full flex items-center gap-2 px-3 py-2 text-sm text-neutral-500 hover:bg-neutral-50">
+              <span class="w-2 h-2 rounded-full bg-neutral-300 shrink-0"></span>
+              Building A
+            </button>
+            <button class="workspace-option w-full flex items-center gap-2 px-3 py-2 text-sm text-neutral-500 hover:bg-neutral-50">
+              <span class="w-2 h-2 rounded-full bg-neutral-300 shrink-0"></span>
+              Building B
+            </button>
+          </div>
+        </div>
+      </div>
+      <ul class="flex flex-col gap-1 px-3">
+        <li>
+          <a href="#" data-nav="tasks" class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium bg-neutral-100 text-neutral-900">
+            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+            Tasks
+          </a>
+        </li>
+        <li>
+          <a href="/construct-projects" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-neutral-500 hover:bg-neutral-50 hover:text-neutral-900 transition-colors">
+            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7h18M3 12h18M3 17h18"/></svg>
+            Projects
+          </a>
+        </li>
+        <li>
+          <a href="/documents" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-neutral-500 hover:bg-neutral-50 hover:text-neutral-900 transition-colors">
+            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+            Documents
+          </a>
+        </li>
+        <li>
+          <a href="/construct-requests" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-neutral-500 hover:bg-neutral-50 hover:text-neutral-900 transition-colors">
+            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
+            Requests
+          </a>
+        </li>
+        <li>
+          <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-neutral-500 hover:bg-neutral-50 hover:text-neutral-900 transition-colors">
+            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            Inspections
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- Main content offset by nav width -->
+    <div class="flex-1 ml-56">
+    <div id="task-list-view" class="px-6 md:px-12 pt-6 md:pt-8">
+      <!-- Back -->
+      <a href="/projects/construct" class="inline-flex items-center gap-2 text-sm text-neutral-700 hover:text-neutral-900 transition-colors mb-8">
+        ← Back
+      </a>
+
+      <!-- Title row -->
+      <div class="flex items-center justify-between mb-8">
+        <h1 class="text-3xl md:text-4xl font-bold text-neutral-900">Tasks</h1>
+        <button class="px-5 py-2.5 text-sm font-medium rounded-lg bg-neutral-900 text-white hover:bg-neutral-800 transition-colors">
+          Add Task
+        </button>
+      </div>
+
+      <!-- Filters row -->
+      <div class="flex flex-wrap items-end justify-between gap-4 mb-8">
+        <div class="flex items-end gap-6">
+          <!-- Discipline filter -->
+          <div class="relative" id="discipline-wrapper">
+            <label class="block text-xs text-neutral-500 mb-1.5">Discipline</label>
+            <button id="discipline-trigger" type="button" class="appearance-none bg-white border border-neutral-300 rounded-lg px-4 py-2.5 pr-10 text-sm text-neutral-400 min-w-[150px] cursor-pointer hover:border-neutral-400 focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:ring-offset-1 text-left relative">
+              <span id="discipline-label">Select</span>
+              <svg class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-500 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div id="discipline-dropdown" class="hidden absolute top-full left-0 mt-1 w-full bg-white border border-neutral-200 rounded-lg shadow-lg z-30 py-1 min-w-[180px]">
+              <button class="filter-option w-full text-left px-3 py-2 text-sm text-neutral-900 hover:bg-neutral-50" data-filter="discipline" data-value="">All</button>
+              {disciplines.map(d => (
+                <button class="filter-option w-full text-left px-3 py-2 text-sm text-neutral-900 hover:bg-neutral-50" data-filter="discipline" data-value={d}>{d}</button>
+              ))}
+            </div>
+          </div>
+
+          <!-- Contractor filter -->
+          <div class="relative" id="contractor-wrapper">
+            <label class="block text-xs text-neutral-500 mb-1.5">Contractor</label>
+            <button id="contractor-trigger" type="button" class="appearance-none bg-white border border-neutral-300 rounded-lg px-4 py-2.5 pr-10 text-sm text-neutral-400 min-w-[150px] cursor-pointer hover:border-neutral-400 focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:ring-offset-1 text-left relative">
+              <span id="contractor-label">Select</span>
+              <svg class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-500 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div id="contractor-dropdown" class="hidden absolute top-full left-0 mt-1 w-full bg-white border border-neutral-200 rounded-lg shadow-lg z-30 py-1 min-w-[180px]">
+              <button class="filter-option w-full text-left px-3 py-2 text-sm text-neutral-900 hover:bg-neutral-50" data-filter="contractor" data-value="">All</button>
+              {contractors.map(c => (
+                <button class="filter-option w-full text-left px-3 py-2 text-sm text-neutral-900 hover:bg-neutral-50" data-filter="contractor" data-value={c}>{c}</button>
+              ))}
+            </div>
+          </div>
+
+          <!-- Project filter -->
+          <div class="relative" id="project-wrapper">
+            <label class="block text-xs text-neutral-500 mb-1.5">Project</label>
+            <button id="project-trigger" type="button" class="appearance-none bg-white border border-neutral-300 rounded-lg px-4 py-2.5 pr-10 text-sm text-neutral-400 min-w-[150px] cursor-pointer hover:border-neutral-400 focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:ring-offset-1 text-left relative">
+              <span id="project-label">Select</span>
+              <svg class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-500 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div id="project-dropdown" class="hidden absolute top-full left-0 mt-1 w-full bg-white border border-neutral-200 rounded-lg shadow-lg z-30 py-1 min-w-[220px]">
+              <button class="filter-option w-full text-left px-3 py-2 text-sm text-neutral-900 hover:bg-neutral-50" data-filter="project" data-value="">All</button>
+              {taskProjects.map(p => (
+                <button class="filter-option w-full text-left px-3 py-2 text-sm text-neutral-900 hover:bg-neutral-50" data-filter="project" data-value={p}>{p}</button>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <!-- Right icons -->
+        <div class="flex items-center gap-3">
+          <button class="p-1.5 text-neutral-500 hover:text-neutral-900 transition-colors" title="Search">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          </button>
+          <button class="p-1.5 text-neutral-500 hover:text-neutral-900 transition-colors" title="Filter">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/></svg>
+          </button>
+          <button class="p-1.5 text-neutral-500 hover:text-neutral-900 transition-colors" title="Columns">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div class="overflow-x-auto">
+        <table class="w-full border-collapse">
+          <thead>
+            <tr class="border-b border-neutral-200">
+              <th class="w-10 px-3 py-3 text-left">
+                <input type="checkbox" id="select-all" class="w-4 h-4 rounded border-neutral-300 accent-neutral-900 cursor-pointer" />
+              </th>
+              <th class="px-3 py-3 text-left text-sm font-semibold text-neutral-900">Task Name</th>
+              <th class="px-3 py-3 text-left text-sm font-semibold text-neutral-900">Project</th>
+              <th class="px-3 py-3 text-left text-sm font-semibold text-neutral-900">Discipline</th>
+              <th class="px-3 py-3 text-left text-sm font-semibold text-neutral-900">Contractor</th>
+              <th class="px-3 py-3 text-left text-sm font-semibold text-neutral-900">Priority</th>
+              <th class="px-3 py-3 text-left text-sm font-semibold text-neutral-900">Status</th>
+              <th class="px-3 py-3 text-left text-sm font-semibold text-neutral-900">Assigned To</th>
+              <th class="w-10 px-3 py-3"></th>
+            </tr>
+          </thead>
+          <tbody id="task-tbody">
+            {tasks.map(task => (
+              <tr class="task-row border-b border-neutral-100 hover:bg-neutral-50/50 transition-colors" data-discipline={task.discipline} data-contractor={task.contractor} data-project={task.project}>
+                <td class="px-3 py-3.5">
+                  <input type="checkbox" class="task-cb w-4 h-4 rounded border-neutral-300 accent-neutral-900 cursor-pointer" />
+                </td>
+                <td class="px-3 py-3.5 text-sm text-neutral-900">
+                  <button class="task-name-link hover:underline underline-offset-2 text-left" data-task-name={task.name} data-task-type={taskDetails[task.name]?.type}>{task.name}</button>
+                </td>
+                <td class="px-3 py-3.5 text-sm text-neutral-700">{task.project}</td>
+                <td class="px-3 py-3.5 text-sm text-neutral-700">{task.discipline}</td>
+                <td class="px-3 py-3.5 text-sm text-neutral-700">{task.contractor}</td>
+                <td class="px-3 py-3.5 text-sm text-neutral-700">{task.priority}</td>
+                <td class="px-3 py-3.5">
+                  <span class={`text-sm font-medium ${statusColors[task.status]}`}>{task.status}</span>
+                </td>
+                <td class="px-3 py-3.5 text-sm text-neutral-500">{task.assignedTo} on {task.date}</td>
+                <td class="px-3 py-3.5 text-center">
+                  <button class="text-neutral-400 hover:text-neutral-700 transition-colors">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg>
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pagination -->
+      <div class="flex items-center justify-center gap-2 py-8">
+        <button class="flex items-center gap-1 text-sm text-neutral-400 cursor-not-allowed">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+          Previous
+        </button>
+        <button class="w-8 h-8 rounded-md flex items-center justify-center text-sm font-medium bg-neutral-900 text-white">1</button>
+        <button class="w-8 h-8 rounded-md flex items-center justify-center text-sm text-neutral-700 hover:bg-neutral-100">2</button>
+        <span class="text-sm text-neutral-400 px-1">...</span>
+        <button class="w-8 h-8 rounded-md flex items-center justify-center text-sm text-neutral-700 hover:bg-neutral-100">4</button>
+        <button class="flex items-center gap-1 text-sm text-neutral-700 hover:text-neutral-900">
+          Next
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- ==================== PROJECTS LIST VIEW ==================== -->
+    <div id="project-list-view" class="hidden px-6 md:px-12 pt-6 md:pt-8">
+      <!-- Back -->
+      <a href="/projects/construct" class="inline-flex items-center gap-2 text-sm text-neutral-700 hover:text-neutral-900 transition-colors mb-8">
+        ← Back
+      </a>
+
+      <!-- Title row -->
+      <div class="flex items-center justify-between mb-8">
+        <h1 class="text-3xl md:text-4xl font-bold text-neutral-900">Projects</h1>
+        <button class="px-5 py-2.5 text-sm font-medium rounded-lg bg-neutral-900 text-white hover:bg-neutral-800 transition-colors">
+          Add Project
+        </button>
+      </div>
+
+      <!-- Filters row -->
+      <div class="flex flex-wrap items-end justify-between gap-4 mb-8">
+        <div class="flex items-end gap-6">
+          <!-- Type filter -->
+          <div class="relative" id="ptype-wrapper">
+            <label class="block text-xs text-neutral-500 mb-1.5">Type</label>
+            <button id="ptype-trigger" type="button" class="appearance-none bg-white border border-neutral-300 rounded-lg px-4 py-2.5 pr-10 text-sm text-neutral-400 min-w-[150px] cursor-pointer hover:border-neutral-400 focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:ring-offset-1 text-left relative">
+              <span id="ptype-label">Select</span>
+              <svg class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-500 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div id="ptype-dropdown" class="hidden absolute top-full left-0 mt-1 w-full bg-white border border-neutral-200 rounded-lg shadow-lg z-30 py-1 min-w-[180px]">
+              <button class="project-filter-option w-full text-left px-3 py-2 text-sm text-neutral-900 hover:bg-neutral-50" data-pfilter="type" data-value="">All</button>
+              {projectTypes.map(t => (
+                <button class="project-filter-option w-full text-left px-3 py-2 text-sm text-neutral-900 hover:bg-neutral-50" data-pfilter="type" data-value={t}>{t}</button>
+              ))}
+            </div>
+          </div>
+
+          <!-- Client filter -->
+          <div class="relative" id="pclient-wrapper">
+            <label class="block text-xs text-neutral-500 mb-1.5">Client</label>
+            <button id="pclient-trigger" type="button" class="appearance-none bg-white border border-neutral-300 rounded-lg px-4 py-2.5 pr-10 text-sm text-neutral-400 min-w-[150px] cursor-pointer hover:border-neutral-400 focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:ring-offset-1 text-left relative">
+              <span id="pclient-label">Select</span>
+              <svg class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-500 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div id="pclient-dropdown" class="hidden absolute top-full left-0 mt-1 w-full bg-white border border-neutral-200 rounded-lg shadow-lg z-30 py-1 min-w-[180px]">
+              <button class="project-filter-option w-full text-left px-3 py-2 text-sm text-neutral-900 hover:bg-neutral-50" data-pfilter="client" data-value="">All</button>
+              {projectClients.map(c => (
+                <button class="project-filter-option w-full text-left px-3 py-2 text-sm text-neutral-900 hover:bg-neutral-50" data-pfilter="client" data-value={c}>{c}</button>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <!-- Right icons -->
+        <div class="flex items-center gap-3">
+          <button class="p-1.5 text-neutral-500 hover:text-neutral-900 transition-colors" title="Search">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          </button>
+          <button class="p-1.5 text-neutral-500 hover:text-neutral-900 transition-colors" title="Filter">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/></svg>
+          </button>
+          <button class="p-1.5 text-neutral-500 hover:text-neutral-900 transition-colors" title="Columns">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div class="overflow-x-auto">
+        <table class="w-full border-collapse">
+          <thead>
+            <tr class="border-b border-neutral-200">
+              <th class="w-10 px-3 py-3 text-left">
+                <input type="checkbox" class="w-4 h-4 rounded border-neutral-300 accent-neutral-900 cursor-pointer" />
+              </th>
+              <th class="px-3 py-3 text-left text-sm font-semibold text-neutral-900">Project Name</th>
+              <th class="px-3 py-3 text-left text-sm font-semibold text-neutral-900">Type</th>
+              <th class="px-3 py-3 text-left text-sm font-semibold text-neutral-900">Client</th>
+              <th class="px-3 py-3 text-left text-sm font-semibold text-neutral-900">Location</th>
+              <th class="px-3 py-3 text-left text-sm font-semibold text-neutral-900">Status</th>
+              <th class="px-3 py-3 text-left text-sm font-semibold text-neutral-900">Manager</th>
+              <th class="px-3 py-3 text-left text-sm font-semibold text-neutral-900">Start Date</th>
+              <th class="w-10 px-3 py-3"></th>
+            </tr>
+          </thead>
+          <tbody id="project-tbody">
+            {projects.map(p => (
+              <tr class="project-row border-b border-neutral-100 hover:bg-neutral-50/50 transition-colors" data-ptype={p.type} data-pclient={p.client}>
+                <td class="px-3 py-3.5">
+                  <input type="checkbox" class="w-4 h-4 rounded border-neutral-300 accent-neutral-900 cursor-pointer" />
+                </td>
+                <td class="px-3 py-3.5 text-sm text-neutral-900 font-medium">
+                  <button class="project-name-link hover:underline underline-offset-2 text-left" data-project-name={p.name}>{p.name}</button>
+                </td>
+                <td class="px-3 py-3.5 text-sm text-neutral-700">{p.type}</td>
+                <td class="px-3 py-3.5 text-sm text-neutral-700">{p.client}</td>
+                <td class="px-3 py-3.5 text-sm text-neutral-700">{p.location}</td>
+                <td class="px-3 py-3.5">
+                  <span class={`text-sm font-medium ${projectStatusColors[p.status]}`}>{p.status}</span>
+                </td>
+                <td class="px-3 py-3.5 text-sm text-neutral-500">{p.manager}</td>
+                <td class="px-3 py-3.5 text-sm text-neutral-500">{p.start}</td>
+                <td class="px-3 py-3.5 text-center">
+                  <button class="text-neutral-400 hover:text-neutral-700 transition-colors">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg>
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pagination -->
+      <div class="flex items-center justify-center gap-2 py-8">
+        <button class="flex items-center gap-1 text-sm text-neutral-400 cursor-not-allowed">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+          Previous
+        </button>
+        <button class="w-8 h-8 rounded-md flex items-center justify-center text-sm font-medium bg-neutral-900 text-white">1</button>
+        <button class="w-8 h-8 rounded-md flex items-center justify-center text-sm text-neutral-700 hover:bg-neutral-100">2</button>
+        <button class="flex items-center gap-1 text-sm text-neutral-700 hover:text-neutral-900">
+          Next
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- ==================== REQUESTS LIST VIEW ==================== -->
+    <div id="request-list-view" class="hidden px-6 md:px-12 pt-6 md:pt-8">
+      <!-- Back -->
+      <a href="/projects/construct" class="inline-flex items-center gap-2 text-sm text-neutral-700 hover:text-neutral-900 transition-colors mb-8">
+        ← Back
+      </a>
+
+      <!-- Title row -->
+      <div class="flex items-center justify-between mb-8">
+        <h1 class="text-3xl md:text-4xl font-bold text-neutral-900">Requests</h1>
+        <button class="px-5 py-2.5 text-sm font-medium rounded-lg bg-neutral-900 text-white hover:bg-neutral-800 transition-colors">
+          New Request
+        </button>
+      </div>
+
+      <!-- Filters row -->
+      <div class="flex flex-wrap items-end justify-between gap-4 mb-8">
+        <div class="flex items-end gap-6">
+          <!-- Type filter -->
+          <div class="relative" id="rtype-wrapper">
+            <label class="block text-xs text-neutral-500 mb-1.5">Type</label>
+            <button id="rtype-trigger" type="button" class="appearance-none bg-white border border-neutral-300 rounded-lg px-4 py-2.5 pr-10 text-sm text-neutral-400 min-w-[150px] cursor-pointer hover:border-neutral-400 focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:ring-offset-1 text-left relative">
+              <span id="rtype-label">Select</span>
+              <svg class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-500 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div id="rtype-dropdown" class="hidden absolute top-full left-0 mt-1 w-full bg-white border border-neutral-200 rounded-lg shadow-lg z-30 py-1 min-w-[150px]">
+              <button class="request-filter-option w-full text-left px-3 py-2 text-sm text-neutral-900 hover:bg-neutral-50" data-rfilter="type" data-value="">All</button>
+              {requestTypes.map(t => (
+                <button class="request-filter-option w-full text-left px-3 py-2 text-sm text-neutral-900 hover:bg-neutral-50" data-rfilter="type" data-value={t}>{t}</button>
+              ))}
+            </div>
+          </div>
+
+          <!-- Project filter -->
+          <div class="relative" id="rproject-wrapper">
+            <label class="block text-xs text-neutral-500 mb-1.5">Project</label>
+            <button id="rproject-trigger" type="button" class="appearance-none bg-white border border-neutral-300 rounded-lg px-4 py-2.5 pr-10 text-sm text-neutral-400 min-w-[180px] cursor-pointer hover:border-neutral-400 focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:ring-offset-1 text-left relative">
+              <span id="rproject-label">Select</span>
+              <svg class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-500 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div id="rproject-dropdown" class="hidden absolute top-full left-0 mt-1 w-full bg-white border border-neutral-200 rounded-lg shadow-lg z-30 py-1 min-w-[220px]">
+              <button class="request-filter-option w-full text-left px-3 py-2 text-sm text-neutral-900 hover:bg-neutral-50" data-rfilter="project" data-value="">All</button>
+              {requestProjects.map(p => (
+                <button class="request-filter-option w-full text-left px-3 py-2 text-sm text-neutral-900 hover:bg-neutral-50" data-rfilter="project" data-value={p}>{p}</button>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <!-- Right icons -->
+        <div class="flex items-center gap-3">
+          <button class="p-1.5 text-neutral-500 hover:text-neutral-900 transition-colors" title="Search">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          </button>
+          <button class="p-1.5 text-neutral-500 hover:text-neutral-900 transition-colors" title="Filter">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/></svg>
+          </button>
+          <button class="p-1.5 text-neutral-500 hover:text-neutral-900 transition-colors" title="Columns">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div class="overflow-x-auto">
+        <table class="w-full border-collapse">
+          <thead>
+            <tr class="border-b border-neutral-200">
+              <th class="w-10 px-3 py-3 text-left">
+                <input type="checkbox" class="w-4 h-4 rounded border-neutral-300 accent-neutral-900 cursor-pointer" />
+              </th>
+              <th class="px-3 py-3 text-left text-sm font-semibold text-neutral-900">Title</th>
+              <th class="px-3 py-3 text-left text-sm font-semibold text-neutral-900">Type</th>
+              <th class="px-3 py-3 text-left text-sm font-semibold text-neutral-900">Project</th>
+              <th class="px-3 py-3 text-left text-sm font-semibold text-neutral-900">Status</th>
+              <th class="px-3 py-3 text-left text-sm font-semibold text-neutral-900">Contractor</th>
+              <th class="px-3 py-3 text-left text-sm font-semibold text-neutral-900">Submitted By</th>
+              <th class="w-10 px-3 py-3"></th>
+            </tr>
+          </thead>
+          <tbody id="request-tbody">
+            {requests.map(r => (
+              <tr class="request-row border-b border-neutral-100 hover:bg-neutral-50/50 transition-colors" data-rtype={r.type} data-rproject={r.project}>
+                <td class="px-3 py-3.5">
+                  <input type="checkbox" class="w-4 h-4 rounded border-neutral-300 accent-neutral-900 cursor-pointer" />
+                </td>
+                <td class="px-3 py-3.5 text-sm text-neutral-900 font-medium">{r.title}</td>
+                <td class="px-3 py-3.5">
+                  <span class="text-xs font-medium px-2 py-0.5 rounded bg-neutral-100 text-neutral-700">{r.type}</span>
+                </td>
+                <td class="px-3 py-3.5 text-sm text-neutral-700">{r.project}</td>
+                <td class="px-3 py-3.5">
+                  <span class={`text-sm font-medium ${requestStatusColors[r.status]}`}>{r.status}</span>
+                </td>
+                <td class="px-3 py-3.5 text-sm text-neutral-700">{r.contractor}</td>
+                <td class="px-3 py-3.5 text-sm text-neutral-500">{r.submittedBy} on {r.date}</td>
+                <td class="px-3 py-3.5 text-center">
+                  <button class="text-neutral-400 hover:text-neutral-700 transition-colors">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg>
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pagination -->
+      <div class="flex items-center justify-center gap-2 py-8">
+        <button class="flex items-center gap-1 text-sm text-neutral-400 cursor-not-allowed">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+          Previous
+        </button>
+        <button class="w-8 h-8 rounded-md flex items-center justify-center text-sm font-medium bg-neutral-900 text-white">1</button>
+        <button class="w-8 h-8 rounded-md flex items-center justify-center text-sm text-neutral-700 hover:bg-neutral-100">2</button>
+        <button class="flex items-center gap-1 text-sm text-neutral-700 hover:text-neutral-900">
+          Next
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- ==================== PROJECT DETAIL VIEW ==================== -->
+    <div id="project-detail-view" class="hidden px-6 md:px-12 pt-6 md:pt-8 pb-12">
+      <!-- Back -->
+      <button id="project-back" class="inline-flex items-center gap-2 text-sm text-neutral-500 hover:text-neutral-900 transition-colors mb-6">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+        Projects
+      </button>
+
+      <!-- Header -->
+      <div class="flex items-start justify-between gap-6 mb-2">
+        <h1 id="proj-title" class="text-3xl md:text-4xl font-bold text-neutral-900"></h1>
+        <div class="flex items-center gap-2 shrink-0 mt-1">
+          <button class="px-4 py-2 text-sm font-medium rounded-lg bg-neutral-900 text-white hover:bg-neutral-800 transition-colors">Complete Construction</button>
+          <button class="px-4 py-2 text-sm font-medium rounded-lg border border-neutral-300 text-neutral-700 hover:bg-neutral-50 transition-colors">Edit</button>
+        </div>
+      </div>
+      <div class="flex items-center gap-4 mb-8">
+        <span id="proj-badge" class="text-xs font-medium px-2.5 py-0.5 rounded-full"></span>
+        <span id="proj-meta" class="text-sm text-neutral-500"></span>
+      </div>
+
+      <!-- Body: left tabs + main content + right PO card -->
+      <div class="flex gap-10">
+
+        <!-- Left tab nav -->
+        <nav class="w-32 shrink-0 flex flex-col gap-1">
+          <button class="proj-tab text-left px-3 py-2 text-sm font-medium text-neutral-900 border border-neutral-200 rounded-lg bg-white" data-ptab="overview">Overview</button>
+          <button class="proj-tab text-left px-3 py-2 text-sm text-neutral-500 hover:text-neutral-900 transition-colors" data-ptab="documents">Documents</button>
+          <button class="proj-tab text-left px-3 py-2 text-sm text-neutral-500 hover:text-neutral-900 transition-colors" data-ptab="requests">Requests</button>
+          <button class="proj-tab text-left px-3 py-2 text-sm text-neutral-500 hover:text-neutral-900 transition-colors" data-ptab="savings">Savings</button>
+        </nav>
+
+        <!-- Main content -->
+        <div class="flex-1 min-w-0">
+
+          <!-- Overview tab -->
+          <div id="ptab-overview">
+            <!-- General Information -->
+            <div class="mb-8" style="width: 486px;">
+              <h2 class="text-base font-semibold text-neutral-900 mb-4">General Information</h2>
+              <div class="flex flex-col gap-3" id="proj-general-info"></div>
+            </div>
+
+            <!-- Description -->
+            <div class="mb-8" style="width: 486px;">
+              <h2 class="text-base font-semibold text-neutral-900 mb-3">Description</h2>
+              <p id="proj-description" class="text-sm text-neutral-600 leading-7"></p>
+            </div>
+
+            <!-- Activity Log -->
+            <div>
+              <h2 class="text-base font-semibold text-neutral-900 mb-3">Activity Log</h2>
+              <div class="flex flex-col gap-3" id="proj-activity-log"></div>
+            </div>
+          </div>
+
+          <!-- Documents tab -->
+          <div id="ptab-documents" class="hidden">
+            <table class="w-full border-collapse">
+              <thead>
+                <tr class="border-b border-neutral-200">
+                  <th class="px-3 py-3 text-left text-sm font-semibold text-neutral-900">Document Name</th>
+                  <th class="px-3 py-3 text-left text-sm font-semibold text-neutral-900">Category</th>
+                  <th class="px-3 py-3 text-left text-sm font-semibold text-neutral-900">Originator</th>
+                  <th class="px-3 py-3 text-left text-sm font-semibold text-neutral-900">Status</th>
+                  <th class="px-3 py-3 text-left text-sm font-semibold text-neutral-900">Uploaded By</th>
+                  <th class="w-10 px-3 py-3"></th>
+                </tr>
+              </thead>
+              <tbody id="proj-docs-tbody"></tbody>
+            </table>
+            <p id="proj-docs-empty" class="hidden text-sm text-neutral-400 mt-6">No documents for this project.</p>
+          </div>
+
+          <!-- Requests tab -->
+          <div id="ptab-requests" class="hidden">
+            <table class="w-full border-collapse">
+              <thead>
+                <tr class="border-b border-neutral-200">
+                  <th class="px-3 py-3 text-left text-sm font-semibold text-neutral-900">Title</th>
+                  <th class="px-3 py-3 text-left text-sm font-semibold text-neutral-900">Type</th>
+                  <th class="px-3 py-3 text-left text-sm font-semibold text-neutral-900">Status</th>
+                  <th class="px-3 py-3 text-left text-sm font-semibold text-neutral-900">Contractor</th>
+                  <th class="px-3 py-3 text-left text-sm font-semibold text-neutral-900">Submitted By</th>
+                  <th class="w-10 px-3 py-3"></th>
+                </tr>
+              </thead>
+              <tbody id="proj-requests-tbody"></tbody>
+            </table>
+            <p id="proj-requests-empty" class="hidden text-sm text-neutral-400 mt-6">No requests for this project.</p>
+          </div>
+
+        </div>
+
+        <!-- Right: PO Information -->
+        <div class="shrink-0" style="width: 432px;">
+          <div class="border border-neutral-200 rounded-xl p-5">
+            <h3 class="text-sm font-semibold text-neutral-900 mb-4">PO Information</h3>
+            <div class="flex flex-col gap-3 mb-4" id="proj-po-items"></div>
+            <div class="border-t border-neutral-200 pt-3 flex items-center justify-between">
+              <span class="text-sm text-neutral-500">Total</span>
+              <span id="proj-po-total" class="text-sm font-semibold text-neutral-900"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== TASK DETAIL VIEW ==================== -->
+    <div id="task-detail-view" class="hidden px-6 md:px-12 pt-6 md:pt-8">
+      <!-- Back breadcrumb -->
+      <div class="mb-2">
+        <button id="task-back" class="flex items-center gap-1.5 text-sm text-neutral-500 hover:text-neutral-900 transition-colors">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+          <span>Site Tasks</span>
+        </button>
+      </div>
+
+      <!-- Title row -->
+      <div class="flex items-center justify-between mb-1">
+        <h1 id="detail-task-title" class="text-3xl md:text-4xl font-bold text-neutral-900"></h1>
+        <div class="flex items-center gap-2">
+          <button id="review-log-btn" class="px-4 py-2 text-sm font-medium rounded-lg border border-neutral-300 text-neutral-700 hover:bg-neutral-50 transition-colors">Review Log</button>
+          <button class="px-4 py-2 text-sm font-medium rounded-lg bg-neutral-900 text-white hover:bg-neutral-800 transition-colors">Edit</button>
+        </div>
+      </div>
+
+      <!-- Status & assignment info -->
+      <div class="flex items-center gap-3 mb-8">
+        <span id="detail-status-badge" class="text-xs font-medium px-2 py-0.5 rounded-full"></span>
+        <span id="detail-assign-info" class="text-sm text-neutral-500"></span>
+      </div>
+
+      <!-- 3-column layout -->
+      <div class="flex gap-0 min-h-[500px]">
+        <!-- Left: Revisions -->
+        <div id="detail-revisions" class="w-[150px] shrink-0 pr-4">
+        </div>
+
+        <!-- Center: Document viewer -->
+        <div class="flex-1 border border-neutral-200 rounded-lg overflow-hidden">
+          <!-- Viewer toolbar -->
+          <div class="flex items-center justify-between px-4 py-2 border-b border-neutral-200 bg-white">
+            <div class="flex items-center gap-3">
+              <button class="text-neutral-500 hover:text-neutral-900">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+              </button>
+              <button class="text-neutral-500 hover:text-neutral-900">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+              </button>
+            </div>
+            <div class="flex items-center gap-2">
+              <button class="text-neutral-500 hover:text-neutral-900">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM13 10H7"/></svg>
+              </button>
+              <span class="text-sm text-neutral-600 font-medium">100%</span>
+              <button class="text-neutral-500 hover:text-neutral-900">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7"/></svg>
+              </button>
+              <div class="w-px h-5 bg-neutral-200 mx-1"></div>
+              <button class="text-neutral-500 hover:text-neutral-900">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg>
+              </button>
+            </div>
+          </div>
+          <!-- Viewer content -->
+          <div class="bg-neutral-200 overflow-auto" style="height: 420px;">
+            <img src="/documents/blueprint.svg" alt="Task attachment preview" class="w-full h-full object-contain" />
+          </div>
+        </div>
+
+        <!-- Right: Metadata sidebar -->
+        <div class="w-[260px] shrink-0 pl-6">
+          <!-- Tabs -->
+          <div class="flex items-center gap-4 mb-6 border-b border-neutral-200">
+            <button class="detail-tab text-sm font-medium text-neutral-900 pb-2 border-b-2 border-neutral-900" data-tab="general">General</button>
+            <button class="detail-tab text-sm text-neutral-500 hover:text-neutral-700 pb-2" data-tab="linked">Linked</button>
+            <button class="detail-tab text-sm text-neutral-500 hover:text-neutral-700 pb-2" data-tab="activity">Activity Log</button>
+          </div>
+
+          <!-- General tab content -->
+          <div id="tab-general">
+            <p class="text-base font-semibold text-neutral-900 mb-4">Metadata</p>
+            <div class="flex flex-col gap-3" id="metadata-list">
+            </div>
+
+            <p class="text-base font-semibold text-neutral-900 mt-6 mb-4">Attachments</p>
+            <div class="flex flex-col gap-2.5" id="attachments-list">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== REVIEW LOG SIDE SHEET ==================== -->
+    <!-- Backdrop -->
+    <div id="review-backdrop" class="fixed inset-0 bg-black/30 z-40 hidden transition-opacity"></div>
+    <!-- Sheet -->
+    <div id="review-sheet" class="fixed top-0 right-0 h-full w-[420px] max-w-full bg-white shadow-2xl z-50 translate-x-full transition-transform duration-300 ease-in-out flex flex-col">
+      <!-- Header -->
+      <div class="flex items-center justify-between px-6 py-5 border-b border-neutral-200">
+        <h2 class="text-lg font-semibold text-neutral-900">Review Log</h2>
+        <button id="review-close" class="p-1 text-neutral-400 hover:text-neutral-900 transition-colors rounded-lg hover:bg-neutral-100">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <!-- Summary counts -->
+      <div class="flex items-center gap-4 px-6 py-4 border-b border-neutral-100">
+        <span id="review-count-approved" class="flex items-center gap-1.5 text-sm font-medium text-emerald-600">
+          <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+          <span>0</span> Approved
+        </span>
+        <span id="review-count-declined" class="flex items-center gap-1.5 text-sm font-medium text-red-500">
+          <span class="w-2 h-2 rounded-full bg-red-500"></span>
+          <span>0</span> Declined
+        </span>
+        <span id="review-count-pending" class="flex items-center gap-1.5 text-sm font-medium text-orange-500">
+          <span class="w-2 h-2 rounded-full bg-orange-400"></span>
+          <span>0</span> Pending
+        </span>
+      </div>
+
+      <!-- Reviewer list -->
+      <div id="review-list" class="flex-1 overflow-y-auto px-6 py-4">
+      </div>
+    </div>
+
+    <script is:inline define:vars={{ taskDetails, reviewLogs, projectDetails: projectDetails, workspaceData, allDocuments: [
+      { name: 'Foundation Blueprint', category: 'Blueprints', originator: 'Siemens', status: 'Approved', project: 'Downtown Office Building', uploadedBy: 'Mike Anderson', date: '18 Jan 2026' },
+      { name: 'Building Permit 2026', category: 'Permits', originator: 'Zublin', status: 'Pending', project: 'Riverside Apartments', uploadedBy: 'Sarah Johnson', date: '20 Jan 2026' },
+      { name: 'Safety Inspection Report', category: 'Safety', originator: 'Strabag', status: 'Approved', project: 'Downtown Office Building', uploadedBy: 'John Smith', date: '17 Jan 2026' },
+      { name: 'Change Order CO-145', category: 'Change Orders', originator: 'Zublin', status: 'Pending', project: 'Riverside Apartments', uploadedBy: 'Mike Anderson', date: '16 Jan 2026' },
+      { name: 'Material Submittal – Concrete', category: 'Submittals', originator: 'Goldbeck', status: 'Approved', project: 'Downtown Office Building', uploadedBy: 'Bobby Wong', date: '15 Jan 2026' },
+      { name: 'Daily Progress Report Jan 14', category: 'Daily Reports', originator: 'Siemens', status: 'Approved', project: 'Riverside Apartments', uploadedBy: 'Sarah Johnson', date: '14 Jan 2026' },
+      { name: 'RFI – Structural Questions', category: 'RFI', originator: 'Siemens', status: 'Rejected', project: 'Downtown Office Building', uploadedBy: 'John Smith', date: '13 Jan 2026' },
+      { name: 'Contractor Agreement ABC', category: 'Contracts', originator: 'Max Boegl', status: 'Approved', project: 'Riverside Apartments', uploadedBy: 'Mike Anderson', date: '12 Jan 2026' },
+      { name: 'Steel Frame Drawing – Level 4', category: 'Blueprints', originator: 'Siemens', status: 'Approved', project: 'Central Plaza Tower', uploadedBy: 'Tom Jonas', date: '18 Jan 2026' },
+      { name: 'MEP Coordination Drawing', category: 'Blueprints', originator: 'Goldbeck', status: 'Pending', project: 'Central Plaza Tower', uploadedBy: 'Lisa Chen', date: '15 Jan 2026' },
+    ], allRequests: [
+      { title: 'RFI-001 – Structural Column Spacing', type: 'RFI', status: 'Open', project: 'Downtown Office Building', submittedBy: 'Mike Anderson', contractor: 'Siemens', date: '20 Jan 2026' },
+      { title: 'DCR-014 – HVAC Routing Change', type: 'DCR', status: 'Pending', project: 'Riverside Apartments', submittedBy: 'Sarah Johnson', contractor: 'Zublin', date: '19 Jan 2026' },
+      { title: 'CR-007 – Window Specification Update', type: 'CR', status: 'Approved', project: 'Downtown Office Building', submittedBy: 'Bobby Wong', contractor: 'Goldbeck', date: '17 Jan 2026' },
+      { title: 'WR-023 – Waterproofing Membrane Repair', type: 'WR', status: 'In Progress', project: 'Riverside Apartments', submittedBy: 'John Smith', contractor: 'Strabag', date: '16 Jan 2026' },
+      { title: 'RFI-002 – Pile Foundation Depth Clarification', type: 'RFI', status: 'Open', project: 'Central Plaza Tower', submittedBy: 'Tom Jonas', contractor: 'Siemens', date: '15 Jan 2026' },
+      { title: 'DCR-015 – Stairwell Width Adjustment', type: 'DCR', status: 'Rejected', project: 'Downtown Office Building', submittedBy: 'Lisa Chen', contractor: 'Max Boegl', date: '14 Jan 2026' },
+      { title: 'CR-008 – Facade Material Substitution', type: 'CR', status: 'Pending', project: 'Central Plaza Tower', submittedBy: 'Mike Anderson', contractor: 'Goldbeck', date: '13 Jan 2026' },
+      { title: 'WR-024 – Drainage Blockage – North Zone', type: 'WR', status: 'Approved', project: 'Riverside Apartments', submittedBy: 'Sarah Johnson', contractor: 'Strabag', date: '12 Jan 2026' },
+    ]}}>
+      window.__taskDetails = taskDetails;
+      window.__reviewLogs = reviewLogs;
+      window.__projectDetails = projectDetails;
+      window.__workspaceData = workspaceData;
+      window.__allDocuments = allDocuments;
+      window.__allRequests = allRequests;
+    </script>
+    </div> <!-- end ml-56 wrapper -->
+  </main>
+</Layout>
+
+<script>
+  // ===== NAV SWITCHING =====
+  const views: Record<string, HTMLElement | null> = {
+    tasks: document.getElementById('task-list-view'),
+    projects: document.getElementById('project-list-view'),
+    requests: document.getElementById('request-list-view'),
+    'project-detail': document.getElementById('project-detail-view'),
+  };
+
+  const activeNavClass = 'bg-neutral-100 text-neutral-900 font-medium';
+  const inactiveNavClass = 'text-neutral-500 hover:bg-neutral-50 hover:text-neutral-900 transition-colors';
+
+  document.querySelectorAll<HTMLAnchorElement>('.nav-item').forEach(item => {
+    item.addEventListener('click', (e) => {
+      e.preventDefault();
+      const target = item.dataset.nav || '';
+      if (!views[target]) return;
+
+      // Hide all views
+      Object.values(views).forEach(v => v?.classList.add('hidden'));
+      // Show target
+      views[target]?.classList.remove('hidden');
+
+      // Update nav active states
+      document.querySelectorAll<HTMLAnchorElement>('.nav-item').forEach(n => {
+        n.className = `nav-item flex items-center gap-3 px-3 py-2 rounded-lg text-sm ${n.dataset.nav === target ? activeNavClass : inactiveNavClass}`;
+      });
+    });
+  });
+
+  // ===== PROJECT FILTERS =====
+  const pfilters: Record<string, string> = { type: '', client: '' };
+
+  ['ptype', 'pclient'].forEach(key => {
+    const trigger = document.getElementById(`${key}-trigger`);
+    const dropdown = document.getElementById(`${key}-dropdown`);
+    const wrapper = document.getElementById(`${key}-wrapper`);
+    trigger?.addEventListener('click', () => dropdown?.classList.toggle('hidden'));
+    document.addEventListener('click', (e) => {
+      if (wrapper && !wrapper.contains(e.target as Node)) dropdown?.classList.add('hidden');
+    });
+  });
+
+  document.querySelectorAll<HTMLButtonElement>('.project-filter-option').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const key = btn.dataset.pfilter || '';
+      const value = btn.dataset.value || '';
+      pfilters[key] = value;
+
+      const labelKey = key === 'type' ? 'ptype' : 'pclient';
+      const label = document.getElementById(`${labelKey}-label`);
+      const trigger = document.getElementById(`${labelKey}-trigger`);
+      if (label) {
+        label.textContent = value || 'Select';
+        trigger?.classList.toggle('text-neutral-400', !value);
+        trigger?.classList.toggle('text-neutral-900', !!value);
+      }
+      document.getElementById(`${labelKey}-dropdown`)?.classList.add('hidden');
+
+      document.querySelectorAll<HTMLTableRowElement>('.project-row').forEach(row => {
+        const matchType = !pfilters.type || row.dataset.ptype === pfilters.type;
+        const matchClient = !pfilters.client || row.dataset.pclient === pfilters.client;
+        row.classList.toggle('hidden', !(matchType && matchClient));
+      });
+    });
+  });
+
+  // ===== REQUEST FILTERS =====
+  const rfilters: Record<string, string> = { type: '', project: '' };
+
+  ['rtype', 'rproject'].forEach(key => {
+    const trigger = document.getElementById(`${key}-trigger`);
+    const dropdown = document.getElementById(`${key}-dropdown`);
+    const wrapper = document.getElementById(`${key}-wrapper`);
+    trigger?.addEventListener('click', () => dropdown?.classList.toggle('hidden'));
+    document.addEventListener('click', (e) => {
+      if (wrapper && !wrapper.contains(e.target as Node)) dropdown?.classList.add('hidden');
+    });
+  });
+
+  document.querySelectorAll<HTMLButtonElement>('.request-filter-option').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const key = btn.dataset.rfilter || '';
+      const value = btn.dataset.value || '';
+      rfilters[key] = value;
+
+      const labelKey = key === 'type' ? 'rtype' : 'rproject';
+      const label = document.getElementById(`${labelKey}-label`);
+      const trigger = document.getElementById(`${labelKey}-trigger`);
+      if (label) {
+        label.textContent = value || 'Select';
+        trigger?.classList.toggle('text-neutral-400', !value);
+        trigger?.classList.toggle('text-neutral-900', !!value);
+      }
+      document.getElementById(`${labelKey}-dropdown`)?.classList.add('hidden');
+
+      document.querySelectorAll<HTMLTableRowElement>('.request-row').forEach(row => {
+        const matchType = !rfilters.type || row.dataset.rtype === rfilters.type;
+        const matchProject = !rfilters.project || row.dataset.rproject === rfilters.project;
+        row.classList.toggle('hidden', !(matchType && matchProject));
+      });
+    });
+  });
+
+  // ===== PROJECT DETAIL VIEW =====
+  const projectDetailsData = (window as any).__projectDetails as Record<string, any>;
+
+  const projBadgeColors: Record<string, { bg: string; text: string }> = {
+    'Released':    { bg: 'bg-emerald-100', text: 'text-emerald-700' },
+    'In Progress': { bg: 'bg-blue-50',     text: 'text-blue-600' },
+    'Pending':     { bg: 'bg-orange-50',   text: 'text-orange-500' },
+    'On Hold':     { bg: 'bg-neutral-100', text: 'text-neutral-500' },
+    'Completed':   { bg: 'bg-emerald-50',  text: 'text-emerald-600' },
+  };
+
+  function openProjectDetail(name: string) {
+    const d = projectDetailsData[name];
+    if (!d) return;
+
+    // Show project detail, hide others
+    Object.entries(views).forEach(([k, v]) => v?.classList.toggle('hidden', k !== 'project-detail'));
+
+    // Title
+    const titleEl = document.getElementById('proj-title');
+    if (titleEl) titleEl.textContent = name;
+
+    // Badge
+    const badge = document.getElementById('proj-badge');
+    if (badge) {
+      const c = projBadgeColors[d.badge] || { bg: 'bg-neutral-100', text: 'text-neutral-600' };
+      badge.className = `text-xs font-medium px-2.5 py-0.5 rounded-full ${c.bg} ${c.text}`;
+      badge.textContent = d.badge;
+    }
+
+    // Meta
+    const meta = document.getElementById('proj-meta');
+    if (meta) meta.textContent = `Created By: ${d.createdBy} on ${d.date}   ·   Contractor: ${d.contractor}`;
+
+    // General info
+    const gi = document.getElementById('proj-general-info');
+    if (gi) {
+      const fields = [
+        { label: 'Area', value: d.area },
+        { label: 'Level', value: d.level },
+        { label: 'Discipline', value: d.discipline },
+        { label: 'Purpose', value: d.purpose },
+        { label: 'Category', value: d.category },
+      ];
+      gi.innerHTML = fields.map(f => `
+        <div class="flex items-center justify-between">
+          <span class="text-sm text-neutral-400">${f.label}</span>
+          <span class="text-sm text-neutral-900">${f.value}</span>
+        </div>
+      `).join('');
+    }
+
+    // Description
+    const desc = document.getElementById('proj-description');
+    if (desc) desc.textContent = d.description;
+
+    // Activity log
+    const log = document.getElementById('proj-activity-log');
+    if (log) {
+      log.innerHTML = d.activityLog.map((e: any) => `
+        <div class="flex items-center gap-6">
+          <span class="text-sm text-neutral-400 w-24 shrink-0">${e.date}</span>
+          <span class="text-sm text-neutral-900 underline underline-offset-2 cursor-pointer hover:text-neutral-600">${e.action}</span>
+        </div>
+      `).join('');
+    }
+
+    // PO items
+    const po = document.getElementById('proj-po-items');
+    if (po) {
+      po.innerHTML = d.poItems.map((item: any) => `
+        <div class="flex items-center justify-between">
+          <span class="text-sm text-neutral-500">${item.label}</span>
+          <span class="text-sm text-neutral-900">${item.amount}</span>
+        </div>
+      `).join('');
+    }
+
+    // PO total
+    const total = document.getElementById('proj-po-total');
+    if (total) {
+      const sum = d.poItems.reduce((acc: number, item: any) => {
+        return acc + parseInt(item.amount.replace(/[^0-9]/g, ''));
+      }, 0);
+      total.textContent = `${sum.toLocaleString()}$`;
+    }
+
+    // Populate documents tab
+    const allDocs = (window as any).__allDocuments as any[];
+    const projDocs = allDocs.filter((doc: any) => doc.project === name);
+    const docsTbody = document.getElementById('proj-docs-tbody');
+    const docsEmpty = document.getElementById('proj-docs-empty');
+    const docStatusCls: Record<string, string> = { Approved: 'text-emerald-600', Pending: 'text-orange-500', Rejected: 'text-red-500' };
+    if (docsTbody) {
+      docsTbody.innerHTML = projDocs.map((doc: any) => `
+        <tr class="border-b border-neutral-100 hover:bg-neutral-50/50 transition-colors">
+          <td class="px-3 py-3.5 text-sm text-neutral-900">${doc.name}</td>
+          <td class="px-3 py-3.5 text-sm text-neutral-700">${doc.category}</td>
+          <td class="px-3 py-3.5 text-sm text-neutral-700">${doc.originator}</td>
+          <td class="px-3 py-3.5"><span class="text-sm font-medium ${docStatusCls[doc.status] || 'text-neutral-600'}">${doc.status}</span></td>
+          <td class="px-3 py-3.5 text-sm text-neutral-500">${doc.uploadedBy} on ${doc.date}</td>
+          <td class="px-3 py-3.5 text-center"><button class="text-neutral-400 hover:text-neutral-700"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg></button></td>
+        </tr>
+      `).join('');
+    }
+    if (docsEmpty) docsEmpty.classList.toggle('hidden', projDocs.length > 0);
+
+    // Populate requests tab
+    const allReqs = (window as any).__allRequests as any[];
+    const projReqs = allReqs.filter((req: any) => req.project === name);
+    const reqsTbody = document.getElementById('proj-requests-tbody');
+    const reqsEmpty = document.getElementById('proj-requests-empty');
+    const reqStatusCls: Record<string, string> = { Open: 'text-blue-600', Pending: 'text-orange-500', Approved: 'text-emerald-600', Rejected: 'text-red-500', 'In Progress': 'text-blue-500' };
+    if (reqsTbody) {
+      reqsTbody.innerHTML = projReqs.map((req: any) => `
+        <tr class="border-b border-neutral-100 hover:bg-neutral-50/50 transition-colors">
+          <td class="px-3 py-3.5 text-sm text-neutral-900">${req.title}</td>
+          <td class="px-3 py-3.5"><span class="text-xs font-medium px-2 py-0.5 rounded bg-neutral-100 text-neutral-700">${req.type}</span></td>
+          <td class="px-3 py-3.5"><span class="text-sm font-medium ${reqStatusCls[req.status] || 'text-neutral-600'}">${req.status}</span></td>
+          <td class="px-3 py-3.5 text-sm text-neutral-700">${req.contractor}</td>
+          <td class="px-3 py-3.5 text-sm text-neutral-500">${req.submittedBy} on ${req.date}</td>
+          <td class="px-3 py-3.5 text-center"><button class="text-neutral-400 hover:text-neutral-700"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg></button></td>
+        </tr>
+      `).join('');
+    }
+    if (reqsEmpty) reqsEmpty.classList.toggle('hidden', projReqs.length > 0);
+
+    // Reset tabs
+    activateProjTab('overview');
+  }
+
+  function activateProjTab(tab: string) {
+    document.querySelectorAll<HTMLButtonElement>('.proj-tab').forEach(t => {
+      const isActive = t.dataset.ptab === tab;
+      t.className = `proj-tab text-left px-3 py-2 text-sm ${isActive ? 'font-medium text-neutral-900 border border-neutral-200 rounded-lg bg-white' : 'text-neutral-500 hover:text-neutral-900 transition-colors'}`;
+    });
+
+    const panels = ['overview', 'documents', 'requests'];
+    panels.forEach(p => {
+      document.getElementById(`ptab-${p}`)?.classList.toggle('hidden', p !== tab);
+    });
+  }
+
+  document.querySelectorAll<HTMLButtonElement>('.proj-tab').forEach(t => {
+    t.addEventListener('click', () => activateProjTab(t.dataset.ptab || 'overview'));
+  });
+
+  document.querySelectorAll<HTMLButtonElement>('.project-name-link').forEach(btn => {
+    btn.addEventListener('click', () => openProjectDetail(btn.dataset.projectName || ''));
+  });
+
+  document.getElementById('project-back')?.addEventListener('click', () => {
+    Object.values(views).forEach(v => v?.classList.add('hidden'));
+    views['projects']?.classList.remove('hidden');
+  });
+
+  // ===== WORKSPACE DROPDOWN =====
+  const workspaceTrigger = document.getElementById('workspace-trigger');
+  const workspaceDropdown = document.getElementById('workspace-dropdown');
+  const workspaceWrapper = document.getElementById('workspace-wrapper');
+  const allWorkspaceData = (window as any).__workspaceData as Record<string, { tasks: any[]; projects: any[] }>;
+
+  const taskStatusClasses: Record<string, string> = {
+    'In Progress': 'text-blue-600',
+    'Pending': 'text-orange-500',
+    'Completed': 'text-emerald-600',
+    'Blocked': 'text-red-500',
+  };
+
+  const projStatusClasses: Record<string, string> = {
+    'In Progress': 'text-blue-600',
+    'Pending': 'text-orange-500',
+    'Completed': 'text-emerald-600',
+    'On Hold': 'text-neutral-400',
+  };
+
+  const dotsMenu = `<button class="text-neutral-400 hover:text-neutral-700 transition-colors"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg></button>`;
+
+  function renderTasks(taskList: any[]) {
+    const tbody = document.getElementById('task-tbody');
+    if (!tbody) return;
+    tbody.innerHTML = taskList.map(t => `
+      <tr class="task-row border-b border-neutral-100 hover:bg-neutral-50/50 transition-colors" data-discipline="${t.discipline}" data-contractor="${t.contractor}" data-project="${t.project}">
+        <td class="px-3 py-3.5"><input type="checkbox" class="task-cb w-4 h-4 rounded border-neutral-300 accent-neutral-900 cursor-pointer"></td>
+        <td class="px-3 py-3.5 text-sm text-neutral-900"><button class="task-name-link hover:underline underline-offset-2 text-left" data-task-name="${t.name}" data-task-type="Document Review">${t.name}</button></td>
+        <td class="px-3 py-3.5 text-sm text-neutral-700">${t.project}</td>
+        <td class="px-3 py-3.5 text-sm text-neutral-700">${t.discipline}</td>
+        <td class="px-3 py-3.5 text-sm text-neutral-700">${t.contractor}</td>
+        <td class="px-3 py-3.5 text-sm text-neutral-700">${t.priority}</td>
+        <td class="px-3 py-3.5"><span class="text-sm font-medium ${taskStatusClasses[t.status] || 'text-neutral-600'}">${t.status}</span></td>
+        <td class="px-3 py-3.5 text-sm text-neutral-500">${t.assignedTo} on ${t.date}</td>
+        <td class="px-3 py-3.5 text-center">${dotsMenu}</td>
+      </tr>
+    `).join('');
+    attachTaskListeners();
+  }
+
+  function renderProjects(projectList: any[]) {
+    const tbody = document.getElementById('project-tbody');
+    if (!tbody) return;
+    tbody.innerHTML = projectList.map(p => `
+      <tr class="project-row border-b border-neutral-100 hover:bg-neutral-50/50 transition-colors" data-ptype="${p.type}" data-pclient="${p.client}">
+        <td class="px-3 py-3.5"><input type="checkbox" class="w-4 h-4 rounded border-neutral-300 accent-neutral-900 cursor-pointer"></td>
+        <td class="px-3 py-3.5 text-sm text-neutral-900 font-medium"><button class="project-name-link hover:underline underline-offset-2 text-left" data-project-name="${p.name}">${p.name}</button></td>
+        <td class="px-3 py-3.5 text-sm text-neutral-700">${p.type}</td>
+        <td class="px-3 py-3.5 text-sm text-neutral-700">${p.client}</td>
+        <td class="px-3 py-3.5 text-sm text-neutral-700">${p.location}</td>
+        <td class="px-3 py-3.5"><span class="text-sm font-medium ${projStatusClasses[p.status] || 'text-neutral-600'}">${p.status}</span></td>
+        <td class="px-3 py-3.5 text-sm text-neutral-500">${p.manager}</td>
+        <td class="px-3 py-3.5 text-sm text-neutral-500">${p.start}</td>
+        <td class="px-3 py-3.5 text-center">${dotsMenu}</td>
+      </tr>
+    `).join('');
+    attachProjectListeners();
+  }
+
+  function attachTaskListeners() {
+    document.querySelectorAll<HTMLButtonElement>('.task-name-link').forEach(link => {
+      link.addEventListener('click', () => openTaskDetail(link.dataset.taskName || ''));
+    });
+    const selectAll = document.getElementById('select-all') as HTMLInputElement | null;
+    document.querySelectorAll<HTMLInputElement>('.task-cb').forEach(cb => {
+      cb.addEventListener('change', () => {
+        if (selectAll) {
+          const visible = Array.from(document.querySelectorAll<HTMLInputElement>('.task-cb')).filter(c => !c.closest('.task-row')?.classList.contains('hidden'));
+          selectAll.checked = visible.length > 0 && visible.every(c => c.checked);
+        }
+      });
+    });
+  }
+
+  function attachProjectListeners() {
+    document.querySelectorAll<HTMLButtonElement>('.project-name-link').forEach(btn => {
+      btn.addEventListener('click', () => openProjectDetail(btn.dataset.projectName || ''));
+    });
+  }
+
+  workspaceTrigger?.addEventListener('click', () => workspaceDropdown?.classList.toggle('hidden'));
+
+  document.addEventListener('click', (e) => {
+    if (workspaceWrapper && !workspaceWrapper.contains(e.target as Node)) {
+      workspaceDropdown?.classList.add('hidden');
+    }
+  });
+
+  document.querySelectorAll<HTMLButtonElement>('.workspace-option').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const label = btn.textContent?.trim() || '';
+      const triggerLabel = workspaceTrigger?.querySelector('span.truncate');
+      const triggerDot = workspaceTrigger?.querySelector('span.rounded-full');
+      if (triggerLabel) triggerLabel.textContent = label;
+      if (triggerDot) {
+        triggerDot.className = `w-2 h-2 rounded-full shrink-0 ${label === 'Building Z' ? 'bg-emerald-500' : 'bg-neutral-400'}`;
+      }
+      workspaceDropdown?.classList.add('hidden');
+
+      const data = allWorkspaceData[label];
+      if (data) {
+        renderTasks(data.tasks);
+        renderProjects(data.projects);
+      }
+    });
+  });
+
+  // ===== DROPDOWN FILTERS =====
+  const filters: Record<string, string> = { discipline: '', contractor: '', project: '' };
+
+  ['discipline', 'contractor', 'project'].forEach(key => {
+    const trigger = document.getElementById(`${key}-trigger`);
+    const dropdown = document.getElementById(`${key}-dropdown`);
+    const wrapper = document.getElementById(`${key}-wrapper`);
+
+    trigger?.addEventListener('click', () => dropdown?.classList.toggle('hidden'));
+
+    document.addEventListener('click', (e) => {
+      if (wrapper && !wrapper.contains(e.target as Node)) {
+        dropdown?.classList.add('hidden');
+      }
+    });
+  });
+
+  document.querySelectorAll<HTMLButtonElement>('.filter-option').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const key = btn.dataset.filter || '';
+      const value = btn.dataset.value || '';
+      filters[key] = value;
+
+      const label = document.getElementById(`${key}-label`);
+      const trigger = document.getElementById(`${key}-trigger`);
+      if (label) {
+        label.textContent = value || 'Select';
+        trigger?.classList.toggle('text-neutral-400', !value);
+        trigger?.classList.toggle('text-neutral-900', !!value);
+      }
+
+      document.getElementById(`${key}-dropdown`)?.classList.add('hidden');
+      filterRows();
+    });
+  });
+
+  function filterRows() {
+    document.querySelectorAll<HTMLTableRowElement>('.task-row').forEach(row => {
+      const matchDiscipline = !filters.discipline || row.dataset.discipline === filters.discipline;
+      const matchContractor = !filters.contractor || row.dataset.contractor === filters.contractor;
+      const matchProject = !filters.project || row.dataset.project === filters.project;
+      row.classList.toggle('hidden', !(matchDiscipline && matchContractor && matchProject));
+    });
+  }
+
+  // ===== SELECT ALL CHECKBOX =====
+  const selectAll = document.getElementById('select-all') as HTMLInputElement | null;
+  const taskCbs = document.querySelectorAll<HTMLInputElement>('.task-cb');
+
+  selectAll?.addEventListener('change', () => {
+    taskCbs.forEach(cb => {
+      const row = cb.closest('.task-row');
+      if (row && !row.classList.contains('hidden')) {
+        cb.checked = selectAll.checked;
+      }
+    });
+  });
+
+  taskCbs.forEach(cb => {
+    cb.addEventListener('change', () => {
+      if (selectAll) {
+        const visibleCbs = Array.from(taskCbs).filter(c => !c.closest('.task-row')?.classList.contains('hidden'));
+        selectAll.checked = visibleCbs.length > 0 && visibleCbs.every(c => c.checked);
+      }
+    });
+  });
+
+  // ===== TASK DETAIL VIEW =====
+  const listView = document.getElementById('task-list-view');
+  const detailView = document.getElementById('task-detail-view');
+  const taskDetails = (window as any).__taskDetails as Record<string, any>;
+  let currentTaskName = '';
+
+  const statusBadgeColors: Record<string, { bg: string; text: string }> = {
+    'In Progress': { bg: 'bg-blue-50', text: 'text-blue-600' },
+    'Completed':   { bg: 'bg-emerald-50', text: 'text-emerald-600' },
+    'Pending':     { bg: 'bg-orange-50', text: 'text-orange-500' },
+    'Blocked':     { bg: 'bg-red-50', text: 'text-red-500' },
+  };
+
+  function openTaskDetail(taskName: string) {
+    const detail = taskDetails[taskName];
+    if (!detail) return;
+
+    currentTaskName = taskName;
+
+    listView?.classList.add('hidden');
+    detailView?.classList.remove('hidden');
+
+    const titleEl = document.getElementById('detail-task-title');
+    if (titleEl) titleEl.textContent = taskName;
+
+    const badge = document.getElementById('detail-status-badge');
+    if (badge) {
+      const colors = statusBadgeColors[detail.status] || { bg: 'bg-neutral-100', text: 'text-neutral-600' };
+      badge.className = `text-xs font-medium px-2 py-0.5 rounded-full ${colors.bg} ${colors.text}`;
+      badge.textContent = detail.status;
+    }
+
+    const assignInfo = document.getElementById('detail-assign-info');
+    if (assignInfo) assignInfo.textContent = `Assigned to ${detail.assignedTo} on ${detail.date}`;
+
+    renderRevisions(detail.revisions);
+    renderMetadata(detail);
+    renderAttachments(detail.attachments);
+    activateTab('general');
+  }
+
+  function renderRevisions(count: number) {
+    const container = document.getElementById('detail-revisions');
+    if (!container) return;
+    container.innerHTML = '';
+
+    for (let i = 1; i <= count; i++) {
+      const isActive = i === count;
+      const btn = document.createElement('button');
+      btn.className = `revision-btn flex items-center gap-2 w-full px-3 py-2 rounded-lg text-sm transition-colors ${isActive ? 'bg-neutral-100 font-medium text-neutral-900' : 'text-neutral-600 hover:bg-neutral-50'}`;
+      btn.dataset.rev = String(i);
+      btn.innerHTML = `
+        <span class="w-2 h-2 rounded-full shrink-0 ${isActive ? 'bg-emerald-500' : 'bg-neutral-300'}"></span>
+        Rev ${i}
+      `;
+      btn.addEventListener('click', () => {
+        container.querySelectorAll('.revision-btn').forEach(b => {
+          b.className = 'revision-btn flex items-center gap-2 w-full px-3 py-2 rounded-lg text-sm transition-colors text-neutral-600 hover:bg-neutral-50';
+          b.querySelector('span')!.className = 'w-2 h-2 rounded-full shrink-0 bg-neutral-300';
+        });
+        btn.className = 'revision-btn flex items-center gap-2 w-full px-3 py-2 rounded-lg text-sm transition-colors bg-neutral-100 font-medium text-neutral-900';
+        btn.querySelector('span')!.className = 'w-2 h-2 rounded-full shrink-0 bg-emerald-500';
+      });
+      container.appendChild(btn);
+    }
+  }
+
+  function renderMetadata(detail: any) {
+    const list = document.getElementById('metadata-list');
+    if (!list) return;
+
+    const fields = [
+      { label: 'Location', value: detail.location },
+      { label: 'Level', value: detail.level },
+      { label: 'Discipline', value: detail.discipline },
+      { label: 'Priority', value: detail.priority },
+      { label: 'Type', value: detail.type },
+    ];
+
+    list.innerHTML = fields.map(f => `
+      <div class="flex items-center justify-between">
+        <span class="text-sm text-neutral-500">${f.label}</span>
+        <span class="text-sm text-neutral-900 font-medium">${f.value}</span>
+      </div>
+    `).join('');
+  }
+
+  function renderAttachments(attachments: { date: string; type: string }[]) {
+    const list = document.getElementById('attachments-list');
+    if (!list) return;
+
+    list.innerHTML = attachments.map(a => `
+      <div class="flex items-center justify-between py-1.5">
+        <span class="text-sm text-neutral-500">${a.date}</span>
+        <span class="text-xs font-medium px-2 py-0.5 rounded bg-neutral-100 text-neutral-700">${a.type}</span>
+      </div>
+    `).join('');
+  }
+
+  function activateTab(tab: string) {
+    document.querySelectorAll<HTMLButtonElement>('.detail-tab').forEach(t => {
+      const isActive = t.dataset.tab === tab;
+      t.className = `detail-tab text-sm pb-2 ${isActive ? 'font-medium text-neutral-900 border-b-2 border-neutral-900' : 'text-neutral-500 hover:text-neutral-700'}`;
+    });
+
+    const general = document.getElementById('tab-general');
+    if (general) general.classList.toggle('hidden', tab !== 'general');
+  }
+
+  document.querySelectorAll<HTMLButtonElement>('.detail-tab').forEach(t => {
+    t.addEventListener('click', () => activateTab(t.dataset.tab || 'general'));
+  });
+
+  document.querySelectorAll<HTMLButtonElement>('.task-name-link').forEach(link => {
+    link.addEventListener('click', () => {
+      openTaskDetail(link.dataset.taskName || '');
+    });
+  });
+
+  document.getElementById('task-back')?.addEventListener('click', () => {
+    detailView?.classList.add('hidden');
+    listView?.classList.remove('hidden');
+  });
+
+  // ===== REVIEW LOG SIDE SHEET =====
+  const reviewLogs = (window as any).__reviewLogs as Record<string, any[]>;
+  const reviewSheet = document.getElementById('review-sheet');
+  const reviewBackdrop = document.getElementById('review-backdrop');
+
+  function openReviewSheet() {
+    const entries = reviewLogs[currentTaskName] || [];
+
+    const approved = entries.filter((e: any) => e.status === 'Approved').length;
+    const declined = entries.filter((e: any) => e.status === 'Declined').length;
+    const pending = entries.filter((e: any) => e.status === 'Pending').length;
+
+    const countApproved = document.querySelector('#review-count-approved span:nth-child(2)');
+    const countDeclined = document.querySelector('#review-count-declined span:nth-child(2)');
+    const countPending = document.querySelector('#review-count-pending span:nth-child(2)');
+    if (countApproved) countApproved.textContent = String(approved);
+    if (countDeclined) countDeclined.textContent = String(declined);
+    if (countPending) countPending.textContent = String(pending);
+
+    const list = document.getElementById('review-list');
+    if (list) {
+      const statusConfig: Record<string, { dot: string; badge: string; badgeBg: string }> = {
+        Approved: { dot: 'bg-emerald-500', badge: 'text-emerald-700', badgeBg: 'bg-emerald-50' },
+        Declined: { dot: 'bg-red-500', badge: 'text-red-700', badgeBg: 'bg-red-50' },
+        Pending:  { dot: 'bg-orange-400', badge: 'text-orange-700', badgeBg: 'bg-orange-50' },
+      };
+
+      list.innerHTML = entries.map((e: any) => {
+        const cfg = statusConfig[e.status] || statusConfig.Pending;
+        const initials = e.name.split(' ').map((w: string) => w[0]).join('');
+        const colors = ['bg-violet-100 text-violet-700', 'bg-blue-100 text-blue-700', 'bg-amber-100 text-amber-700', 'bg-rose-100 text-rose-700', 'bg-teal-100 text-teal-700'];
+        const color = colors[e.name.length % colors.length];
+        return `
+          <div class="flex gap-3 py-4 border-b border-neutral-100 last:border-0">
+            <div class="w-9 h-9 rounded-full ${color} flex items-center justify-center text-xs font-semibold shrink-0">${initials}</div>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center justify-between mb-0.5">
+                <span class="text-sm font-medium text-neutral-900">${e.name}</span>
+                <span class="text-xs font-medium px-2 py-0.5 rounded-full ${cfg.badgeBg} ${cfg.badge}">${e.status}</span>
+              </div>
+              <p class="text-xs text-neutral-500 mb-1">${e.role} &middot; ${e.date}</p>
+              ${e.comment ? `<p class="text-sm text-neutral-600 mt-1.5">${e.comment}</p>` : ''}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    reviewBackdrop?.classList.remove('hidden');
+    requestAnimationFrame(() => {
+      reviewSheet?.classList.remove('translate-x-full');
+    });
+  }
+
+  function closeReviewSheet() {
+    reviewSheet?.classList.add('translate-x-full');
+    reviewBackdrop?.classList.add('hidden');
+  }
+
+  document.getElementById('review-log-btn')?.addEventListener('click', openReviewSheet);
+  document.getElementById('review-close')?.addEventListener('click', closeReviewSheet);
+  reviewBackdrop?.addEventListener('click', closeReviewSheet);
+</script>
