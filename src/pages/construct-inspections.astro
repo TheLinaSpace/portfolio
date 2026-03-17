@@ -1,0 +1,1055 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const inspections = [
+  {
+    title: 'Foundation Depth Verification',
+    project: 'Downtown Office Building',
+    type: 'Structural',
+    status: 'Passed',
+    inspector: 'Tom Jonas',
+    contractor: 'Siemens',
+    date: '22 Jan 2026',
+    checklistItems: [
+      { label: 'Pile depth meets design specification', result: 'Pass' },
+      { label: 'Concrete mix ratio verified', result: 'Pass' },
+      { label: 'Rebar spacing within tolerance', result: 'Pass' },
+      { label: 'Bearing capacity test completed', result: 'Pass' },
+      { label: 'Foundation level surveyed and recorded', result: 'Pass' },
+    ],
+    issues: [
+      { title: 'Pile depth at Grid A3 below tolerance', status: 'Closed', note: 'Resolved after re-drilling to design depth' },
+      { title: 'Concrete mix documentation missing', status: 'Closed', note: 'Documentation submitted and approved' },
+    ],
+  },
+  {
+    title: 'Waterproofing Quality Check',
+    project: 'Riverside Apartments',
+    type: 'Quality',
+    status: 'Failed',
+    inspector: 'John Smith',
+    contractor: 'Zublin',
+    date: '16 Jan 2026',
+    checklistItems: [
+      { label: 'Membrane thickness ≥ 3mm', result: 'Fail' },
+      { label: 'No visible punctures or tears', result: 'Fail' },
+      { label: 'Lap joints properly sealed', result: 'Pass' },
+      { label: 'Drainage layer installed correctly', result: 'Pass' },
+      { label: 'Perimeter upstand height ≥ 150mm', result: 'Pass' },
+    ],
+    issues: [
+      { title: 'Membrane thickness below 3mm spec', status: 'In Progress', note: 'Average 2.1mm — contractor to replace affected areas' },
+      { title: 'Punctures found at Grid B2', status: 'Ready for Walkdown', note: '3 punctures patched — awaiting re-inspection' },
+    ],
+  },
+  {
+    title: 'MEP Rough-In Inspection',
+    project: 'Riverside Apartments',
+    type: 'MEP',
+    status: 'Failed',
+    inspector: 'Mike Anderson',
+    contractor: 'Zublin',
+    date: '20 Jan 2026',
+    checklistItems: [
+      { label: 'Pipe sizing matches drawings', result: 'Pass' },
+      { label: 'Electrical conduit routing approved', result: 'Fail' },
+      { label: 'HVAC duct clearances maintained', result: 'Pass' },
+      { label: 'Valve access points accessible', result: 'Fail' },
+      { label: 'Pressure test completed', result: 'Pass' },
+      { label: 'Insulation installed on cold pipes', result: 'Pass' },
+    ],
+    issues: [
+      { title: 'Conduit crosses fire-rated wall without sleeve', status: 'In Progress', note: 'Fire sleeve installation in progress' },
+      { title: 'Access panel blocked by structural beam', status: 'Ready for Walkdown', note: 'Panel relocated — walkdown scheduled' },
+    ],
+  },
+  {
+    title: 'Structural Steel Frame – Level 2',
+    project: 'Central Plaza Tower',
+    type: 'Structural',
+    status: 'Passed',
+    inspector: 'Bobby Wong',
+    contractor: 'Siemens',
+    date: '18 Jan 2026',
+    checklistItems: [
+      { label: 'Column plumb within ±5mm tolerance', result: 'Pass' },
+      { label: 'Beam connections fully bolted', result: 'Pass' },
+      { label: 'Weld quality meets AWS D1.1', result: 'Pass' },
+      { label: 'Shear stud spacing verified', result: 'Pass' },
+      { label: 'Fire protection applied to all members', result: 'Pass' },
+    ],
+    issues: [
+      { title: 'Missing bolt at connection node C4', status: 'Closed', note: 'Bolt installed and torqued to specification' },
+    ],
+  },
+  {
+    title: 'Site Safety Audit – Q1',
+    project: 'Central Plaza Tower',
+    type: 'Safety',
+    status: 'Failed',
+    inspector: 'Lisa Chen',
+    contractor: 'Siemens',
+    date: '28 Jan 2026',
+    checklistItems: [
+      { label: 'PPE compliance ≥ 95% of workers', result: 'Fail' },
+      { label: 'Perimeter edge protection installed', result: 'Pass' },
+      { label: 'Signage and exclusion zones in place', result: 'Pass' },
+      { label: 'First aid kit stocked and accessible', result: 'Fail' },
+      { label: 'Housekeeping and debris removal', result: 'Pass' },
+      { label: 'Emergency evacuation plan posted', result: 'Pass' },
+    ],
+    issues: [
+      { title: 'PPE compliance below 95% on Level 3', status: 'In Progress', note: 'Toolbox talk conducted — monitoring ongoing' },
+      { title: 'First aid kit at Sector B expired', status: 'In Progress', note: 'Replacement ordered' },
+      { title: 'Incomplete edge protection at north stairwell', status: 'Ready for Walkdown', note: 'Barrier installed — pending sign-off' },
+    ],
+  },
+  {
+    title: 'Concrete Pour – Slab Level 3',
+    project: 'Downtown Office Building',
+    type: 'Structural',
+    status: 'Passed',
+    inspector: 'Mike Anderson',
+    contractor: 'Siemens',
+    date: '14 Jan 2026',
+    checklistItems: [
+      { label: 'Formwork dimensions correct', result: 'Pass' },
+      { label: 'Rebar cover maintained', result: 'Pass' },
+      { label: 'Concrete slump test within spec', result: 'Pass' },
+      { label: 'Pour sequence followed', result: 'Pass' },
+      { label: 'Curing compound applied within 30 min', result: 'Pass' },
+    ],
+    issues: [],
+  },
+  {
+    title: 'Facade Installation Check',
+    project: 'Downtown Office Building',
+    type: 'Quality',
+    status: 'Failed',
+    inspector: 'Bobby Wong',
+    contractor: 'Siemens',
+    date: '21 Jan 2026',
+    checklistItems: [
+      { label: 'Panel alignment within 2mm tolerance', result: 'Fail' },
+      { label: 'Sealant joints continuous and gap-free', result: 'Pass' },
+      { label: 'Anchor brackets torqued to spec', result: 'Pass' },
+      { label: 'Thermal break installed at all interfaces', result: 'Fail' },
+      { label: 'Drainage channels clear and unobstructed', result: 'Pass' },
+    ],
+    issues: [
+      { title: 'Panel row misaligned by 6mm at Grid C', status: 'In Progress', note: 'Panels being repositioned by contractor' },
+      { title: 'Missing thermal break at floor 4 perimeter', status: 'Ready for Walkdown', note: 'Thermal break installed — walkdown pending' },
+    ],
+  },
+  {
+    title: 'Fire Suppression Commissioning',
+    project: 'North Warehouse Expansion',
+    type: 'MEP',
+    status: 'Passed',
+    inspector: 'Tom Jonas',
+    contractor: 'Max Boegl',
+    date: '03 Feb 2026',
+    checklistItems: [
+      { label: 'Sprinkler head spacing per NFPA 13', result: 'Pass' },
+      { label: 'System pressure test 200 psi for 2hrs', result: 'Pass' },
+      { label: 'Alarm flow switch tested', result: 'Pass' },
+      { label: 'Inspector test valve accessible', result: 'Pass' },
+      { label: 'All heads free of paint or obstruction', result: 'Pass' },
+    ],
+    issues: [],
+  },
+  {
+    title: 'Electrical Wiring Inspection',
+    project: 'Riverside Apartments',
+    type: 'MEP',
+    status: 'Passed',
+    inspector: 'Lisa Chen',
+    contractor: 'Zublin',
+    date: '12 Jan 2026',
+    checklistItems: [
+      { label: 'Cable sizing matches load schedule', result: 'Pass' },
+      { label: 'Earth continuity verified', result: 'Pass' },
+      { label: 'Conduit supports at correct spacing', result: 'Pass' },
+      { label: 'No exposed live conductors', result: 'Pass' },
+    ],
+    issues: [
+      { title: 'Conduit support spacing exceeded at Zone D', status: 'Closed', note: 'Additional supports added and verified' },
+    ],
+  },
+  {
+    title: 'Drainage & Stormwater Audit',
+    project: 'North Warehouse Expansion',
+    type: 'Site',
+    status: 'Pending',
+    inspector: 'John Smith',
+    contractor: 'Max Boegl',
+    date: '10 Feb 2026',
+    checklistItems: [
+      { label: 'Drainage channels clear and unobstructed', result: 'Pass' },
+      { label: 'Stormwater outlet locations verified', result: 'Pass' },
+      { label: 'Retention pond capacity checked', result: 'Pass' },
+      { label: 'Sediment traps installed at all inlets', result: 'Pass' },
+    ],
+    issues: [],
+  },
+  {
+    title: 'Pre-Handover Site Walkthrough',
+    project: 'East Wing Renovation',
+    type: 'Site',
+    status: 'Failed',
+    inspector: 'Sarah Johnson',
+    contractor: 'Goldbeck',
+    date: '05 Feb 2026',
+    checklistItems: [
+      { label: 'Snag list items resolved', result: 'Fail' },
+      { label: 'All finishes complete to specification', result: 'Fail' },
+      { label: 'Mechanical systems operational', result: 'Pass' },
+      { label: 'Commissioning certificates received', result: 'Pass' },
+      { label: 'As-built drawings submitted', result: 'Fail' },
+      { label: 'Keys and access cards handed over', result: 'Pass' },
+    ],
+    issues: [
+      { title: '12 snag items remain unresolved', status: 'In Progress', note: 'Contractor working through snag list' },
+      { title: 'Paint finish incomplete on Level 2 corridor', status: 'Ready for Walkdown', note: 'Painting complete — awaiting walkdown' },
+      { title: 'MEP as-built drawings not received', status: 'In Progress', note: 'Contractor to submit by 12 Feb 2026' },
+    ],
+  },
+];
+
+const inspectionTypes = ['Structural', 'Safety', 'MEP', 'Quality', 'Site'];
+const inspectionProjects = [...new Set(inspections.map(i => i.project))];
+
+const typeColors: Record<string, string> = {
+  'Structural': 'bg-purple-50 text-purple-700',
+  'Safety':     'bg-red-50 text-red-600',
+  'MEP':        'bg-blue-50 text-blue-600',
+  'Quality':    'bg-amber-50 text-amber-600',
+  'Site':       'bg-neutral-100 text-neutral-600',
+};
+
+const issueStatusColors: Record<string, string> = {
+  'In Progress':        'bg-blue-50 text-blue-600',
+  'Ready for Walkdown': 'bg-amber-50 text-amber-600',
+  'Closed':             'bg-neutral-100 text-neutral-500',
+};
+---
+
+<Layout title="Inspections" bgColor="#FFFFFF" hideHeader={true}>
+  <main class="min-h-screen flex">
+
+    <!-- Side Navigation (desktop only) -->
+    <nav class="fixed top-0 left-0 h-full w-56 bg-white border-r border-neutral-200 flex-col pt-8 pb-6 z-40 hidden md:flex">
+      <div class="px-5 mb-8">
+        <span class="text-sm font-semibold text-neutral-900">Construct</span>
+        <div class="relative mt-2">
+          <button type="button" id="workspace-trigger" class="w-full flex items-center justify-between gap-2 px-3 py-2 rounded-lg border border-neutral-200 text-sm text-neutral-700">
+            <div class="flex items-center gap-2 min-w-0">
+              <span class="w-2 h-2 rounded-full bg-emerald-500 shrink-0"></span>
+              <span id="workspace-label" class="truncate">Building Z</span>
+            </div>
+            <svg class="w-3.5 h-3.5 text-neutral-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div id="workspace-dropdown" class="hidden absolute top-full left-0 mt-1 w-full bg-white border border-neutral-200 rounded-lg shadow-lg z-50 py-1">
+            <button class="workspace-option w-full flex items-center gap-2 px-3 py-2 text-sm text-neutral-900 hover:bg-neutral-50 font-medium"><span class="w-2 h-2 rounded-full bg-emerald-500 shrink-0"></span>Building Z</button>
+            <button class="workspace-option w-full flex items-center gap-2 px-3 py-2 text-sm text-neutral-500 hover:bg-neutral-50"><span class="w-2 h-2 rounded-full bg-neutral-300 shrink-0"></span>Building A</button>
+            <button class="workspace-option w-full flex items-center gap-2 px-3 py-2 text-sm text-neutral-500 hover:bg-neutral-50"><span class="w-2 h-2 rounded-full bg-neutral-300 shrink-0"></span>Building B</button>
+          </div>
+        </div>
+      </div>
+      <ul class="flex flex-col gap-1 px-3">
+        <li><a href="/construct-prototype" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-neutral-500 hover:bg-neutral-50 hover:text-neutral-900 transition-colors"><svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>Tasks</a></li>
+        <li><a href="/construct-projects" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-neutral-500 hover:bg-neutral-50 hover:text-neutral-900 transition-colors"><svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7h18M3 12h18M3 17h18"/></svg>Projects</a></li>
+        <li><a href="/documents" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-neutral-500 hover:bg-neutral-50 hover:text-neutral-900 transition-colors"><svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>Documents</a></li>
+        <li><a href="/construct-requests" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-neutral-500 hover:bg-neutral-50 hover:text-neutral-900 transition-colors"><svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>Requests</a></li>
+        <li><a href="/construct-inspections" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium bg-neutral-100 text-neutral-900"><svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Inspections</a></li>
+      </ul>
+    </nav>
+
+    <!-- Mobile nav overlay -->
+    <div id="mobile-nav-overlay" class="fixed inset-0 bg-black/40 z-30 hidden md:hidden"></div>
+    <nav id="mobile-sidenav" class="fixed top-0 left-0 h-full w-64 bg-white border-r border-neutral-200 flex flex-col pt-8 pb-6 z-40 -translate-x-full transition-transform duration-200 md:hidden">
+      <div class="flex items-center justify-between px-5 mb-6">
+        <span class="text-sm font-semibold text-neutral-900">Construct</span>
+        <button id="mobile-nav-close" class="p-1 text-neutral-500 hover:text-neutral-900"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+      </div>
+      <ul class="flex flex-col gap-1 px-3">
+        <li><a href="/construct-prototype" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-neutral-500 hover:bg-neutral-50 transition-colors"><svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>Tasks</a></li>
+        <li><a href="/construct-projects" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-neutral-500 hover:bg-neutral-50 transition-colors"><svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7h18M3 12h18M3 17h18"/></svg>Projects</a></li>
+        <li><a href="/documents" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-neutral-500 hover:bg-neutral-50 transition-colors"><svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>Documents</a></li>
+        <li><a href="/construct-requests" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-neutral-500 hover:bg-neutral-50 transition-colors"><svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>Requests</a></li>
+        <li><a href="/construct-inspections" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium bg-neutral-100 text-neutral-900"><svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Inspections</a></li>
+      </ul>
+    </nav>
+
+    <!-- Main content -->
+    <div class="flex-1 md:ml-56">
+
+      <!-- ==================== LIST VIEW ==================== -->
+      <div id="insp-list-view" class="px-4 md:px-12 pt-4 md:pt-8 pb-12">
+
+        <!-- Mobile top bar -->
+        <div class="flex items-center justify-between mb-6 md:hidden">
+          <button id="mobile-nav-open" class="p-2 -ml-1 text-neutral-600"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+          <span class="text-sm font-semibold text-neutral-900">Inspections</span>
+          <button class="px-3 py-1.5 text-xs font-medium rounded-lg bg-neutral-900 text-white">+ Add Checklist</button>
+        </div>
+
+        <div class="hidden md:block">
+          <a href="/" class="inline-flex items-center gap-2 text-sm text-neutral-700 hover:text-neutral-900 transition-colors mb-8">← Back</a>
+          <div class="flex items-center justify-between mb-8">
+            <h1 class="text-3xl md:text-4xl font-bold text-neutral-900">Inspections</h1>
+            <button class="px-5 py-2.5 text-sm font-medium rounded-lg bg-neutral-900 text-white hover:bg-neutral-800 transition-colors">Add Checklist</button>
+          </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="flex flex-wrap items-end gap-3 mb-6">
+          <div class="relative" id="itype-wrapper">
+            <label class="block text-xs text-neutral-500 mb-1.5">Type</label>
+            <button id="itype-trigger" type="button" class="bg-white border border-neutral-300 rounded-lg px-3 py-2 pr-8 text-sm text-neutral-400 min-w-[120px] cursor-pointer hover:border-neutral-400 text-left relative">
+              <span id="itype-label">Select</span>
+              <svg class="absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-neutral-500 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div id="itype-dropdown" class="hidden absolute top-full left-0 mt-1 bg-white border border-neutral-200 rounded-lg shadow-lg z-30 py-1 min-w-[150px]">
+              <button class="ifilter-option w-full text-left px-3 py-2 text-sm text-neutral-900 hover:bg-neutral-50" data-ifilter="type" data-value="">All</button>
+              {inspectionTypes.map(t => <button class="ifilter-option w-full text-left px-3 py-2 text-sm text-neutral-900 hover:bg-neutral-50" data-ifilter="type" data-value={t}>{t}</button>)}
+            </div>
+          </div>
+
+          <div class="relative" id="istatus-wrapper">
+            <label class="block text-xs text-neutral-500 mb-1.5">Result</label>
+            <button id="istatus-trigger" type="button" class="bg-white border border-neutral-300 rounded-lg px-3 py-2 pr-8 text-sm text-neutral-400 min-w-[120px] cursor-pointer hover:border-neutral-400 text-left relative">
+              <span id="istatus-label">Select</span>
+              <svg class="absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-neutral-500 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div id="istatus-dropdown" class="hidden absolute top-full left-0 mt-1 bg-white border border-neutral-200 rounded-lg shadow-lg z-30 py-1 min-w-[130px]">
+              <button class="ifilter-option w-full text-left px-3 py-2 text-sm text-neutral-900 hover:bg-neutral-50" data-ifilter="status" data-value="">All</button>
+              <button class="ifilter-option w-full text-left px-3 py-2 text-sm text-neutral-900 hover:bg-neutral-50" data-ifilter="status" data-value="Passed">Passed</button>
+              <button class="ifilter-option w-full text-left px-3 py-2 text-sm text-neutral-900 hover:bg-neutral-50" data-ifilter="status" data-value="Failed">Failed</button>
+              <button class="ifilter-option w-full text-left px-3 py-2 text-sm text-neutral-900 hover:bg-neutral-50" data-ifilter="status" data-value="Pending">Pending</button>
+            </div>
+          </div>
+
+          <div class="relative hidden md:block" id="iproject-wrapper">
+            <label class="block text-xs text-neutral-500 mb-1.5">Project</label>
+            <button id="iproject-trigger" type="button" class="bg-white border border-neutral-300 rounded-lg px-3 py-2 pr-8 text-sm text-neutral-400 min-w-[180px] cursor-pointer hover:border-neutral-400 text-left relative">
+              <span id="iproject-label">Select</span>
+              <svg class="absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-neutral-500 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div id="iproject-dropdown" class="hidden absolute top-full left-0 mt-1 bg-white border border-neutral-200 rounded-lg shadow-lg z-30 py-1 min-w-[220px]">
+              <button class="ifilter-option w-full text-left px-3 py-2 text-sm text-neutral-900 hover:bg-neutral-50" data-ifilter="project" data-value="">All</button>
+              {inspectionProjects.map(p => <button class="ifilter-option w-full text-left px-3 py-2 text-sm text-neutral-900 hover:bg-neutral-50" data-ifilter="project" data-value={p}>{p}</button>)}
+            </div>
+          </div>
+        </div>
+
+        <!-- Desktop table -->
+        <div class="hidden md:block overflow-x-auto">
+          <table class="w-full border-collapse">
+            <thead>
+              <tr class="border-b border-neutral-200">
+                <th class="w-8 px-3 py-3"></th>
+                <th class="px-3 py-3 text-left text-sm font-semibold text-neutral-900">Checklist</th>
+                <th class="px-3 py-3 text-left text-sm font-semibold text-neutral-900">Type</th>
+                <th class="px-3 py-3 text-left text-sm font-semibold text-neutral-900">Project</th>
+                <th class="px-3 py-3 text-left text-sm font-semibold text-neutral-900">Result</th>
+                <th class="px-3 py-3 text-left text-sm font-semibold text-neutral-900">Issues</th>
+                <th class="px-3 py-3 text-left text-sm font-semibold text-neutral-900">Inspector</th>
+                <th class="px-3 py-3 text-left text-sm font-semibold text-neutral-900">Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              {inspections.map((insp, idx) => {
+                const openCount = insp.issues.filter(i => i.status !== 'Closed').length;
+                return (
+                  <>
+                    <tr class="inspection-row border-b border-neutral-100 hover:bg-neutral-50/50 transition-colors" data-itype={insp.type} data-istatus={insp.status} data-iproject={insp.project} data-idx={idx}>
+                      <!-- Expand chevron -->
+                      <td class="px-3 py-3.5 text-center">
+                        {insp.issues.length > 0 && (
+                          <button class="expand-btn p-0.5 text-neutral-400 hover:text-neutral-700 transition-colors" data-expand-idx={idx}>
+                            <svg class="chevron w-4 h-4 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                          </button>
+                        )}
+                      </td>
+                      <!-- Clickable title -->
+                      <td class="px-3 py-3.5">
+                        <button class="open-detail-btn text-sm font-medium text-neutral-900 hover:underline underline-offset-2 text-left" data-detail-idx={idx}>{insp.title}</button>
+                      </td>
+                      <td class="px-3 py-3.5"><span class={`text-xs font-medium px-2 py-0.5 rounded-full ${typeColors[insp.type]}`}>{insp.type}</span></td>
+                      <td class="px-3 py-3.5 text-sm text-neutral-700">{insp.project}</td>
+                      <td class="px-3 py-3.5">
+                        {insp.status === 'Passed'
+                          ? <span class="inline-flex items-center gap-1 text-xs font-medium text-emerald-600 bg-emerald-50 px-2.5 py-0.5 rounded-full"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>Passed</span>
+                          : insp.status === 'Pending'
+                          ? <span class="inline-flex items-center gap-1 text-xs font-medium text-orange-500 bg-orange-50 px-2.5 py-0.5 rounded-full"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Pending</span>
+                          : <span class="inline-flex items-center gap-1 text-xs font-medium text-red-600 bg-red-50 px-2.5 py-0.5 rounded-full"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>Failed</span>
+                        }
+                      </td>
+                      <td class="px-3 py-3.5 text-sm">
+                        {openCount > 0 ? <span class="text-red-500 font-medium">{openCount} open</span> : insp.issues.length > 0 ? <span class="text-neutral-400">{insp.issues.length} closed</span> : <span class="text-neutral-400">—</span>}
+                      </td>
+                      <td class="px-3 py-3.5 text-sm text-neutral-500">{insp.inspector}</td>
+                      <td class="px-3 py-3.5 text-sm text-neutral-500">{insp.date}</td>
+                    </tr>
+                    <!-- Nested issues row -->
+                    {insp.issues.length > 0 && (
+                      <tr class="nested-row hidden" data-parent={idx}>
+                        <td></td>
+                        <td colspan="7" class="px-3 pb-4 pt-1">
+                          <div class="border border-neutral-100 rounded-xl overflow-hidden">
+                            <table class="w-full border-collapse">
+                              <thead>
+                                <tr class="bg-neutral-50 border-b border-neutral-100">
+                                  <th class="px-4 py-2 text-left text-xs font-semibold text-neutral-500 w-8">#</th>
+                                  <th class="px-4 py-2 text-left text-xs font-semibold text-neutral-500">Issue Title</th>
+                                  <th class="px-4 py-2 text-left text-xs font-semibold text-neutral-500 w-44">Status</th>
+                                  <th class="px-4 py-2 text-left text-xs font-semibold text-neutral-500">Note</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {insp.issues.map((issue, issueIdx) => (
+                                  <tr class={`border-b border-neutral-50 last:border-0 ${issue.status === 'Closed' ? 'opacity-60' : ''}`}>
+                                    <td class="px-4 py-2.5 text-xs text-neutral-400">{issueIdx + 1}</td>
+                                    <td class="px-4 py-2.5 text-sm text-neutral-700">{issue.title}</td>
+                                    <td class="px-4 py-2.5"><span class={`text-xs font-medium px-2 py-0.5 rounded-full ${issueStatusColors[issue.status]}`}>{issue.status}</span></td>
+                                    <td class="px-4 py-2.5 text-xs text-neutral-500">{issue.note || '—'}</td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          </div>
+                        </td>
+                      </tr>
+                    )}
+                  </>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Mobile cards -->
+        <div class="flex flex-col gap-3 md:hidden">
+          {inspections.map((insp, idx) => {
+            const openCount = insp.issues.filter(i => i.status !== 'Closed').length;
+            return (
+              <div class="mobile-insp-card border border-neutral-200 rounded-xl overflow-hidden bg-white" data-itype={insp.type} data-istatus={insp.status} data-iproject={insp.project} data-idx={idx}>
+                <!-- Top: title opens detail, chevron expands issues -->
+                <div class="flex items-start gap-2 px-4 py-3.5">
+                  <button class="open-detail-btn flex-1 text-left min-w-0" data-detail-idx={idx}>
+                    <p class="text-sm font-semibold text-neutral-900 leading-snug mb-1.5">{insp.title}</p>
+                    <div class="flex flex-wrap items-center gap-2 mb-1.5">
+                      <span class={`text-xs font-medium px-2 py-0.5 rounded-full ${typeColors[insp.type]}`}>{insp.type}</span>
+                      {insp.status === 'Passed'
+                        ? <span class="inline-flex items-center gap-1 text-xs font-medium text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>Passed</span>
+                        : insp.status === 'Pending'
+                        ? <span class="inline-flex items-center gap-1 text-xs font-medium text-orange-500 bg-orange-50 px-2 py-0.5 rounded-full"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Pending</span>
+                        : <span class="inline-flex items-center gap-1 text-xs font-medium text-red-600 bg-red-50 px-2 py-0.5 rounded-full"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>Failed</span>
+                      }
+                      {openCount > 0 && <span class="text-xs font-medium text-red-500">{openCount} open issue{openCount > 1 ? 's' : ''}</span>}
+                    </div>
+                    <p class="text-xs text-neutral-400">{insp.project} · {insp.inspector} · {insp.date}</p>
+                  </button>
+                  {insp.issues.length > 0 && (
+                    <button class="expand-btn shrink-0 p-1.5 mt-0.5 text-neutral-400 hover:text-neutral-700 transition-colors" data-expand-idx={idx}>
+                      <svg class="chevron w-4 h-4 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                  )}
+                </div>
+                <!-- Nested issues (collapsed) -->
+                {insp.issues.length > 0 && (
+                  <div class="nested-row hidden border-t border-neutral-100" data-parent={idx}>
+                    {insp.issues.map((issue) => (
+                      <div class={`flex items-start gap-3 px-4 py-3 border-b border-neutral-50 last:border-0 ${issue.status === 'Closed' ? 'opacity-60' : ''}`}>
+                        <div class="flex-1 min-w-0">
+                          <p class="text-sm text-neutral-700">{issue.title}</p>
+                          {issue.note && <p class="text-xs text-neutral-400 mt-0.5">{issue.note}</p>}
+                        </div>
+                        <span class={`shrink-0 text-xs font-medium px-2 py-0.5 rounded-full ${issueStatusColors[issue.status]}`}>{issue.status}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+      </div>
+
+      <!-- ==================== DETAIL VIEW ==================== -->
+      <div id="insp-detail-view" class="hidden px-4 md:px-12 pt-4 md:pt-8 pb-12">
+
+        <!-- Back -->
+        <button id="insp-back" class="inline-flex items-center gap-2 text-sm text-neutral-500 hover:text-neutral-900 transition-colors mb-5">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+          Inspections
+        </button>
+
+        <!-- Header: stacks on mobile -->
+        <div class="mb-2">
+          <div class="flex items-start justify-between gap-4 mb-2">
+            <h1 id="det-title" class="text-xl md:text-4xl font-bold text-neutral-900 leading-tight"></h1>
+            <!-- Desktop buttons -->
+            <div class="hidden md:flex items-center gap-2 shrink-0 mt-1">
+              <button class="px-4 py-2 text-sm font-medium rounded-lg bg-neutral-900 text-white hover:bg-neutral-800 transition-colors">Close Inspection</button>
+              <button class="px-4 py-2 text-sm font-medium rounded-lg border border-neutral-300 text-neutral-700 hover:bg-neutral-50 transition-colors">Edit</button>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 mb-4">
+            <span id="det-badge" class="text-xs font-medium px-2.5 py-0.5 rounded-full"></span>
+            <span id="det-meta" class="text-xs md:text-sm text-neutral-500"></span>
+          </div>
+          <!-- Mobile buttons -->
+          <div class="flex gap-2 md:hidden mb-5">
+            <button class="flex-1 px-3 py-2 text-sm font-medium rounded-lg bg-neutral-900 text-white">Close Inspection</button>
+            <button class="px-3 py-2 text-sm font-medium rounded-lg border border-neutral-300 text-neutral-700">Edit</button>
+          </div>
+        </div>
+
+        <!-- Mobile summary strip -->
+        <div class="flex items-center gap-3 mb-5 md:hidden">
+          <div class="flex-1 border border-neutral-200 rounded-xl px-4 py-3 flex items-center justify-between">
+            <span class="text-xs text-neutral-500">Passed</span>
+            <span id="sum-pass-m" class="text-sm font-bold text-emerald-600"></span>
+          </div>
+          <div class="flex-1 border border-neutral-200 rounded-xl px-4 py-3 flex items-center justify-between">
+            <span class="text-xs text-neutral-500">Failed</span>
+            <span id="sum-fail-m" class="text-sm font-bold text-red-500"></span>
+          </div>
+          <div class="flex-1 border border-neutral-200 rounded-xl px-4 py-3 flex items-center justify-between">
+            <span class="text-xs text-neutral-500">Open</span>
+            <span id="sum-open-m" class="text-sm font-bold"></span>
+          </div>
+        </div>
+
+        <!-- Body: sidebar layout on desktop, stacked on mobile -->
+        <div class="flex flex-col md:flex-row md:gap-10">
+
+          <!-- Tabs: horizontal pills on mobile, vertical sidebar on desktop -->
+          <nav class="mb-4 md:mb-0 md:w-32 md:shrink-0 md:flex-col md:gap-1 flex gap-2 md:flex">
+            <button class="insp-tab px-3 py-2 text-sm font-medium text-neutral-900 border border-neutral-200 rounded-lg bg-white" data-itab="overview">Overview</button>
+            <button class="insp-tab px-3 py-2 text-sm text-neutral-500 hover:text-neutral-900 border border-transparent rounded-lg transition-colors" data-itab="issues">Issues</button>
+          </nav>
+
+          <!-- Tab content -->
+          <div class="flex-1 min-w-0">
+
+            <!-- Overview tab -->
+            <div id="itab-overview">
+              <!-- General info -->
+              <div id="det-section-general" class="mb-6 md:mb-8">
+                <h2 class="text-sm md:text-base font-semibold text-neutral-900 mb-3 md:mb-4">General Information</h2>
+                <div id="det-general-info" class="border border-neutral-100 rounded-xl overflow-hidden divide-y divide-neutral-50"></div>
+              </div>
+
+              <!-- Checklist items -->
+              <div id="det-section-checklist">
+                <h2 class="text-sm md:text-base font-semibold text-neutral-900 mb-3 md:mb-4">Checklist Items</h2>
+                <!-- Desktop: table -->
+                <div class="hidden md:block border border-neutral-100 rounded-xl overflow-hidden">
+                  <table class="w-full border-collapse">
+                    <thead>
+                      <tr class="bg-neutral-50 border-b border-neutral-100">
+                        <th class="px-4 py-2.5 text-left text-xs font-semibold text-neutral-500 w-8">#</th>
+                        <th class="px-4 py-2.5 text-left text-xs font-semibold text-neutral-500">Item</th>
+                        <th class="px-4 py-2.5 text-left text-xs font-semibold text-neutral-500 w-20">Result</th>
+                      </tr>
+                    </thead>
+                    <tbody id="det-checklist-tbody"></tbody>
+                  </table>
+                </div>
+                <!-- Mobile: cards -->
+                <div id="det-checklist-cards" class="md:hidden flex flex-col gap-2"></div>
+              </div>
+            </div>
+
+            <!-- Issues tab -->
+            <div id="itab-issues" class="hidden">
+              <!-- Desktop: table -->
+              <div class="hidden md:block border border-neutral-100 rounded-xl overflow-hidden">
+                <table class="w-full border-collapse">
+                  <thead>
+                    <tr class="bg-neutral-50 border-b border-neutral-100">
+                      <th class="px-4 py-2.5 text-left text-xs font-semibold text-neutral-500 w-8">#</th>
+                      <th class="px-4 py-2.5 text-left text-xs font-semibold text-neutral-500">Issue Title</th>
+                      <th class="px-4 py-2.5 text-left text-xs font-semibold text-neutral-500 w-44">Status</th>
+                      <th class="px-4 py-2.5 text-left text-xs font-semibold text-neutral-500">Note</th>
+                    </tr>
+                  </thead>
+                  <tbody id="det-issues-tbody"></tbody>
+                </table>
+              </div>
+              <div id="det-add-issue-desktop" class="hidden md:block mt-3"></div>
+              <!-- Mobile: cards -->
+              <div id="det-issues-cards" class="md:hidden flex flex-col gap-2"></div>
+              <div id="det-add-issue-mobile" class="md:hidden mt-3"></div>
+            </div>
+
+          </div>
+
+          <!-- Right summary card (desktop only) -->
+          <div class="shrink-0 hidden md:block" style="width: 260px;">
+            <div class="border border-neutral-200 rounded-xl p-5">
+              <h3 class="text-sm font-semibold text-neutral-900 mb-4">Summary</h3>
+              <div class="flex flex-col gap-3">
+                <div class="flex items-center justify-between">
+                  <span class="text-sm text-neutral-500">Total Items</span>
+                  <span id="sum-total" class="text-sm font-semibold text-neutral-900"></span>
+                </div>
+                <div class="flex items-center justify-between">
+                  <span class="text-sm text-neutral-500">Passed</span>
+                  <span id="sum-pass" class="text-sm font-semibold text-emerald-600"></span>
+                </div>
+                <div class="flex items-center justify-between">
+                  <span class="text-sm text-neutral-500">Failed</span>
+                  <span id="sum-fail" class="text-sm font-semibold text-red-500"></span>
+                </div>
+                <div class="border-t border-neutral-100 pt-3 flex items-center justify-between">
+                  <span class="text-sm text-neutral-500">Open Issues</span>
+                  <span id="sum-open-issues" class="text-sm font-semibold"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <script is:inline define:vars={{ inspections }}>
+        window.__inspections = inspections;
+      </script>
+
+    </div>
+  </main>
+</Layout>
+
+<script>
+  // Mobile nav
+  const mobileNavOpen = document.getElementById('mobile-nav-open');
+  const mobileNavClose = document.getElementById('mobile-nav-close');
+  const mobileSidenav = document.getElementById('mobile-sidenav');
+  const mobileOverlay = document.getElementById('mobile-nav-overlay');
+  const openMobileNav = () => { mobileSidenav?.classList.remove('-translate-x-full'); mobileOverlay?.classList.remove('hidden'); };
+  const closeMobileNav = () => { mobileSidenav?.classList.add('-translate-x-full'); mobileOverlay?.classList.add('hidden'); };
+  mobileNavOpen?.addEventListener('click', openMobileNav);
+  mobileNavClose?.addEventListener('click', closeMobileNav);
+  mobileOverlay?.addEventListener('click', closeMobileNav);
+
+  // Workspace dropdown
+  const workspaceTrigger = document.getElementById('workspace-trigger');
+  const workspaceDropdown = document.getElementById('workspace-dropdown');
+  workspaceTrigger?.addEventListener('click', () => workspaceDropdown?.classList.toggle('hidden'));
+  document.addEventListener('click', (e) => {
+    if (workspaceTrigger && !workspaceTrigger.contains(e.target as Node) && workspaceDropdown && !workspaceDropdown.contains(e.target as Node)) workspaceDropdown?.classList.add('hidden');
+  });
+  document.querySelectorAll<HTMLButtonElement>('.workspace-option').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const label = document.getElementById('workspace-label');
+      if (label) label.textContent = btn.textContent?.trim() || '';
+      workspaceDropdown?.classList.add('hidden');
+    });
+  });
+
+  // ===== EXPAND / COLLAPSE nested issues =====
+  document.querySelectorAll<HTMLButtonElement>('.expand-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const idx = btn.dataset.expandIdx;
+      const nested = document.querySelector<HTMLElement>(`.nested-row[data-parent="${idx}"]`);
+      const chevron = btn.querySelector<SVGElement>('.chevron');
+      if (!nested) return;
+      const isOpen = !nested.classList.contains('hidden');
+      nested.classList.toggle('hidden', isOpen);
+      // Desktop: rotate right→down; Mobile: rotate down→up
+      chevron?.classList.toggle('rotate-90', !isOpen);
+    });
+  });
+
+  // ===== DETAIL VIEW =====
+  const listView = document.getElementById('insp-list-view');
+  const detailView = document.getElementById('insp-detail-view');
+  const allInspections = (window as any).__inspections as any[];
+
+  const issueStatusColors: Record<string, string> = {
+    'In Progress':        'bg-blue-50 text-blue-600',
+    'Ready for Walkdown': 'bg-amber-50 text-amber-600',
+    'Closed':             'bg-neutral-100 text-neutral-500',
+  };
+
+  // Per-session state for pending checklists
+  const itemStates: Record<number, Record<number, string | null>> = {}; // inspIdx → itemIdx → 'Pass'|'Fail'|null
+  const sessionIssues: Record<number, any[]> = {}; // inspIdx → added issues
+
+  const passIcon = `<svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>`;
+  const failIcon = `<svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>`;
+
+  let currentInspIdx = -1;
+
+  function renderChecklistRow(item: any, i: number, isPending: boolean, state: string | null) {
+    const resolved = isPending ? state : item.result;
+    const rowBg = resolved === 'Fail' ? 'bg-red-50/40' : '';
+    const resultCell = isPending
+      ? `<div class="flex gap-1.5">
+           <button class="item-result-btn px-2.5 py-1 text-xs font-medium rounded-lg border transition-colors ${state === 'Pass' ? 'bg-emerald-50 text-emerald-600 border-emerald-300' : 'border-neutral-200 text-neutral-400 hover:border-emerald-300 hover:text-emerald-600 hover:bg-emerald-50'}" data-item-idx="${i}" data-result="Pass">Pass</button>
+           <button class="item-result-btn px-2.5 py-1 text-xs font-medium rounded-lg border transition-colors ${state === 'Fail' ? 'bg-red-50 text-red-500 border-red-300' : 'border-neutral-200 text-neutral-400 hover:border-red-300 hover:text-red-500 hover:bg-red-50'}" data-item-idx="${i}" data-result="Fail">Fail</button>
+         </div>`
+      : resolved === 'Pass'
+        ? `<span class="inline-flex items-center gap-1 text-xs font-medium text-emerald-600">${passIcon}Pass</span>`
+        : `<span class="inline-flex items-center gap-1 text-xs font-medium text-red-500">${failIcon}Fail</span>`;
+
+    return `<tr class="border-b border-neutral-50 last:border-0 ${rowBg}" data-row-idx="${i}">
+      <td class="px-4 py-3 text-xs text-neutral-400">${i + 1}</td>
+      <td class="px-4 py-3 text-sm text-neutral-700">${item.label}</td>
+      <td class="px-4 py-3">${resultCell}</td>
+    </tr>`;
+  }
+
+  function renderChecklistCard(item: any, i: number, isPending: boolean, state: string | null) {
+    const resolved = isPending ? state : item.result;
+    const cardBg = resolved === 'Fail' ? 'bg-red-50/40 border-red-100' : 'bg-white';
+    const resultPart = isPending
+      ? `<div class="flex gap-1.5 shrink-0">
+           <button class="item-result-btn-m px-2.5 py-1 text-xs font-medium rounded-lg border transition-colors ${state === 'Pass' ? 'bg-emerald-50 text-emerald-600 border-emerald-300' : 'border-neutral-200 text-neutral-400'}" data-item-idx="${i}" data-result="Pass">Pass</button>
+           <button class="item-result-btn-m px-2.5 py-1 text-xs font-medium rounded-lg border transition-colors ${state === 'Fail' ? 'bg-red-50 text-red-500 border-red-300' : 'border-neutral-200 text-neutral-400'}" data-item-idx="${i}" data-result="Fail">Fail</button>
+         </div>`
+      : resolved === 'Pass'
+        ? `<span class="inline-flex items-center gap-1 text-xs font-medium text-emerald-600 shrink-0">${passIcon}Pass</span>`
+        : `<span class="inline-flex items-center gap-1 text-xs font-medium text-red-500 shrink-0">${failIcon}Fail</span>`;
+
+    return `<div class="flex items-center justify-between px-4 py-3 border border-neutral-100 rounded-xl ${cardBg}" data-card-idx="${i}">
+      <span class="text-sm text-neutral-700 flex-1 pr-3">${item.label}</span>
+      ${resultPart}
+    </div>`;
+  }
+
+  function renderIssues(issues: any[]) {
+    // Desktop table
+    const issuesTbody = document.getElementById('det-issues-tbody');
+    if (issuesTbody) {
+      issuesTbody.innerHTML = issues.length
+        ? issues.map((issue: any, i: number) => `
+          <tr class="border-b border-neutral-50 last:border-0 ${issue.status === 'Closed' ? 'opacity-60' : ''}">
+            <td class="px-4 py-3 text-xs text-neutral-400">${i + 1}</td>
+            <td class="px-4 py-3 text-sm text-neutral-700">${issue.title}</td>
+            <td class="px-4 py-3"><span class="text-xs font-medium px-2 py-0.5 rounded-full ${issueStatusColors[issue.status] || ''}">${issue.status}</span></td>
+            <td class="px-4 py-3 text-xs text-neutral-500">${issue.note || '—'}</td>
+          </tr>`).join('')
+        : '<tr><td colspan="4" class="px-4 py-6 text-sm text-neutral-400 text-center">No issues recorded.</td></tr>';
+    }
+    // Mobile cards
+    const issuesCards = document.getElementById('det-issues-cards');
+    if (issuesCards) {
+      issuesCards.innerHTML = issues.length
+        ? issues.map((issue: any) => `
+          <div class="border border-neutral-100 rounded-xl px-4 py-3 ${issue.status === 'Closed' ? 'opacity-60' : ''}">
+            <div class="flex items-start justify-between gap-3 mb-1">
+              <p class="text-sm text-neutral-700 font-medium flex-1">${issue.title}</p>
+              <span class="text-xs font-medium px-2 py-0.5 rounded-full shrink-0 ${issueStatusColors[issue.status] || ''}">${issue.status}</span>
+            </div>
+            ${issue.note ? `<p class="text-xs text-neutral-400">${issue.note}</p>` : ''}
+          </div>`).join('')
+        : '<p class="text-sm text-neutral-400 text-center py-6">No issues recorded.</p>';
+    }
+  }
+
+  function renderSummary(insp: any, states: Record<number, string | null>, addedIssues: any[]) {
+    const allIssues = [...insp.issues, ...addedIssues];
+    let passCount = 0, failCount = 0;
+    insp.checklistItems.forEach((c: any, i: number) => {
+      const r = insp.status === 'Pending' ? (states[i] ?? null) : c.result;
+      if (r === 'Pass') passCount++;
+      else if (r === 'Fail') failCount++;
+    });
+    const openIssues = allIssues.filter((i: any) => i.status !== 'Closed').length;
+
+    const elTotal = document.getElementById('sum-total');
+    const elPass = document.getElementById('sum-pass');
+    const elFail = document.getElementById('sum-fail');
+    const elOpenIssues = document.getElementById('sum-open-issues');
+    if (elTotal) elTotal.textContent = String(insp.checklistItems.length);
+    if (elPass) elPass.textContent = String(passCount);
+    if (elFail) elFail.textContent = String(failCount);
+    if (elOpenIssues) {
+      elOpenIssues.textContent = String(openIssues);
+      elOpenIssues.className = `text-sm font-semibold ${openIssues > 0 ? 'text-red-500' : 'text-neutral-400'}`;
+    }
+    const elPassM = document.getElementById('sum-pass-m');
+    const elFailM = document.getElementById('sum-fail-m');
+    const elOpenM = document.getElementById('sum-open-m');
+    if (elPassM) elPassM.textContent = String(passCount);
+    if (elFailM) elFailM.textContent = String(failCount);
+    if (elOpenM) {
+      elOpenM.textContent = String(openIssues);
+      elOpenM.className = `text-sm font-bold ${openIssues > 0 ? 'text-red-500' : 'text-neutral-400'}`;
+    }
+  }
+
+  function openDetail(idx: number) {
+    const insp = allInspections[idx];
+    if (!insp) return;
+
+    currentInspIdx = idx;
+    if (!itemStates[idx]) itemStates[idx] = {};
+    if (!sessionIssues[idx]) sessionIssues[idx] = [];
+
+    listView?.classList.add('hidden');
+    detailView?.classList.remove('hidden');
+
+    // Title
+    const titleEl = document.getElementById('det-title');
+    if (titleEl) titleEl.textContent = insp.title;
+
+    // Badge
+    const badge = document.getElementById('det-badge');
+    if (badge) {
+      const badgeCls = insp.status === 'Passed' ? 'bg-emerald-50 text-emerald-600'
+        : insp.status === 'Pending' ? 'bg-orange-50 text-orange-500'
+        : 'bg-red-50 text-red-600';
+      badge.className = `text-xs font-medium px-2.5 py-0.5 rounded-full ${badgeCls}`;
+      badge.textContent = insp.status;
+    }
+
+    // Meta
+    const meta = document.getElementById('det-meta');
+    if (meta) meta.textContent = `${insp.type}  ·  Inspector: ${insp.inspector}  ·  Contractor: ${insp.contractor}`;
+
+    // General info
+    const generalInfo = document.getElementById('det-general-info');
+    if (generalInfo) {
+      const fields = [
+        { label: 'Project',    value: insp.project },
+        { label: 'Type',       value: insp.type },
+        { label: 'Inspector',  value: insp.inspector },
+        { label: 'Contractor', value: insp.contractor },
+        { label: 'Date',       value: insp.date },
+      ];
+      generalInfo.innerHTML = fields.map(f => `
+        <div class="flex items-center justify-between px-4 py-3">
+          <span class="text-sm text-neutral-500">${f.label}</span>
+          <span class="text-sm text-neutral-900 font-medium">${f.value}</span>
+        </div>`).join('');
+    }
+
+    const isPending = insp.status === 'Pending';
+    const states = itemStates[idx];
+
+    // Checklist — desktop table
+    const checklistTbody = document.getElementById('det-checklist-tbody');
+    if (checklistTbody) {
+      checklistTbody.innerHTML = insp.checklistItems.map((item: any, i: number) =>
+        renderChecklistRow(item, i, isPending, states[i] ?? null)).join('');
+
+      // Pass/Fail button listeners (desktop)
+      attachDesktopItemListeners(checklistTbody, insp);
+    }
+
+    // Checklist — mobile cards
+    const checklistCards = document.getElementById('det-checklist-cards');
+    if (checklistCards) {
+      checklistCards.innerHTML = insp.checklistItems.map((item: any, i: number) =>
+        renderChecklistCard(item, i, isPending, states[i] ?? null)).join('');
+
+      checklistCards.querySelectorAll<HTMLButtonElement>('.item-result-btn-m').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const i = Number(btn.dataset.itemIdx);
+          const result = btn.dataset.result as string;
+          itemStates[currentInspIdx][i] = itemStates[currentInspIdx][i] === result ? null : result;
+          const card = checklistCards.querySelector<HTMLElement>(`[data-card-idx="${i}"]`);
+          if (card) card.outerHTML = renderChecklistCard(insp.checklistItems[i], i, true, itemStates[currentInspIdx][i]);
+          attachMobileItemListeners(checklistCards, insp);
+          renderSummary(insp, itemStates[currentInspIdx], sessionIssues[currentInspIdx]);
+        });
+      });
+    }
+
+    // Issues
+    const allIssues = [...insp.issues, ...sessionIssues[idx]];
+    renderIssues(allIssues);
+
+    // Add Issue form (only for Pending)
+    renderAddIssueForm(isPending, idx);
+
+    // Summary
+    renderSummary(insp, states, sessionIssues[idx]);
+
+    // Reorder overview sections: checklist first for Pending, general info first otherwise
+    const generalSection = document.getElementById('det-section-general');
+    const checklistSection = document.getElementById('det-section-checklist');
+    if (generalSection && checklistSection && generalSection.parentElement) {
+      const parent = generalSection.parentElement;
+      if (isPending) {
+        // checklist first: move general info after checklist
+        generalSection.classList.remove('mb-6', 'md:mb-8');
+        checklistSection.classList.add('mb-6', 'md:mb-8');
+        parent.insertBefore(checklistSection, generalSection);
+      } else {
+        // general info first (default order)
+        checklistSection.classList.remove('mb-6', 'md:mb-8');
+        generalSection.classList.add('mb-6', 'md:mb-8');
+        parent.insertBefore(generalSection, checklistSection);
+      }
+    }
+
+    activateTab('overview');
+  }
+
+  function attachDesktopItemListeners(container: HTMLElement, insp: any) {
+    container.querySelectorAll<HTMLButtonElement>('.item-result-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const i = Number(btn.dataset.itemIdx);
+        const result = btn.dataset.result as string;
+        itemStates[currentInspIdx][i] = itemStates[currentInspIdx][i] === result ? null : result;
+        const row = container.querySelector<HTMLTableRowElement>(`tr[data-row-idx="${i}"]`);
+        if (row) row.outerHTML = renderChecklistRow(insp.checklistItems[i], i, true, itemStates[currentInspIdx][i]);
+        attachDesktopItemListeners(container, insp);
+        renderSummary(insp, itemStates[currentInspIdx], sessionIssues[currentInspIdx]);
+      });
+    });
+  }
+
+  function attachMobileItemListeners(container: HTMLElement, insp: any) {
+    container.querySelectorAll<HTMLButtonElement>('.item-result-btn-m').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const i = Number(btn.dataset.itemIdx);
+        const result = btn.dataset.result as string;
+        itemStates[currentInspIdx][i] = itemStates[currentInspIdx][i] === result ? null : result;
+        const card = container.querySelector<HTMLElement>(`[data-card-idx="${i}"]`);
+        if (card) card.outerHTML = renderChecklistCard(insp.checklistItems[i], i, true, itemStates[currentInspIdx][i]);
+        attachMobileItemListeners(container, insp);
+        renderSummary(insp, itemStates[currentInspIdx], sessionIssues[currentInspIdx]);
+      });
+    });
+  }
+
+  function renderAddIssueForm(isPending: boolean, idx: number) {
+    // Find or create the add-issue containers (one for desktop, one for mobile)
+    ['det-add-issue-desktop', 'det-add-issue-mobile'].forEach(containerId => {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+      if (!isPending) { container.innerHTML = ''; return; }
+
+      container.innerHTML = `
+        <div class="mt-4">
+          <button id="show-add-issue-${containerId}" class="inline-flex items-center gap-1.5 text-sm font-medium text-neutral-700 border border-neutral-300 rounded-lg px-3 py-2 hover:bg-neutral-50 transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+            Add Issue
+          </button>
+          <div id="add-issue-form-${containerId}" class="hidden mt-3 border border-neutral-200 rounded-xl p-4 bg-neutral-50 flex flex-col gap-3">
+            <div>
+              <label class="block text-xs text-neutral-500 mb-1">Issue Title <span class="text-red-400">*</span></label>
+              <input id="issue-title-${containerId}" type="text" placeholder="Describe the issue…" class="w-full border border-neutral-200 rounded-lg px-3 py-2 text-sm text-neutral-900 bg-white focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:ring-offset-1" />
+            </div>
+            <div>
+              <label class="block text-xs text-neutral-500 mb-1">Status</label>
+              <select id="issue-status-${containerId}" class="w-full border border-neutral-200 rounded-lg px-3 py-2 text-sm text-neutral-900 bg-white focus:outline-none focus:ring-2 focus:ring-neutral-900">
+                <option value="In Progress">In Progress</option>
+                <option value="Ready for Walkdown">Ready for Walkdown</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs text-neutral-500 mb-1">Note</label>
+              <input id="issue-note-${containerId}" type="text" placeholder="Optional note…" class="w-full border border-neutral-200 rounded-lg px-3 py-2 text-sm text-neutral-900 bg-white focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:ring-offset-1" />
+            </div>
+            <div class="flex gap-2">
+              <button id="submit-issue-${containerId}" class="px-4 py-2 text-sm font-medium rounded-lg bg-neutral-900 text-white hover:bg-neutral-800 transition-colors">Add Issue</button>
+              <button id="cancel-issue-${containerId}" class="px-4 py-2 text-sm font-medium rounded-lg border border-neutral-300 text-neutral-700 hover:bg-neutral-50 transition-colors">Cancel</button>
+            </div>
+          </div>
+        </div>`;
+
+      const showBtn = document.getElementById(`show-add-issue-${containerId}`);
+      const form = document.getElementById(`add-issue-form-${containerId}`);
+      showBtn?.addEventListener('click', () => form?.classList.remove('hidden'));
+      document.getElementById(`cancel-issue-${containerId}`)?.addEventListener('click', () => form?.classList.add('hidden'));
+      document.getElementById(`submit-issue-${containerId}`)?.addEventListener('click', () => {
+        const titleInput = document.getElementById(`issue-title-${containerId}`) as HTMLInputElement;
+        const statusInput = document.getElementById(`issue-status-${containerId}`) as HTMLSelectElement;
+        const noteInput = document.getElementById(`issue-note-${containerId}`) as HTMLInputElement;
+        const title = titleInput?.value.trim();
+        if (!title) { titleInput?.focus(); return; }
+        sessionIssues[idx].push({ title, status: statusInput.value, note: noteInput?.value.trim() });
+        const insp = allInspections[idx];
+        renderIssues([...insp.issues, ...sessionIssues[idx]]);
+        renderSummary(insp, itemStates[idx], sessionIssues[idx]);
+        titleInput.value = '';
+        noteInput.value = '';
+        form?.classList.add('hidden');
+      });
+    });
+  }
+
+  function activateTab(tab: string) {
+    ['overview', 'issues'].forEach(t => {
+      document.getElementById(`itab-${t}`)?.classList.toggle('hidden', t !== tab);
+    });
+    document.querySelectorAll<HTMLButtonElement>('.insp-tab').forEach(btn => {
+      const isActive = btn.dataset.itab === tab;
+      btn.className = isActive
+        ? 'insp-tab text-left px-3 py-2 text-sm font-medium text-neutral-900 border border-neutral-200 rounded-lg bg-white'
+        : 'insp-tab text-left px-3 py-2 text-sm text-neutral-500 hover:text-neutral-900 transition-colors';
+    });
+  }
+
+  // Title clicks (desktop + mobile)
+  document.querySelectorAll<HTMLButtonElement>('.open-detail-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openDetail(Number(btn.dataset.detailIdx));
+    });
+  });
+
+  // Tab clicks
+  document.querySelectorAll<HTMLButtonElement>('.insp-tab').forEach(btn => {
+    btn.addEventListener('click', () => activateTab(btn.dataset.itab || 'overview'));
+  });
+
+  // Back button
+  document.getElementById('insp-back')?.addEventListener('click', () => {
+    detailView?.classList.add('hidden');
+    listView?.classList.remove('hidden');
+  });
+
+  // Filters
+  const ifilters: Record<string, string> = { type: '', status: '', project: '' };
+
+  ['itype', 'istatus', 'iproject'].forEach(key => {
+    const trigger = document.getElementById(`${key}-trigger`);
+    const dropdown = document.getElementById(`${key}-dropdown`);
+    const wrapper = document.getElementById(`${key}-wrapper`);
+    trigger?.addEventListener('click', () => dropdown?.classList.toggle('hidden'));
+    document.addEventListener('click', (e) => {
+      if (wrapper && !wrapper.contains(e.target as Node)) dropdown?.classList.add('hidden');
+    });
+  });
+
+  document.querySelectorAll<HTMLButtonElement>('.ifilter-option').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const key = btn.dataset.ifilter || '';
+      const value = btn.dataset.value || '';
+      ifilters[key] = value;
+      const labelKey = `i${key}`;
+      const label = document.getElementById(`${labelKey}-label`);
+      const trigger = document.getElementById(`${labelKey}-trigger`);
+      if (label) {
+        label.textContent = value || 'Select';
+        trigger?.classList.toggle('text-neutral-400', !value);
+        trigger?.classList.toggle('text-neutral-900', !!value);
+      }
+      document.getElementById(`${labelKey}-dropdown`)?.classList.add('hidden');
+      filterRows();
+    });
+  });
+
+  function filterRows() {
+    document.querySelectorAll<HTMLTableRowElement>('.inspection-row').forEach(row => {
+      const match = (!ifilters.type || row.dataset.itype === ifilters.type) && (!ifilters.status || row.dataset.istatus === ifilters.status) && (!ifilters.project || row.dataset.iproject === ifilters.project);
+      row.classList.toggle('hidden', !match);
+    });
+    document.querySelectorAll<HTMLButtonElement>('.mobile-insp-card').forEach(card => {
+      const match = (!ifilters.type || card.dataset.itype === ifilters.type) && (!ifilters.status || card.dataset.istatus === ifilters.status) && (!ifilters.project || card.dataset.iproject === ifilters.project);
+      card.classList.toggle('hidden', !match);
+    });
+  }
+</script>
