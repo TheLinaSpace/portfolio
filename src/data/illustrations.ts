@@ -35,9 +35,4 @@ export const illustrations: Illustration[] = [
     defaultImage: '/leila default.png',
     hoverImage: '/leila hover.png',
   },
-  {
-    slug: 'bambi',
-    title: 'Bambi',
-    description: 'A knitted cat that comes alive and befriends a little girl named Rim.',
-  },
 ];
