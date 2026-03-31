@@ -9,45 +9,26 @@ const { prefix = '', words, className = '' } = Astro.props;
 ---
 
 <span class={className} data-cycling-text data-words={JSON.stringify(words)}>
-  {prefix}<span class="cycling-wrapper" style="display: inline-block; position: relative;"><span class="cycling-word" style="display: inline-block; transition: opacity 400ms ease, transform 400ms ease;">{words[0]}</span><span class="cycling-measure" style="display: inline-block; height: 0; overflow: hidden; visibility: hidden;">{words[0]}</span></span>
+  {prefix}<span class="cycling-word" style="display: inline; transition: opacity 400ms ease, transform 400ms ease;">{words[0]}</span>
 </span>
-
-<style>
-  .cycling-wrapper {
-    transition: width 400ms ease;
-    vertical-align: bottom;
-  }
-</style>
 
 <script>
   document.querySelectorAll('[data-cycling-text]').forEach((el) => {
     const words: string[] = JSON.parse(el.getAttribute('data-words') || '[]');
     if (words.length <= 1) return;
 
-    const wrapper = el.querySelector('.cycling-wrapper') as HTMLElement;
     const wordEl = el.querySelector('.cycling-word') as HTMLElement;
-    const measure = el.querySelector('.cycling-measure') as HTMLElement;
 
     let index = 0;
 
-    // Set initial width
-    measure.textContent = words[0];
-    wrapper.style.width = measure.offsetWidth + 'px';
-
     setInterval(() => {
-      // Fade out current word
       wordEl.style.opacity = '0';
       wordEl.style.transform = 'translateY(6px)';
 
       setTimeout(() => {
         index = (index + 1) % words.length;
         wordEl.textContent = words[index];
-        measure.textContent = words[index];
 
-        // Animate wrapper width
-        wrapper.style.width = measure.offsetWidth + 'px';
-
-        // Reset position for fade in
         wordEl.style.transform = 'translateY(-6px)';
         wordEl.style.transition = 'none';
 
