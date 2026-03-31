@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { projects } from '../data/projects';
+import CyclingText from '../components/CyclingText.astro';
 
 const productProjects = projects.filter(p => p.category === 'products');
 const uxProjects = projects.filter(p => p.category === 'ux');
@@ -9,69 +10,44 @@ const uxProjects = projects.filter(p => p.category === 'ux');
 <Layout>
   <main class="max-w-5xl mx-auto px-6 py-14">
 
-    <!-- Header -->
-    <header class="mb-10">
-      <h1 class="text-2xl font-semibold text-neutral-900 mb-2">Lina Charara</h1>
-      <p class="text-neutral-700 text-sm">Product designer at Tesla. Building products that solve user problems.</p>
+    <!-- Header with avatar -->
+    <header class="mb-10 flex items-center gap-6">
+      <img
+        src="/Pin Image.PNG"
+        alt="Lina Charara"
+        class="shrink-0" style="width: 161px; height: 180px;"
+      />
+      <div>
+        <h1 class="font-semibold text-neutral-900 mb-2" style="font-size: 32px;">Lina Charara</h1>
+        <p class="text-neutral-700 text-base whitespace-nowrap">Product Designer at Tesla. Building products <CyclingText words={["that solve user problems.", "that are simple.", "that are easy to use.", "that are fun.", "that are unique."]} className="text-neutral-700 text-base font-semibold" /></p>
+      </div>
     </header>
 
-    <!-- Two-column project grid with roach -->
-    <div class="relative">
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-x-28 gap-y-6">
-
-        <!-- Left column: Products I've Built -->
-        <div class="flex flex-col gap-4">
-          <img src="/Product I've Built.PNG" alt="Products I Have Built" class="w-64 mb-[-4px]" />
-          {productProjects.map((project) => (
-            <a
-              href={`/projects/${project.slug}`}
-              class="group relative block"
-            >
-              <img
-                src={project.defaultImage ?? '/Skills Default.png'}
-                alt={project.title}
-                class="w-full group-hover:opacity-0 transition-opacity duration-200"
-              />
-              <img
-                src={project.hoverImage ?? '/Skills Hover.png'}
-                alt={project.title}
-                class="w-full absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-              />
-              <div class="absolute bottom-0 left-0 w-full h-[40%] max-w-[75%] flex flex-col gap-2 items-start justify-center pl-6">
-                <h3 class="text-sm font-semibold text-neutral-900">{project.title}</h3>
-                <p class="text-[13px] text-neutral-700">{project.description}</p>
-              </div>
-            </a>
-          ))}
-        </div>
-
-        <!-- Right column: UX Use Cases -->
-        <div class="flex flex-col gap-4">
-          <img src="/UX Use Cases.PNG" alt="UX Use Cases" class="w-56 mb-[-4px]" />
-          {uxProjects.map((project) => (
-            <a
-              href={`/projects/${project.slug}`}
-              class="group relative block"
-            >
-              <img
-                src={project.defaultImage ?? '/Skills Default.png'}
-                alt={project.title}
-                class="w-full group-hover:opacity-0 transition-opacity duration-200"
-              />
-              <img
-                src={project.hoverImage ?? '/Skills Hover.png'}
-                alt={project.title}
-                class="w-full absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-              />
-              <div class="absolute bottom-0 left-0 w-full h-[40%] max-w-[75%] flex flex-col gap-2 items-start justify-center pl-6">
-                <h3 class="text-sm font-semibold text-neutral-900">{project.title}</h3>
-                <p class="text-[13px] text-neutral-700">{project.description}</p>
-              </div>
-            </a>
-          ))}
-        </div>
-
+    <!-- Products I've Built -->
+    <div class="relative mb-10">
+      <img src="/Product I've Built.PNG" alt="Products I Have Built" class="w-64 mb-3" />
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {productProjects.map((project) => (
+          <a
+            href={`/projects/${project.slug}`}
+            class="group relative block"
+          >
+            <img
+              src={project.defaultImage ?? '/Skills Default.png'}
+              alt={project.title}
+              class="w-full group-hover:opacity-0 transition-opacity duration-200"
+            />
+            <img
+              src={project.hoverImage ?? '/Skills Hover.png'}
+              alt={project.title}
+              class="w-full absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+            />
+            <div class="absolute bottom-0 left-0 w-full h-[40%] max-w-[75%] flex flex-col gap-2 items-start justify-center pl-6">
+              <h3 class="text-sm font-semibold text-neutral-900">{project.title}</h3>
+              <p class="text-[13px] text-neutral-700">{project.description}</p>
+            </div>
+          </a>
+        ))}
       </div>
 
       <!-- Hire me Roach character - top right -->
@@ -82,7 +58,35 @@ const uxProjects = projects.filter(p => p.category === 'ux');
           class="w-40 md:w-44"
         />
       </a>
-
     </div>
+
+    <!-- UX Use Cases -->
+    <div>
+      <img src="/UX Use Cases.PNG" alt="UX Use Cases" class="w-56 mb-3" />
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {uxProjects.map((project) => (
+          <a
+            href={`/projects/${project.slug}`}
+            class="group relative block"
+          >
+            <img
+              src={project.defaultImage ?? '/Skills Default.png'}
+              alt={project.title}
+              class="w-full group-hover:opacity-0 transition-opacity duration-200"
+            />
+            <img
+              src={project.hoverImage ?? '/Skills Hover.png'}
+              alt={project.title}
+              class="w-full absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+            />
+            <div class="absolute bottom-0 left-0 w-full h-[40%] max-w-[75%] flex flex-col gap-2 items-start justify-center pl-6">
+              <h3 class="text-sm font-semibold text-neutral-900">{project.title}</h3>
+              <p class="text-[13px] text-neutral-700">{project.description}</p>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+
   </main>
 </Layout>
