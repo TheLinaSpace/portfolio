@@ -12,7 +12,9 @@
       "Bash(npx astro:*)",
       "WebFetch(domain:linacharara.com)",
       "WebFetch(domain:simpleicons.org)",
-      "Bash(node:*)"
+      "Bash(node:*)",
+      "Bash(find /Users/linac/Documents/GitHub/portfolio -type f \\\\\\(-name *alblatta* -o -name *Alblatta* -o -name *blatta* \\\\\\))",
+      "WebFetch(domain:paper.design)"
     ]
   }
 }

@@ -5,6 +5,7 @@ export interface Project {
   body: string;
   tags: string[];
   year: string;
+  category?: 'products' | 'ux';
   links?: { label: string; href: string }[];
   defaultImage?: string;
   hoverImage?: string;
@@ -12,12 +13,24 @@ export interface Project {
 
 export const projects: Project[] = [
   {
+    slug: 'bambi',
+    title: 'Bambi',
+    description: 'An AI language support mobile application',
+    body: '',
+    tags: [],
+    year: '2025',
+    category: 'products',
+    defaultImage: '/Bambi N Default.PNG',
+    hoverImage: '/Bambi N Hover.PNG',
+  },
+  {
     slug: 'alblatta',
     title: "Al'Blatta",
     description: "A south lebanese community where food, culture, and heritage is shared.",
     body: '',
     tags: [],
     year: '2025',
+    category: 'products',
     defaultImage: '/alblatta default.png',
     hoverImage: '/alblatta hover.png',
   },
@@ -28,11 +41,13 @@ export const projects: Project[] = [
     body: '',
     tags: ['Design Strategy', 'User Research', 'User Interface', 'User Testing', 'Prototyping'],
     year: '2024',
+    category: 'ux',
   },
   {
     slug: 'construct',
     title: 'Construct',
     description: 'Construction management application.',
+    category: 'ux',
     body: `This is a longer write-up about the project. What was the problem? How did you approach it? What did you learn?
 
 You can describe the architecture, interesting technical decisions, and any challenges you faced along the way.`,
