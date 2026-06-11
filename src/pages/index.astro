@@ -1,93 +1,108 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { projects } from '../data/projects';
-import CyclingText from '../components/CyclingText.astro';
+import IntroSection from '../components/IntroSection.astro';
 
-const productProjects = projects.filter(p => p.category === 'products');
-const uxProjects = projects.filter(p => p.category === 'ux');
+const HEADER_PX = 106;
+
+type Card = {
+  slug: string;
+  title: string;
+  hover: string;
+  href?: string;
+  external?: boolean;
+  left: number;
+  top: number;
+  width: number;
+  height: number;
+};
+
+const cards: Card[] = [
+  { slug: 'pbr',          title: 'PBR',          hover: '/Hove PBR.PNG',           href: 'https://pbr.studio', external: true, left: 13.5, top: 18, width: 12, height: 27.7 },
+  { slug: 'bambi',        title: 'Bambi',        hover: '/Hover bamabi.PNG',       left: 30.7, top: 14, width: 8, height: 33.2 },
+  { slug: 'alblatta',     title: "Al'Blatta",    hover: '/Hover Al Blatta .PNG',   left: 71.9, top: 9.2, width: 12, height: 27.7 },
+  { slug: 'career-track', title: 'Career Track', hover: '/Hover Career Track.PNG', left: 49.8, top: 12.1, width: 12, height: 33.2 },
+  { slug: 'construct',    title: 'Construct',    hover: '/Hover Construct.PNG',    left: 86.5, top: 20.1, width: 12, height: 31.9 },
+];
 ---
 
-<Layout>
-  <main class="max-w-5xl mx-auto px-6 py-14">
-
-    <!-- Header with avatar -->
-    <header class="mb-10 flex flex-col md:flex-row md:items-center gap-4 md:gap-6">
+<Layout hideFooter>
+  <IntroSection />
+  <main
+    id="home-scroller"
+    class="overflow-x-auto overflow-y-hidden scrollbar-hide bg-[#F5F5F0]"
+    style={`height: calc(100vh - ${HEADER_PX}px);`}
+  >
+    <div class="relative h-full w-max">
       <img
-        src="/Pin Image.PNG"
-        alt="Lina Charara"
-        class="shrink-0 w-24 h-auto md:w-auto md:h-auto" style="max-width: 161px; max-height: 180px;"
+        src="/Home page .PNG"
+        alt="Gallery of Lina's projects"
+        class="h-full w-auto max-w-none block select-none pointer-events-none"
+        draggable="false"
       />
-      <div>
-        <h1 class="font-semibold text-neutral-900 mb-2 text-2xl md:text-[32px]">Lina Charara</h1>
-        <p class="text-neutral-700 text-sm md:text-base">Product Designer at Tesla. <span class="hidden md:inline">Building products <CyclingText words={["that solve user problems.", "that are simple.", "that are easy to use.", "that are fun.", "that are unique."]} className="text-neutral-700 text-sm md:text-base font-semibold" /></span></p>
-        <p class="text-neutral-700 text-sm mt-1 md:hidden">Building products <CyclingText words={["that solve user problems.", "that are simple.", "that are easy to use.", "that are fun.", "that are unique."]} className="text-neutral-700 text-sm font-semibold" /></p>
-      </div>
-    </header>
 
-    <!-- Products I've Built -->
-    <div class="relative mb-10">
-      <img src="/Product I've Built.PNG" alt="Products I Have Built" class="w-48 md:w-64 mb-3" />
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {productProjects.map((project) => (
-          <a
-            href={`/projects/${project.slug}`}
-            class="group relative block"
-          >
-            <img
-              src={project.defaultImage ?? '/Skills Default.png'}
-              alt={project.title}
-              class="w-full group-hover:opacity-0 transition-opacity duration-200"
-            />
-            <img
-              src={project.hoverImage ?? '/Skills Hover.png'}
-              alt={project.title}
-              class="w-full absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-            />
-            <div class="absolute bottom-0 left-0 w-full h-[40%] max-w-[75%] flex flex-col gap-1 md:gap-2 items-start justify-center pl-4 md:pl-6">
-              <h3 class="text-sm font-semibold text-neutral-900">{project.title}</h3>
-              <p class="text-[12px] md:text-[13px] text-neutral-700">{project.description}</p>
-            </div>
-          </a>
-        ))}
-      </div>
-
-      <!-- Hire me Roach character - top right, hidden on mobile -->
-      <a href="/about" class="absolute top-[-3.75rem] right-[-5.5rem] z-10 hidden md:block">
+      {cards.map((c) => (
         <img
-          src="/Hire me roach.PNG"
-          alt="Hire me roach character"
-          class="w-40 md:w-44"
+          src={c.hover}
+          alt=""
+          aria-hidden="true"
+          data-overlay={c.slug}
+          class="hover-overlay absolute top-0 left-0 h-full w-auto max-w-none block select-none pointer-events-none"
+          draggable="false"
         />
-      </a>
-    </div>
+      ))}
 
-    <!-- UX Use Cases -->
-    <div>
-      <img src="/UX Use Cases.PNG" alt="UX Use Cases" class="w-40 md:w-56 mb-3" />
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {uxProjects.map((project) => (
-          <a
-            href={`/projects/${project.slug}`}
-            class="group relative block"
-          >
-            <img
-              src={project.defaultImage ?? '/Skills Default.png'}
-              alt={project.title}
-              class="w-full group-hover:opacity-0 transition-opacity duration-200"
-            />
-            <img
-              src={project.hoverImage ?? '/Skills Hover.png'}
-              alt={project.title}
-              class="w-full absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-            />
-            <div class="absolute bottom-0 left-0 w-full h-[40%] max-w-[75%] flex flex-col gap-1 md:gap-2 items-start justify-center pl-4 md:pl-6">
-              <h3 class="text-sm font-semibold text-neutral-900">{project.title}</h3>
-              <p class="text-[12px] md:text-[13px] text-neutral-700">{project.description}</p>
-            </div>
-          </a>
-        ))}
-      </div>
+      {cards.map((c) => (
+        <a
+          href={c.href ?? `/projects/${c.slug}`}
+          target={c.external ? '_blank' : undefined}
+          rel={c.external ? 'noopener noreferrer' : undefined}
+          aria-label={c.title}
+          data-hotspot={c.slug}
+          class="hotspot absolute rounded-md"
+          style={`left:${c.left}%; top:${c.top}%; width:${c.width}%; height:${c.height}%`}
+        >
+          <span class="sr-only">{c.title}</span>
+        </a>
+      ))}
     </div>
-
   </main>
 </Layout>
+
+<style>
+  .hover-overlay {
+    opacity: 0;
+    transition: opacity 0.25s ease;
+  }
+  .hover-overlay.is-active {
+    opacity: 1;
+  }
+</style>
+
+<script>
+  function bindHomeScroller() {
+    const scroller = document.getElementById('home-scroller');
+    if (!scroller) return;
+
+    scroller.scrollLeft = 0;
+    window.scrollTo(0, 0);
+
+    const onWheel = (e: WheelEvent) => {
+      if (e.deltaY === 0 || e.shiftKey) return;
+      e.preventDefault();
+      scroller.scrollLeft += e.deltaY;
+    };
+    scroller.addEventListener('wheel', onWheel, { passive: false });
+
+    document.querySelectorAll<HTMLElement>('[data-hotspot]').forEach((spot) => {
+      const slug = spot.dataset.hotspot;
+      if (!slug) return;
+      const overlay = document.querySelector(`[data-overlay="${slug}"]`);
+      if (!overlay) return;
+      spot.addEventListener('mouseenter', () => overlay.classList.add('is-active'));
+      spot.addEventListener('mouseleave', () => overlay.classList.remove('is-active'));
+    });
+  }
+
+  bindHomeScroller();
+  document.addEventListener('astro:page-load', bindHomeScroller);
+</script>

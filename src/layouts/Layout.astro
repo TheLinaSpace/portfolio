@@ -1,14 +1,16 @@
 ---
 import '../styles/global.css';
 import Header from '../components/Header.astro';
+import { ClientRouter } from 'astro:transitions';
 
 interface Props {
   title?: string;
   bgColor?: string;
   hideHeader?: boolean;
+  hideFooter?: boolean;
 }
 
-const { title = 'Lina - Portfolio', bgColor = '#F5F5F0', hideHeader = false } = Astro.props;
+const { title = 'Lina - Portfolio', bgColor = '#F5F5F0', hideHeader = false, hideFooter = false } = Astro.props;
 
 ---
 
@@ -19,8 +21,8 @@ const { title = 'Lina - Portfolio', bgColor = '#F5F5F0', hideHeader = false } = 
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
-    <link href="https://api.fontshare.com/v2/css?f[]=chillax@400,500,600,700&display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&display=swap" rel="stylesheet" />
     <script>
       if (["localhost", "127.0.0.1"].includes(location.hostname)) {
         const s = document.createElement("script");
@@ -28,14 +30,17 @@ const { title = 'Lina - Portfolio', bgColor = '#F5F5F0', hideHeader = false } = 
         document.head.appendChild(s);
       }
     </script>
+    <ClientRouter />
   </head>
-  <body class="text-neutral-900 min-h-screen font-[Inter,sans-serif]" style={`background-color: ${bgColor}; --page-bg: ${bgColor};`}>
-    {!hideHeader && <Header />}
+  <body class="text-neutral-900 min-h-screen font-[Inter,sans-serif] transition-colors duration-300" style={`background-color: ${bgColor}; --page-bg: ${bgColor};`}>
+    {!hideHeader && <Header transition:persist />}
     <slot />
-    <footer class="border-t border-neutral-200 mt-10 md:mt-20">
-      <div class="px-12 h-14 flex items-center justify-center">
-        <p class="text-xs text-neutral-700">Lina 2026</p>
-      </div>
-    </footer>
+    {!hideFooter && (
+      <footer class="border-t border-neutral-200 mt-10 md:mt-20">
+        <div class="px-12 h-14 flex items-center justify-center">
+          <p class="text-xs text-neutral-700">Lina 2026</p>
+        </div>
+      </footer>
+    )}
   </body>
 </html>

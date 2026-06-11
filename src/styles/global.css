@@ -1,11 +1,37 @@
 @import "tailwindcss";
 
-h1, h2, h3, h4, h5, h6 {
-  font-family: 'Chillax', sans-serif;
+@font-face {
+  font-family: 'FinePoint';
+  src: url('/finePoint.ttf') format('truetype');
+  font-display: swap;
 }
 
-body {
-  font-family: 'Inter', sans-serif;
+@font-face {
+  font-family: 'Dker';
+  src: url('/Dker-Poster.ttf?v=2') format('truetype');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'KKTDMag';
+  src: url('/kktdmag.ttf') format('truetype');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Gochi Hand';
+  src: url('/GochiHand-Regular.ttf') format('truetype');
+  font-display: swap;
+}
+
+@layer base {
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Gochi Hand', sans-serif;
+  }
+
+  body {
+    font-family: 'Inter', sans-serif;
+  }
 }
 
 .scrollbar-hide {

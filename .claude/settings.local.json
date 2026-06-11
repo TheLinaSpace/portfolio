@@ -16,7 +16,12 @@
       "Bash(find /Users/linac/Documents/GitHub/portfolio -type f \\\\\\(-name *alblatta* -o -name *Alblatta* -o -name *blatta* \\\\\\))",
       "WebFetch(domain:paper.design)",
       "mcp__paper__get_basic_info",
-      "mcp__paper__get_screenshot"
+      "mcp__paper__get_screenshot",
+      "mcp__paper__open_file",
+      "mcp__paper__get_tree_summary",
+      "mcp__paper__get_selection",
+      "mcp__paper__get_jsx",
+      "mcp__paper__get_fill_image"
     ]
   }
 }

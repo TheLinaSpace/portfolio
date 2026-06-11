@@ -1,0 +1,42 @@
+---
+// Translated from Paper file 01KRQRM80GJP1PMKQM4VY61H3H frame 7W6-0
+---
+
+<section class="bg-[#493DD2] text-white antialiased">
+  <div class="px-12 pb-8">
+    <div class="max-w-[970px] mx-auto flex items-center gap-6">
+      <img
+        src="/lina-portrait.png"
+        alt="Lina Charara"
+        class="w-[206px] h-[229px] shrink-0 object-contain"
+      />
+      <div>
+        <h2 class="font-[Gochi_Hand,sans-serif] text-[36px] leading-[1.33] mb-2">Hey! I am Lina…</h2>
+        <p class="font-[Inter,sans-serif] text-[18px] leading-[1.43] text-[#F6F6F6]">
+          I am a Product Designer currently at Tesla. I like designing and creating simple and fun products. I also love illustrating children books. Enjoy the museum!
+        </p>
+      </div>
+    </div>
+    <div class="text-center mt-6">
+      <button
+        type="button"
+        data-scroll-to-gallery
+        class="font-[Gochi_Hand,sans-serif] text-[24px] leading-[1.33] text-white hover:opacity-80 transition-opacity cursor-pointer"
+      >
+        Browse Projects
+      </button>
+    </div>
+  </div>
+</section>
+
+<script>
+  function bindScrollToGallery() {
+    document.querySelectorAll<HTMLButtonElement>('[data-scroll-to-gallery]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        document.getElementById('home-scroller')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+  }
+  bindScrollToGallery();
+  document.addEventListener('astro:page-load', bindScrollToGallery);
+</script>
