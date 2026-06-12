@@ -1,0 +1,213 @@
+---
+import { projects } from '../data/projects';
+
+interface Props {
+  slug: string;
+}
+
+const { slug } = Astro.props;
+const project = projects.find((p) => p.slug === slug);
+if (!project) {
+  throw new Error(`ProjectHeader: no project with slug "${slug}"`);
+}
+---
+
+<section class="bg-[#F5F5F0]">
+  <div class="max-w-[1432px] mx-auto px-6 md:px-12 pt-10 md:pt-14 pb-12 md:pb-16 flex gap-8 md:gap-16">
+
+    <!-- Left rail: persists across project pages so the dot can animate -->
+    <nav
+      class="project-rail hidden md:flex flex-col gap-4 shrink-0 pt-2 w-[140px]"
+      aria-label="Other projects"
+      transition:persist="project-rail"
+    >
+      {projects.map((p) => (
+        <a
+          href={`/projects/${p.slug}`}
+          data-rail-slug={p.slug}
+          class={`project-rail__item${p.slug === slug ? ' is-current' : ''}`}
+        >
+          <span class="project-rail__dot" aria-hidden="true"></span>
+          <span class="project-rail__label">{p.title}</span>
+        </a>
+      ))}
+    </nav>
+
+    <!-- Main metadata block -->
+    <div class="flex-1 min-w-0 project-meta animate-fade-up">
+      <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+        <h1
+          class="font-[Inter,sans-serif] text-[40px] md:text-[56px] leading-[1.05] font-semibold text-neutral-900"
+          transition:name="project-title"
+        >{project.title}</h1>
+        {project.subtitle && (
+          <p
+            class="text-[20px] leading-tight text-neutral-700"
+            transition:name="project-subtitle"
+          >{project.subtitle}</p>
+        )}
+      </div>
+
+      <div class="flex items-center flex-wrap">
+        <span class="inline-flex items-center px-3 py-1 rounded-full border border-neutral-300 text-xs text-neutral-700">
+          {project.year}
+        </span>
+        {project.liveLink && (
+          <a
+            href={project.liveLink}
+            target={project.liveLink.startsWith('http') ? '_blank' : undefined}
+            rel={project.liveLink.startsWith('http') ? 'noopener noreferrer' : undefined}
+            class="try-app relative inline-block ml-auto top-[-51px] left-[-25px] font-[Gochi_Hand,sans-serif] text-[32px] text-[#493DD2]"
+          >
+            <span class="relative z-10">{project.liveLinkLabel ?? 'Open App!'}</span>
+            <svg class="try-app__circle" viewBox="0 0 200 70" preserveAspectRatio="none" aria-hidden="true">
+              <path d="M 8 35 C 4 8, 60 4, 100 5 C 140 4, 196 8, 194 35 C 196 62, 140 67, 100 65 C 60 67, 4 62, 8 35" pathLength="1" />
+            </svg>
+          </a>
+        )}
+      </div>
+
+      {project.disclaimer && (
+        <p class="mt-2 text-xs italic text-neutral-500">{project.disclaimer}</p>
+      )}
+
+      <div class="mt-10 grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
+        {project.challenge && (
+          <div>
+            <p class="text-sm text-neutral-500 mb-2">Challenge:</p>
+            <p class="text-base md:text-[17px] leading-snug text-neutral-900">{project.challenge}</p>
+          </div>
+        )}
+
+        {project.impact && (
+          <div>
+            <p class="text-sm text-neutral-500 mb-2">Impact:</p>
+            <p class="text-base md:text-[17px] leading-snug text-neutral-900">{project.impact}</p>
+          </div>
+        )}
+
+        {(project.role || Astro.slots.has('tools')) && (
+          <div>
+            {project.role && (
+              <>
+                <p class="text-sm text-neutral-500 mb-2">Role:</p>
+                <p class="text-base md:text-[17px] leading-snug text-neutral-900">{project.role}</p>
+              </>
+            )}
+            {Astro.slots.has('tools') && (
+              <div class={project.role ? 'mt-6' : ''}>
+                <p class="text-sm text-neutral-500 mb-2">Tools:</p>
+                <div class="flex flex-wrap gap-2">
+                  <slot name="tools" />
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+
+      {project.headerVideo && (
+        <div class="mt-8">
+          <video src={project.headerVideo} autoplay loop muted playsinline class="w-full"></video>
+        </div>
+      )}
+
+      {!project.headerVideo && project.headerImages && project.headerImages.length > 0 && (
+        <div class="mt-8 flex flex-col gap-6">
+          {project.headerImages.map((src) => (
+            <img src={src} alt="" class="w-full" />
+          ))}
+        </div>
+      )}
+
+      {!project.headerVideo && !project.headerImages && project.headerImage && (
+        <div class="mt-8">
+          <img src={project.headerImage} alt="" class="w-full" />
+        </div>
+      )}
+    </div>
+
+  </div>
+</section>
+
+<style>
+  .project-rail__item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    transition: transform 0.25s ease;
+  }
+  .project-rail__dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 999px;
+    background: #d4d4d4;
+    flex-shrink: 0;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+  }
+  .project-rail__label {
+    font-size: 14px;
+    color: #525252;
+    white-space: nowrap;
+    opacity: 0;
+    transform: translateX(-4px);
+    transition: opacity 0.25s ease, transform 0.25s ease, color 0.3s ease;
+    pointer-events: none;
+  }
+  .project-rail__item:hover .project-rail__label {
+    opacity: 0.7;
+    transform: translateX(0);
+  }
+  .project-rail__item.is-current .project-rail__dot {
+    background: #493DD2;
+    transform: scale(1.15);
+  }
+  .project-rail__item.is-current .project-rail__label {
+    opacity: 1;
+    transform: translateX(0);
+    color: #0C0A09;
+    font-weight: 600;
+  }
+
+  .try-app {
+    padding: 6px 16px;
+  }
+  .try-app__circle {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: visible;
+    transform: rotate(-1.5deg);
+    color: #E59DA8;
+  }
+  .try-app__circle path {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    transition: stroke-dashoffset 0.7s ease-in-out;
+  }
+  .try-app:hover .try-app__circle path,
+  .try-app:focus-visible .try-app__circle path {
+    stroke-dashoffset: 0;
+  }
+</style>
+
+<script>
+  function syncProjectRail() {
+    const path = location.pathname;
+    const match = path.match(/\/projects\/([^/]+)/);
+    const currentSlug = match?.[1];
+    document.querySelectorAll<HTMLAnchorElement>('[data-rail-slug]').forEach((item) => {
+      item.classList.toggle('is-current', item.dataset.railSlug === currentSlug);
+    });
+  }
+  syncProjectRail();
+  document.addEventListener('astro:page-load', syncProjectRail);
+</script>

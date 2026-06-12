@@ -3,13 +3,19 @@ import Layout from '../layouts/Layout.astro';
 import IntroSection from '../components/IntroSection.astro';
 
 const HEADER_PX = 106;
+// Public-domain Vivaldi "Spring - Largo" — quiet, museum-friendly. Swap freely.
+const MUSEUM_AUDIO_URL = 'https://upload.wikimedia.org/wikipedia/commons/9/9f/Vivaldi_-_Four_Seasons_1_Spring_mvt_2_Largo_-_John_Harrison_violin.oga';
 
 type Card = {
   slug: string;
   title: string;
+  description?: string;
   hover: string;
   href?: string;
   external?: boolean;
+  noLink?: boolean;
+  labelPosition?: 'top' | 'bottom';
+  labelOffset?: number;
   left: number;
   top: number;
   width: number;
@@ -17,11 +23,12 @@ type Card = {
 };
 
 const cards: Card[] = [
-  { slug: 'pbr',          title: 'PBR',          hover: '/Hove PBR.PNG',           href: 'https://pbr.studio', external: true, left: 13.5, top: 18, width: 12, height: 27.7 },
-  { slug: 'bambi',        title: 'Bambi',        hover: '/Hover bamabi.PNG',       left: 30.7, top: 14, width: 8, height: 33.2 },
-  { slug: 'alblatta',     title: "Al'Blatta",    hover: '/Hover Al Blatta .PNG',   left: 71.9, top: 9.2, width: 12, height: 27.7 },
-  { slug: 'career-track', title: 'Career Track', hover: '/Hover Career Track.PNG', left: 49.8, top: 12.1, width: 12, height: 33.2 },
-  { slug: 'construct',    title: 'Construct',    hover: '/Hover Construct.PNG',    left: 86.5, top: 20.1, width: 12, height: 31.9 },
+  { slug: 'pbr',          title: 'PBR',          description: 'A web tool for generating PBR textures from a photo or prompt.', hover: '/Hove PBR.PNG',           left: 13.5, top: 18, width: 12, height: 27.7 },
+  { slug: 'bambi',        title: 'Bambi',        description: 'An AI language support mobile application.',                      hover: '/Hover bamabi.PNG',       left: 30.7, top: 14, width: 8, height: 33.2 },
+  { slug: 'alblatta',     title: "Al'Blatta",    description: 'A South Lebanese community where food, culture, and heritage is shared.', hover: '/Hover Al Blatta .PNG',   labelOffset: 60, left: 71.9, top: 9.2, width: 12, height: 27.7 },
+  { slug: 'career-track', title: 'Career Track', description: 'Tracking skill development and career advancement pathways.',      hover: '/Hover Career Track.PNG', left: 49.8, top: 12.1, width: 12, height: 33.2 },
+  { slug: 'construct',    title: 'Construct',    description: 'Construction management application.',                            hover: '/Hover Construct.PNG',    labelPosition: 'top', left: 86.5, top: 20.1, width: 12, height: 31.9 },
+  { slug: 'character',    title: 'Character',    hover: '/Hover on text .PNG',     noLink: true, left: 5, top: 41.7, width: 7.1, height: 45 },
 ];
 ---
 
@@ -32,9 +39,10 @@ const cards: Card[] = [
     class="overflow-x-auto overflow-y-hidden scrollbar-hide bg-[#F5F5F0]"
     style={`height: calc(100vh - ${HEADER_PX}px);`}
   >
+    <audio id="museum-audio" src={MUSEUM_AUDIO_URL} loop muted autoplay preload="auto"></audio>
     <div class="relative h-full w-max">
       <img
-        src="/Home page .PNG"
+        src="/Home Page New new update.PNG"
         alt="Gallery of Lina's projects"
         class="h-full w-auto max-w-none block select-none pointer-events-none"
         draggable="false"
@@ -51,18 +59,50 @@ const cards: Card[] = [
         />
       ))}
 
+      <button
+        id="music-toggle"
+        type="button"
+        aria-label="Toggle museum music"
+        data-muted="true"
+        class="hotspot music-toggle absolute rounded-md"
+        style="left: 0.6%; top: 81.7%; width: 4.5%; height: 13.9%;"
+      >
+        <span class="music-toggle__label music-toggle__label--unmute">Unmute</span>
+        <span class="music-toggle__label music-toggle__label--mute">Mute</span>
+      </button>
+
       {cards.map((c) => (
-        <a
-          href={c.href ?? `/projects/${c.slug}`}
-          target={c.external ? '_blank' : undefined}
-          rel={c.external ? 'noopener noreferrer' : undefined}
-          aria-label={c.title}
-          data-hotspot={c.slug}
-          class="hotspot absolute rounded-md"
-          style={`left:${c.left}%; top:${c.top}%; width:${c.width}%; height:${c.height}%`}
-        >
-          <span class="sr-only">{c.title}</span>
-        </a>
+        c.noLink ? (
+          <div
+            aria-hidden="true"
+            data-hotspot={c.slug}
+            class="hotspot absolute rounded-md"
+            style={`left:${c.left}%; top:${c.top}%; width:${c.width}%; height:${c.height}%`}
+          />
+        ) : (
+          <a
+            href={c.href ?? `/projects/${c.slug}`}
+            target={c.external ? '_blank' : undefined}
+            rel={c.external ? 'noopener noreferrer' : undefined}
+            aria-label={c.title}
+            data-hotspot={c.slug}
+            class="hotspot absolute rounded-md"
+            style={`left:${c.left}%; top:${c.top}%; width:${c.width}%; height:${c.height}%`}
+          >
+            <span class="sr-only">{c.title}</span>
+            {c.description && (
+              <div
+                class:list={["hotspot-label", c.labelPosition === 'top' && 'hotspot-label--top']}
+                style={c.labelOffset !== undefined
+                  ? (c.labelPosition === 'top' ? `margin-bottom:${c.labelOffset}px` : `margin-top:${c.labelOffset}px`)
+                  : undefined}
+              >
+                <div class="hotspot-label__title">{c.title}</div>
+                <div class="hotspot-label__desc">{c.description}</div>
+              </div>
+            )}
+          </a>
+        )
       ))}
     </div>
   </main>
@@ -76,15 +116,89 @@ const cards: Card[] = [
   .hover-overlay.is-active {
     opacity: 1;
   }
+
+  .hotspot-label {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: 14px;
+    width: 240px;
+    text-align: center;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    z-index: 10;
+  }
+  .hotspot-label--top {
+    top: auto;
+    bottom: 100%;
+    margin-top: 0;
+    margin-bottom: 14px;
+  }
+  .hotspot:hover .hotspot-label,
+  .hotspot:focus-visible .hotspot-label {
+    opacity: 1;
+    transform: translate(-50%, 4px);
+  }
+  .hotspot:hover .hotspot-label--top,
+  .hotspot:focus-visible .hotspot-label--top {
+    transform: translate(-50%, -4px);
+  }
+
+  .music-toggle__label {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-bottom: 14px;
+    padding: 4px 12px;
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    border-radius: 999px;
+    font-family: 'Gochi Hand', sans-serif;
+    font-size: 22px;
+    color: #0C0A09;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    z-index: 10;
+  }
+  .music-toggle[data-muted="true"] .music-toggle__label--mute,
+  .music-toggle[data-muted="false"] .music-toggle__label--unmute {
+    display: none;
+  }
+  .music-toggle:hover .music-toggle__label,
+  .music-toggle:focus-visible .music-toggle__label {
+    opacity: 1;
+    transform: translate(-50%, -4px);
+  }
+  .hotspot-label__title {
+    font-family: 'Gochi Hand', sans-serif;
+    font-size: 22px;
+    line-height: 1.2;
+    color: #0C0A09;
+  }
+  .hotspot-label__desc {
+    margin-top: 2px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    line-height: 1.35;
+    color: #4B4B4B;
+  }
 </style>
 
 <script>
   function bindHomeScroller() {
-    const scroller = document.getElementById('home-scroller');
+    const scroller = document.getElementById('home-scroller') as (HTMLElement & { __bound?: boolean }) | null;
     if (!scroller) return;
 
     scroller.scrollLeft = 0;
     window.scrollTo(0, 0);
+
+    if (scroller.__bound) return;
+    scroller.__bound = true;
 
     const onWheel = (e: WheelEvent) => {
       if (e.deltaY === 0 || e.shiftKey) return;
@@ -101,6 +215,22 @@ const cards: Card[] = [
       spot.addEventListener('mouseenter', () => overlay.classList.add('is-active'));
       spot.addEventListener('mouseleave', () => overlay.classList.remove('is-active'));
     });
+
+    const audio = document.getElementById('museum-audio') as HTMLAudioElement | null;
+    const toggle = document.getElementById('music-toggle') as HTMLButtonElement | null;
+    if (audio && toggle) {
+      const stored = localStorage.getItem('museum-music-muted');
+      audio.muted = stored === null ? true : stored === 'true';
+      toggle.dataset.muted = String(audio.muted);
+      if (!audio.muted) audio.play().catch(() => {});
+
+      toggle.addEventListener('click', () => {
+        audio.muted = !audio.muted;
+        toggle.dataset.muted = String(audio.muted);
+        localStorage.setItem('museum-music-muted', String(audio.muted));
+        if (!audio.muted) audio.play().catch(() => {});
+      });
+    }
   }
 
   bindHomeScroller();
