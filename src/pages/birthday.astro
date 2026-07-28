@@ -1,0 +1,550 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+// Secret birthday page — only reachable by visiting /birthday directly.
+// Not linked anywhere in the site nav.
+
+// Cat memes via cataas.com (Cat As A Service). Text overlay = instant meme.
+const partyCats = [
+  'https://cataas.com/cat/says/Happy%20Birthday?fontSize=50&fontColor=white',
+  'https://cataas.com/cat/gif/says/Party%20Time?fontSize=40&fontColor=white',
+  'https://cataas.com/cat/says/Its%20your%20day?fontSize=50&fontColor=white',
+];
+const loveCat = 'https://cataas.com/cat/says/Do%20you%20love%20me?fontSize=44&fontColor=white';
+const yesCat = 'https://cataas.com/cat/says/I%20knew%20it!?fontSize=50&fontColor=white';
+const kaiserCat = '/kaiser-yoshi.png'; // saved locally so this exact goofy cat stays put
+const linaCat = 'https://cataas.com/cat/says/Lina%20Al%20Jamila?fontSize=44&fontColor=white';
+const dilemmaCat = 'https://cataas.com/cat/says/Love%20or%20Growth?fontSize=44&fontColor=white';
+const weddingCat = 'https://cataas.com/cat/says/JAAA%20Danke!?fontSize=48&fontColor=white';
+const newStartCat = 'https://cataas.com/cat/says/A%20new%20start!?fontSize=46&fontColor=white';
+---
+
+<Layout title="🎉 Happy Birthday 🎉" bgColor="#1a1030" hideHeader={true} hideFooter={true}>
+  <canvas id="confetti" class="fixed inset-0 w-full h-full pointer-events-none z-0"></canvas>
+
+  <main class="relative z-10 min-h-screen flex flex-col items-center justify-center px-5 py-10 text-center overflow-hidden">
+
+    <!-- SCREEN 1: Happy Birthday -->
+    <section id="screen-birthday" class="w-full max-w-sm mx-auto flex flex-col items-center gap-6">
+      <h1 class="text-4xl sm:text-5xl font-bold leading-tight text-white drop-shadow-lg">
+        <span class="block text-2xl mb-1">🎉🎂🎈</span>
+        Happy Birthday!
+      </h1>
+      <p class="text-base text-purple-100/90 -mt-2">
+        A tiny corner of the internet, just for you 💜
+      </p>
+
+      <div class="w-full grid gap-3">
+        {partyCats.map((src) => (
+          <img
+            src={src}
+            alt="A birthday cat"
+            loading="eager"
+            class="w-full rounded-2xl shadow-xl object-cover aspect-square bg-purple-900/40"
+          />
+        ))}
+      </div>
+
+      <button
+        id="celebrate-btn"
+        class="mt-2 w-full rounded-full bg-gradient-to-r from-pink-500 to-purple-500 px-8 py-4 text-lg font-semibold text-white shadow-lg active:scale-95 transition-transform hover:brightness-110"
+      >
+        🎊 Celebrate 🎊
+      </button>
+    </section>
+
+    <!-- SCREEN 2: Do you love me? -->
+    <section id="screen-question" class="hidden w-full max-w-sm mx-auto flex-col items-center gap-6">
+      <h2 class="text-3xl sm:text-4xl font-bold text-white drop-shadow-lg">
+        Do you love me?
+      </h2>
+      <img
+        src={loveCat}
+        alt="A questioning cat"
+        loading="eager"
+        class="w-full rounded-2xl shadow-xl object-cover aspect-square bg-purple-900/40"
+      />
+      <div id="answer-buttons" class="relative w-full flex items-center justify-center gap-4 min-h-[64px]">
+        <button
+          id="yes-btn"
+          class="rounded-full bg-gradient-to-r from-pink-500 to-rose-500 px-10 py-4 text-lg font-semibold text-white shadow-lg active:scale-95 transition-all"
+        >
+          Yes 💖
+        </button>
+        <button
+          id="no-btn"
+          class="rounded-full bg-white/10 border border-white/30 px-10 py-4 text-lg font-semibold text-purple-100 transition-all"
+        >
+          No
+        </button>
+      </div>
+    </section>
+
+    <!-- SCREEN 3: Yes! -->
+    <section id="screen-yes" class="hidden w-full max-w-sm mx-auto flex-col items-center gap-6">
+      <h2 class="text-3xl sm:text-4xl font-bold text-white drop-shadow-lg">
+        I love you too! 💜
+      </h2>
+      <img
+        src={yesCat}
+        alt="A happy cat"
+        loading="eager"
+        class="w-full rounded-2xl shadow-xl object-cover aspect-square bg-purple-900/40"
+      />
+      <p class="text-base text-purple-100/90">
+        Happiest of birthdays. Here's to many more together 🥳🎂
+      </p>
+
+      <!-- Extra cat memes get appended here -->
+      <div id="meme-gallery" class="w-full grid gap-3"></div>
+
+      <div class="w-full grid gap-3">
+        <button
+          id="more-memes-btn"
+          class="w-full rounded-full bg-white/10 border border-white/30 px-8 py-4 text-lg font-semibold text-purple-100 shadow-lg active:scale-95 transition-transform hover:bg-white/20"
+        >
+          🐱 More cat memes 🎉
+        </button>
+        <button
+          id="view-gift-btn"
+          class="w-full rounded-full bg-gradient-to-r from-pink-500 to-purple-500 px-8 py-4 text-lg font-semibold text-white shadow-lg active:scale-95 transition-transform hover:brightness-110"
+        >
+          🎁 View gift
+        </button>
+      </div>
+    </section>
+
+    <!-- SCREEN 4: The gift -->
+    <section id="screen-gift" class="hidden w-full max-w-sm mx-auto flex-col items-center gap-6">
+      <span class="text-6xl">🎁</span>
+      <h2 class="text-3xl sm:text-4xl font-bold text-white drop-shadow-lg">
+        Your gift
+      </h2>
+      <img
+        src={kaiserCat}
+        alt="Kaiser Yoshi, the handsome cat"
+        loading="eager"
+        class="w-full rounded-2xl shadow-xl object-cover aspect-square bg-purple-900/40"
+      />
+      <div class="w-full rounded-2xl bg-white/10 border border-white/20 p-6 text-purple-100 leading-7 text-left">
+        <p class="text-base">
+          Once upon a time there lived a handsome Kaiser in the beautiful empire of
+          Kaiserslautern. He travelled across lands to help people with their software
+          problems because he is a GENIOUS! His name is Yoshilicious Maximilian. Yoshi
+          is kind, cute, and super prettttttyyy... He moved to the kingdom of Berlin,
+          to concure the ancient ruins of Teslarius. That's when the story gets spicy.
+        </p>
+      </div>
+      <div class="w-full grid gap-3">
+        <button
+          id="gift-continue-btn"
+          class="w-full rounded-full bg-gradient-to-r from-pink-500 to-purple-500 px-8 py-4 text-lg font-semibold text-white shadow-lg active:scale-95 transition-transform hover:brightness-110"
+        >
+          Continue →
+        </button>
+        <button
+          id="gift-back-btn"
+          class="w-full rounded-full bg-white/10 border border-white/30 px-8 py-4 text-base font-semibold text-purple-100 active:scale-95 transition-transform hover:bg-white/20"
+        >
+          ← Back
+        </button>
+      </div>
+    </section>
+
+    <!-- SCREEN 5: The story, chapter 2 -->
+    <section id="screen-story2" class="hidden w-full max-w-sm mx-auto flex-col items-center gap-6">
+      <img
+        src={linaCat}
+        alt="Lina Al Jamila, a lovely cat"
+        loading="eager"
+        class="w-full rounded-2xl shadow-xl object-cover aspect-square bg-purple-900/40"
+      />
+      <div class="w-full rounded-2xl bg-white/10 border border-white/20 p-6 text-purple-100 leading-7 text-left">
+        <p class="text-base">
+          Yoshi spent 2 years fighting holigans, dumb people, and bullshit. He was
+          able to win the battle, and conquered Berlin, but he was lonely. He was
+          praised, loved by people around him, but never experienced true love.
+          Woman and princesses across lands lined up to be with him. But he didn't
+          recepricate, till one day, he met Lina Al Jamila.
+        </p>
+      </div>
+      <div class="w-full grid gap-3">
+        <button
+          id="story2-continue-btn"
+          class="w-full rounded-full bg-gradient-to-r from-pink-500 to-purple-500 px-8 py-4 text-lg font-semibold text-white shadow-lg active:scale-95 transition-transform hover:brightness-110"
+        >
+          Continue →
+        </button>
+        <button
+          id="story2-back-btn"
+          class="w-full rounded-full bg-white/10 border border-white/30 px-8 py-4 text-base font-semibold text-purple-100 active:scale-95 transition-transform hover:bg-white/20"
+        >
+          ← Back
+        </button>
+      </div>
+    </section>
+
+    <!-- SCREEN 6: The story, chapter 3 -->
+    <section id="screen-story3" class="hidden w-full max-w-sm mx-auto flex-col items-center gap-6">
+      <img
+        src={dilemmaCat}
+        alt="A thoughtful cat"
+        loading="eager"
+        class="w-full rounded-2xl shadow-xl object-cover aspect-square bg-purple-900/40"
+      />
+      <div class="w-full rounded-2xl bg-white/10 border border-white/20 p-6 text-purple-100 leading-7 text-left">
+        <p class="text-base">
+          Lina was stunning, smart and cute. They clicked immediately, and became
+          good friends, to best friends, to lovers. Yoshi told Lina that he can't
+          imagine his life without her, but he had to leave for his next quest! Lina
+          told him you can do it, and I love you and will wait for you... He didn't
+          know what to do, seek love or seek growth.
+        </p>
+      </div>
+      <div class="w-full grid gap-3">
+        <button
+          id="story3-continue-btn"
+          class="w-full rounded-full bg-gradient-to-r from-pink-500 to-purple-500 px-8 py-4 text-lg font-semibold text-white shadow-lg active:scale-95 transition-transform hover:brightness-110"
+        >
+          Continue →
+        </button>
+        <button
+          id="story3-back-btn"
+          class="w-full rounded-full bg-white/10 border border-white/30 px-8 py-4 text-base font-semibold text-purple-100 active:scale-95 transition-transform hover:bg-white/20"
+        >
+          ← Back
+        </button>
+      </div>
+    </section>
+
+    <!-- SCREEN 7: The story, chapter 4 -->
+    <section id="screen-story4" class="hidden w-full max-w-sm mx-auto flex-col items-center gap-6">
+      <img
+        src={weddingCat}
+        alt="A joyful cat"
+        loading="eager"
+        class="w-full rounded-2xl shadow-xl object-cover aspect-square bg-purple-900/40"
+      />
+      <div class="w-full rounded-2xl bg-white/10 border border-white/20 p-6 text-purple-100 leading-7 text-left">
+        <p class="text-base">
+          He eventually chose love. He asked Lina for marriage. She said JAAA Danke,
+          and they got married. But she wasn't happy — she mostly loved about him how
+          he sparkles when he is doing what he loves, how he is great at doing his
+          thing, how amazing the world can be with his existence. So she surprised him
+          with a gift: a ticket to a new place to conquer!
+        </p>
+      </div>
+      <div class="w-full grid gap-3">
+        <button
+          id="story4-continue-btn"
+          class="w-full rounded-full bg-gradient-to-r from-pink-500 to-purple-500 px-8 py-4 text-lg font-semibold text-white shadow-lg active:scale-95 transition-transform hover:brightness-110"
+        >
+          Continue →
+        </button>
+        <button
+          id="story4-back-btn"
+          class="w-full rounded-full bg-white/10 border border-white/30 px-8 py-4 text-base font-semibold text-purple-100 active:scale-95 transition-transform hover:bg-white/20"
+        >
+          ← Back
+        </button>
+      </div>
+    </section>
+
+    <!-- SCREEN 8: The story, chapter 5 -->
+    <section id="screen-story5" class="hidden w-full max-w-sm mx-auto flex-col items-center gap-6">
+      <img
+        src={newStartCat}
+        alt="A hopeful cat looking ahead"
+        loading="eager"
+        class="w-full rounded-2xl shadow-xl object-cover aspect-square bg-purple-900/40"
+      />
+      <div class="w-full rounded-2xl bg-white/10 border border-white/20 p-6 text-purple-100 leading-7 text-left">
+        <p class="text-base">
+          Yoshi was extremely happy. He chose love either way — the loving woman by
+          his side, and his love for his dream and ambition. He looked up into the new
+          kingdom. It was a new start and an exciting journey.
+        </p>
+        <p class="text-base mt-4 font-semibold text-white">
+          Can you guess what is the new destination?
+        </p>
+      </div>
+
+      <form id="guess-form" class="w-full grid gap-2">
+        <input
+          id="guess-input"
+          type="text"
+          autocomplete="off"
+          autocapitalize="off"
+          spellcheck="false"
+          placeholder="Type your guess..."
+          class="w-full rounded-full bg-white/10 border border-white/30 px-6 py-4 text-lg text-white placeholder-purple-200/50 text-center outline-none focus:border-pink-400 transition-colors"
+        />
+        <p class="text-sm text-purple-200/70 italic">Hint: slow down</p>
+        <p id="guess-feedback" class="text-sm text-pink-300 min-h-[20px]"></p>
+        <button
+          type="submit"
+          class="w-full rounded-full bg-gradient-to-r from-pink-500 to-purple-500 px-8 py-4 text-lg font-semibold text-white shadow-lg active:scale-95 transition-transform hover:brightness-110"
+        >
+          Guess →
+        </button>
+        <button
+          id="story5-back-btn"
+          type="button"
+          class="w-full rounded-full bg-white/10 border border-white/30 px-8 py-4 text-base font-semibold text-purple-100 active:scale-95 transition-transform hover:bg-white/20"
+        >
+          ← Back
+        </button>
+      </form>
+    </section>
+
+    <!-- SCREEN 9: Finale -->
+    <section id="screen-final" class="hidden w-full max-w-sm mx-auto flex-col items-center gap-6">
+      <span class="text-6xl">🎉🎂🥳</span>
+      <h2 class="text-3xl sm:text-4xl font-bold text-white drop-shadow-lg">
+        Yayyy — it's Vienna! 🇦🇹
+      </h2>
+      <img
+        src={newStartCat}
+        alt="A celebrating cat"
+        loading="eager"
+        class="w-full rounded-2xl shadow-xl object-cover aspect-square bg-purple-900/40"
+      />
+      <p class="text-lg text-white font-semibold">
+        Happy Birthday, my love 💜
+      </p>
+      <p class="text-base text-purple-100/90">
+        Here's to our next kingdom, and every adventure after. I love you. 🥂
+      </p>
+    </section>
+
+  </main>
+</Layout>
+
+<style>
+  #screen-question:not(.hidden),
+  #screen-yes:not(.hidden),
+  #screen-gift:not(.hidden),
+  #screen-story2:not(.hidden),
+  #screen-story3:not(.hidden),
+  #screen-story4:not(.hidden),
+  #screen-story5:not(.hidden),
+  #screen-final:not(.hidden) {
+    display: flex;
+  }
+</style>
+
+<script>
+  // ---- Confetti ----
+  const canvas = document.getElementById('confetti') as HTMLCanvasElement;
+  const ctx = canvas.getContext('2d')!;
+  let W = 0, H = 0;
+  let pieces: any[] = [];
+  let running = false;
+  let rafId = 0;
+
+  const COLORS = ['#ff5fa2', '#ffd166', '#a78bfa', '#4dd4ff', '#6ee7b7', '#ff8c42'];
+
+  function resize() {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+
+  function spawnBurst(count = 120) {
+    for (let i = 0; i < count; i++) {
+      pieces.push({
+        x: Math.random() * W,
+        y: -20 - Math.random() * H * 0.3,
+        r: 4 + Math.random() * 6,
+        c: COLORS[(Math.random() * COLORS.length) | 0],
+        vx: -2 + Math.random() * 4,
+        vy: 2 + Math.random() * 4,
+        rot: Math.random() * Math.PI,
+        vr: -0.2 + Math.random() * 0.4,
+      });
+    }
+    if (!running) {
+      running = true;
+      rafId = requestAnimationFrame(tick);
+    }
+  }
+
+  function tick() {
+    ctx.clearRect(0, 0, W, H);
+    for (const p of pieces) {
+      p.x += p.vx;
+      p.y += p.vy;
+      p.vy += 0.05; // gravity
+      p.rot += p.vr;
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot);
+      ctx.fillStyle = p.c;
+      ctx.fillRect(-p.r / 2, -p.r / 2, p.r, p.r * 0.6);
+      ctx.restore();
+    }
+    pieces = pieces.filter((p) => p.y < H + 40);
+    if (pieces.length > 0) {
+      rafId = requestAnimationFrame(tick);
+    } else {
+      running = false;
+    }
+  }
+
+  // ---- Screen flow ----
+  function show(id: string) {
+    for (const el of document.querySelectorAll('main > section')) {
+      el.classList.add('hidden');
+    }
+    const target = document.getElementById(id);
+    target?.classList.remove('hidden');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function init() {
+    resize();
+    window.addEventListener('resize', resize);
+
+    // Confetti on load
+    spawnBurst(140);
+
+    const celebrate = document.getElementById('celebrate-btn');
+    celebrate?.addEventListener('click', () => {
+      spawnBurst(180);
+      show('screen-question');
+    });
+
+    const yesBtn = document.getElementById('yes-btn');
+    yesBtn?.addEventListener('click', () => {
+      spawnBurst(220);
+      show('screen-yes');
+      // extra celebratory bursts
+      setTimeout(() => spawnBurst(120), 350);
+      setTimeout(() => spawnBurst(120), 700);
+    });
+
+    // ---- "More cat memes" ----
+    const memeCaptions = [
+      'Happy%20Birthday', 'You%20are%20purrfect', 'More%20treats%20please',
+      'Best%20human%20ever', 'Party%20cat', 'Meow%20means%20love',
+      'One%20more%20nap', 'Cake%20time', 'So%20cute',
+    ];
+    const gallery = document.getElementById('meme-gallery');
+    const moreMemes = document.getElementById('more-memes-btn');
+    moreMemes?.addEventListener('click', () => {
+      spawnBurst(160);
+      if (!gallery) return;
+      // Add two fresh random cat memes each tap. Cache-buster forces a new cat.
+      for (let i = 0; i < 2; i++) {
+        const caption = memeCaptions[(Math.random() * memeCaptions.length) | 0];
+        const bust = Math.floor(Math.random() * 1e9);
+        const img = document.createElement('img');
+        img.src = `https://cataas.com/cat/says/${caption}?fontSize=46&fontColor=white&_=${bust}`;
+        img.alt = 'A celebratory cat';
+        img.loading = 'eager';
+        img.className = 'w-full rounded-2xl shadow-xl object-cover aspect-square bg-purple-900/40';
+        gallery.appendChild(img);
+      }
+      gallery.lastElementChild?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+
+    // ---- "View gift" ----
+    document.getElementById('view-gift-btn')?.addEventListener('click', () => {
+      spawnBurst(200);
+      show('screen-gift');
+    });
+    document.getElementById('gift-back-btn')?.addEventListener('click', () => {
+      show('screen-yes');
+    });
+    // Continue → chapter 2 of the story.
+    document.getElementById('gift-continue-btn')?.addEventListener('click', () => {
+      spawnBurst(180);
+      show('screen-story2');
+    });
+    document.getElementById('story2-back-btn')?.addEventListener('click', () => {
+      show('screen-gift');
+    });
+    // Continue → chapter 3 of the story.
+    document.getElementById('story2-continue-btn')?.addEventListener('click', () => {
+      spawnBurst(180);
+      show('screen-story3');
+    });
+    document.getElementById('story3-back-btn')?.addEventListener('click', () => {
+      show('screen-story2');
+    });
+    // Continue → chapter 4 of the story.
+    document.getElementById('story3-continue-btn')?.addEventListener('click', () => {
+      spawnBurst(180);
+      show('screen-story4');
+    });
+    document.getElementById('story4-back-btn')?.addEventListener('click', () => {
+      show('screen-story3');
+    });
+    // Continue → chapter 5 (finale) of the story.
+    document.getElementById('story4-continue-btn')?.addEventListener('click', () => {
+      spawnBurst(180);
+      show('screen-story5');
+    });
+    document.getElementById('story5-back-btn')?.addEventListener('click', () => {
+      show('screen-story4');
+    });
+
+    // ---- Guess the destination (answer: Vienna) ----
+    const guessForm = document.getElementById('guess-form') as HTMLFormElement | null;
+    const guessInput = document.getElementById('guess-input') as HTMLInputElement | null;
+    const guessFeedback = document.getElementById('guess-feedback');
+    // Accept Vienna and its common spellings (German: Wien).
+    const answers = ['vienna', 'wien'];
+    guessForm?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const val = (guessInput?.value || '').trim().toLowerCase();
+      if (answers.includes(val)) {
+        if (guessFeedback) guessFeedback.textContent = '';
+        spawnBurst(240);
+        show('screen-final');
+        setTimeout(() => spawnBurst(160), 400);
+        setTimeout(() => spawnBurst(160), 800);
+      } else if (val.length === 0) {
+        if (guessFeedback) guessFeedback.textContent = 'Take a guess 🙂';
+      } else {
+        if (guessFeedback) guessFeedback.textContent = 'Not quite... try again 😽';
+      }
+    });
+
+    // The "No" button playfully runs away and shrinks. It can never be caught.
+    const noBtn = document.getElementById('no-btn') as HTMLButtonElement | null;
+    const container = document.getElementById('answer-buttons');
+    let dodges = 0;
+    const noTexts = ['No', 'Nope', 'Are you sure?', 'Think again 😼', 'Impossible', '🙀', '💔?'];
+
+    function dodge() {
+      if (!noBtn || !container) return;
+      dodges++;
+      // On the first couple of dodges, just jump within the row; then float freely.
+      const maxX = Math.max(0, container.clientWidth - noBtn.clientWidth);
+      const rand = () => Math.floor(Math.random() * (maxX + 1));
+      noBtn.style.position = 'absolute';
+      noBtn.style.left = rand() + 'px';
+      noBtn.style.top = Math.floor(Math.random() * 40) + 'px';
+      noBtn.style.transform = `scale(${Math.max(0.4, 1 - dodges * 0.08)})`;
+      noBtn.textContent = noTexts[Math.min(dodges, noTexts.length - 1)];
+
+      // Grow the Yes button to nudge the right answer.
+      const yes = document.getElementById('yes-btn');
+      if (yes) yes.style.transform = `scale(${Math.min(1.5, 1 + dodges * 0.06)})`;
+    }
+
+    noBtn?.addEventListener('mouseenter', dodge);
+    noBtn?.addEventListener('click', (e) => {
+      e.preventDefault();
+      dodge();
+    });
+    // Touch devices: dodge on touch/tap start so it slips away before the tap lands.
+    noBtn?.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      dodge();
+    }, { passive: false });
+  }
+
+  // Astro view transitions: run on both first load and swaps.
+  document.addEventListener('astro:page-load', init);
+</script>
