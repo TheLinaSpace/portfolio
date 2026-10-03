@@ -1,0 +1,739 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { illustrations } from '../data/illustrations';
+
+// Each spread is a 2:1 image. The book opens on the first spread; every leaf
+// carries the right half of one spread on its front and the left half of the
+// next spread on its back.
+const spreads = ['/kishki/6_Eng_page.jpg', '/kishki/10eng_page.jpg', '/kishki/11_Eng_page.jpg'];
+
+const leaves = spreads.slice(0, -1).map((src, i) => ({ front: src, back: spreads[i + 1] }));
+
+const facts = [
+  { label: 'Format', value: 'Illustrated picture book' },
+  { label: 'Technique', value: 'Hand embroidery on fabric' },
+  { label: 'Status', value: 'Looking for a publisher' },
+];
+
+// Shorter card subtitles than the ones on the illustrations page
+const taglines: Record<string, string> = {
+  'abo-sharshoob': 'An immigrant cockroach in Berlin',
+  'em-kees': 'A haunted Beiruti house',
+  leila: 'Red Riding Hood, retold',
+};
+const others = illustrations.filter((item) => item.slug !== 'kishki');
+
+// Scattered cross-stitches on the contact block
+const crossStitches = [
+  { x: '8%', y: '22%', r: -8 },
+  { x: '88%', y: '18%', r: 12 },
+  { x: '78%', y: '72%', r: -14 },
+  { x: '16%', y: '68%', r: 6 },
+  { x: '93%', y: '48%', r: 0 },
+];
+
+const half = (src: string, side: 'left' | 'right') =>
+  `background-image: url('${src}'); background-position: ${side === 'left' ? '0%' : '100%'} 0;`;
+---
+
+<Layout title="Lina — Children's books" bgColor="#F5F5F0" hideHeader={true} hideFooter={true}>
+  <main class="relative overflow-hidden" data-scarf-root>
+    <!-- Kishki's never-ending scarf, drawn by the script below. It runs behind
+         the content (back) and crosses over the book's corner (front). -->
+    <svg class="scarf scarf-back" data-scarf="back" aria-hidden="true"></svg>
+    <svg class="scarf scarf-front" data-scarf="front" aria-hidden="true"></svg>
+
+    <!-- Intro -->
+    <header data-scarf-hero class="relative z-[2] max-w-5xl mx-auto px-6 pt-16 md:pt-24 pb-10 md:pb-14 text-center animate-fade-up">
+      <h1 class="text-5xl md:text-7xl text-neutral-900 leading-none mb-5">Hi, I'm Lina</h1>
+      <p class="text-neutral-700 text-sm md:text-base leading-7 max-w-md mx-auto">
+        I write and illustrate children's books, and I stitch every picture by hand.
+      </p>
+    </header>
+
+    <!-- Kishki book -->
+    <section class="relative z-[2] pb-16 md:pb-24 animate-fade-up" style="animation-delay: 100ms;" aria-label="Kishki preview">
+      <div class="book-stage">
+        <div class="book" data-book tabindex="0" aria-label="Kishki book. Use the arrow keys to turn pages.">
+          <div class="base base-left half" style={half(spreads[0], 'left')} role="img" aria-label="Kishki page"></div>
+          <div class="base base-right half" style={half(spreads[spreads.length - 1], 'right')} role="img" aria-label="Kishki page"></div>
+          {leaves.map((leaf) => (
+            <div class="leaf" data-leaf>
+              <div class="face face-front half" style={half(leaf.front, 'right')} role="img" aria-label="Kishki page"><span class="shade"></span></div>
+              <div class="face face-back half" style={half(leaf.back, 'left')} role="img" aria-label="Kishki page"><span class="shade"></span></div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div class="flex items-center justify-center gap-6 mt-8">
+        <button type="button" data-book-prev class="book-btn" aria-label="Previous page">←</button>
+        <div class="flex gap-2" aria-hidden="true">
+          {spreads.map(() => <span class="dot" data-dot></span>)}
+        </div>
+        <button type="button" data-book-next class="book-btn" aria-label="Next page">→</button>
+      </div>
+    </section>
+
+    <!-- About Kishki -->
+    <section data-scarf-kishki class="relative z-[2] max-w-5xl mx-auto px-6 pb-20 md:pb-28">
+      <div class="grid gap-10 md:grid-cols-[1fr_280px] md:gap-16">
+        <div>
+          <h2 class="text-4xl text-neutral-900 mb-5">Kishki</h2>
+          <p class="text-neutral-700 text-sm md:text-base leading-7 mb-4">
+            A 10-year-old girl opens a mysterious gift from her late mother and finds a magical, never-ending scarf. It soon takes over her school, her house, her neighbourhood, her city and then her whole world. How will she escape a blessing that turned into a dilemma?
+          </p>
+          <p class="text-neutral-700 text-sm md:text-base leading-7 mb-6">
+            Every illustration starts as hundreds of sketches and is tested with children. Then it takes three days or more to stitch.
+          </p>
+          <a href="/illustrations/kishki" class="text-sm text-neutral-900 underline underline-offset-4 hover:no-underline">See how it's made →</a>
+        </div>
+        <dl class="border-t border-neutral-300 self-start">
+          {facts.map(({ label, value }) => (
+            <div class="border-b border-neutral-300 py-4">
+              <dt class="text-xs uppercase tracking-widest text-neutral-700 mb-1">{label}</dt>
+              <dd class="text-sm text-neutral-900">{value}</dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+    </section>
+
+    <!-- Other illustrations -->
+    <section data-scarf-more class="relative z-[2] max-w-5xl mx-auto px-6 pb-20 md:pb-28">
+      <h2 class="text-4xl text-neutral-900 mb-2">More illustrations</h2>
+      <p class="text-neutral-700 text-sm md:text-base mb-8">Other books and characters I'm working on.</p>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+        {others.map((item) => (
+          <a href={`/illustrations/${item.slug}`} class="group relative block">
+            <img src={item.defaultImage} alt={item.title} class="w-full group-hover:opacity-0 transition-opacity duration-200" />
+            <img src={item.hoverImage} alt="" class="w-full absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+            <div class="absolute bottom-0 left-0 w-full h-[40%] max-w-[85%] flex flex-col gap-1 items-start justify-center pl-4 md:pl-5">
+              <h3 class="text-xl text-neutral-900">{item.title}</h3>
+              <p class="text-[13px] text-neutral-700 leading-snug">{taglines[item.slug] ?? item.description}</p>
+            </div>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section data-scarf-contact class="relative bg-[#1E2546] text-white">
+      <!-- Hand-drawn top edge -->
+      <svg class="absolute left-0 -top-[23px] w-full h-6" viewBox="0 0 1440 24" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M0 24 L0 14 C 90 4, 200 20, 320 12 S 560 2, 700 13 S 950 22, 1080 10 S 1330 4, 1440 14 L1440 24 Z" fill="#1E2546" />
+      </svg>
+
+      {crossStitches.map(({ x, y, r }) => (
+        <svg class="cross-stitch" style={`left: ${x}; top: ${y}; transform: rotate(${r}deg);`} viewBox="0 0 20 20" aria-hidden="true">
+          <path d="M3 3 L17 17 M17 3 L3 17" />
+        </svg>
+      ))}
+
+      <div class="relative z-[2] max-w-5xl mx-auto px-6 py-20 md:py-28 text-center">
+        <div class="relative inline-block">
+          <h2 class="text-4xl md:text-6xl leading-tight mb-4">Let's make a book together</h2>
+          <!-- Needle and thread doodle -->
+          <svg class="needle" viewBox="0 0 90 90" aria-hidden="true">
+            <path d="M14 76 L62 22" stroke-width="3.5" />
+            <ellipse cx="60" cy="24" rx="4.5" ry="2" transform="rotate(-48 60 24)" stroke-width="1.6" />
+            <path d="M60 24 C 78 8, 88 34, 70 40 S 48 60, 74 74 S 86 84, 80 88" stroke-width="1.6" />
+          </svg>
+        </div>
+        <p class="text-white/85 text-sm md:text-base leading-7 max-w-md mx-auto mb-10">
+          Publisher, agent or fellow author? I'd love to hear from you.
+        </p>
+        <a href="mailto:Lina.m.charara@gmail.com" class="email-patch">
+          Lina.m.charara@gmail.com
+        </a>
+        <div class="flex justify-center items-center gap-6 mt-9 text-white/85">
+          <a href="https://www.linkedin.com/in/linacharara/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" class="social-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <rect x="2.5" y="2.5" width="19" height="19" rx="4" />
+              <path d="M7.5 10.5v6M7.5 7.5v.01M11.5 16.5v-6M11.5 13c0-1.6 1-2.6 2.4-2.6s2.1 1 2.1 2.6v3.5" />
+            </svg>
+          </a>
+          <a href="https://www.instagram.com/the_roachtheory/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" class="social-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+              <circle cx="12" cy="12" r="4.2" />
+              <path d="M17.3 6.7v.01" />
+            </svg>
+          </a>
+          <a href="/" class="font-[Gochi_Hand,sans-serif] text-xl hover:text-white transition-colors ml-2">Full portfolio →</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</Layout>
+
+<style>
+  .book-stage {
+    --page: min(46vw, 440px);
+    display: flex;
+    justify-content: center;
+    padding: 24px 0 48px;
+    overflow: hidden;
+  }
+
+  .book {
+    position: relative;
+    width: calc(var(--page) * 2);
+    height: var(--page);
+    perspective: calc(var(--page) * 5);
+    outline: none;
+    cursor: pointer;
+    touch-action: pan-y;
+  }
+  .book::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 4px;
+    box-shadow: 0 18px 36px -8px rgba(40, 30, 20, 0.28), 0 2px 6px rgba(40, 30, 20, 0.08);
+  }
+
+  .half {
+    background-size: 200% 100%;
+    background-repeat: no-repeat;
+    background-color: #ece8dd;
+  }
+
+  .base,
+  .leaf {
+    position: absolute;
+    top: 0;
+    width: 50%;
+    height: 100%;
+  }
+  .base-left {
+    left: 0;
+    border-radius: 4px 0 0 4px;
+  }
+  .base-right {
+    left: 50%;
+    border-radius: 0 4px 4px 0;
+  }
+
+  .leaf {
+    left: 50%;
+    transform-origin: left center;
+    transform-style: preserve-3d;
+    transition: transform 1.1s cubic-bezier(0.3, 0.1, 0.2, 1);
+  }
+  .leaf.is-flipped {
+    transform: rotateY(-180deg);
+  }
+  /* Hover affordance: lift the edge of the page you'd turn */
+  .book.peek-next .leaf.is-top-right {
+    transform: rotateY(-8deg);
+    transition-duration: 0.4s;
+  }
+  .book.peek-prev .leaf.is-top-left {
+    transform: rotateY(-172deg);
+    transition-duration: 0.4s;
+  }
+
+  .face {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    overflow: hidden;
+  }
+  .face-front {
+    border-radius: 0 4px 4px 0;
+  }
+  .face-back {
+    transform: rotateY(180deg);
+    border-radius: 4px 0 0 4px;
+  }
+
+  /* Spine shading on every page */
+  .base::after,
+  .face::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+  .base-right::after,
+  .face-front::after {
+    background: linear-gradient(to right, rgba(0, 0, 0, 0.16), rgba(0, 0, 0, 0) 7%);
+  }
+  .base-left::after,
+  .face-back::after {
+    background: linear-gradient(to left, rgba(0, 0, 0, 0.16), rgba(0, 0, 0, 0) 7%);
+  }
+
+  /* Shadow sweep while a page is turning */
+  .shade {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .face-front .shade {
+    background: linear-gradient(to left, rgba(0, 0, 0, 0.28), rgba(0, 0, 0, 0.04));
+  }
+  .face-back .shade {
+    background: linear-gradient(to right, rgba(0, 0, 0, 0.28), rgba(0, 0, 0, 0.04));
+  }
+  .leaf.is-turning .shade {
+    animation: turn-shade 1.1s ease-in-out;
+  }
+  @keyframes turn-shade {
+    0%, 100% { opacity: 0; }
+    50% { opacity: 1; }
+  }
+
+  .book-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 9999px;
+    border: 1px solid #d4d4d4;
+    color: #171717;
+    transition: border-color 0.2s, opacity 0.2s;
+  }
+  .book-btn:hover:not(:disabled) {
+    border-color: #737373;
+  }
+  .book-btn:disabled {
+    opacity: 0.3;
+    cursor: default;
+  }
+
+  .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 9999px;
+    background: #d4d4d4;
+    transition: background 0.3s, width 0.3s;
+  }
+  .dot.is-active {
+    width: 18px;
+    background: #171717;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .leaf {
+      transition-duration: 0.01s;
+    }
+    .leaf.is-turning .shade {
+      animation: none;
+    }
+  }
+
+  .scarf {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+  .scarf-back {
+    z-index: 1;
+  }
+  .scarf-front {
+    z-index: 3;
+  }
+
+
+  .cross-stitch {
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.45);
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    pointer-events: none;
+  }
+
+  .needle {
+    position: absolute;
+    right: -70px;
+    top: -46px;
+    width: 72px;
+    height: 72px;
+    fill: none;
+    stroke: #fff;
+    stroke-linecap: round;
+  }
+  @media (max-width: 767px) {
+    .needle {
+      right: -14px;
+      top: -58px;
+      width: 52px;
+      height: 52px;
+    }
+  }
+
+  .social-icon {
+    display: inline-flex;
+    width: 44px;
+    height: 44px;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s, transform 0.2s;
+  }
+  .social-icon:hover {
+    color: #fff;
+    transform: rotate(-6deg) scale(1.08);
+  }
+  .social-icon svg {
+    width: 30px;
+    height: 30px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* Email as a stitched-on fabric patch */
+  .email-patch {
+    position: relative;
+    display: inline-block;
+    padding: 14px 30px;
+    background: #fff;
+    color: #E3262B;
+    font-family: 'Gochi Hand', sans-serif;
+    font-size: 22px;
+    border-radius: 18px;
+    transform: rotate(-1.5deg);
+    box-shadow: 0 6px 0 rgba(0, 0, 0, 0.35);
+    transition: transform 0.2s;
+  }
+  .email-patch::after {
+    content: '';
+    position: absolute;
+    inset: 5px;
+    border: 2px dashed rgba(227, 38, 43, 0.4);
+    border-radius: 13px;
+    pointer-events: none;
+  }
+  .email-patch:hover {
+    transform: rotate(0deg) scale(1.03);
+  }
+</style>
+
+<script>
+  function initBook() {
+    const book = document.querySelector<HTMLElement>('[data-book]');
+    if (!book || book.dataset.ready) return;
+    book.dataset.ready = 'true';
+
+    const leaves = Array.from(book.querySelectorAll<HTMLElement>('[data-leaf]'));
+    const dots = Array.from(document.querySelectorAll<HTMLElement>('[data-dot]'));
+    const prev = document.querySelector<HTMLButtonElement>('[data-book-prev]');
+    const next = document.querySelector<HTMLButtonElement>('[data-book-next]');
+    let page = 0; // number of flipped leaves
+
+    function render() {
+      leaves.forEach((leaf, i) => {
+        const flipped = i < page;
+        leaf.classList.toggle('is-flipped', flipped);
+        leaf.classList.toggle('is-top-right', i === page);
+        leaf.classList.toggle('is-top-left', i === page - 1);
+        // Right stack: lowest index on top. Left stack: highest index on top.
+        if (!leaf.classList.contains('is-turning')) {
+          leaf.style.zIndex = String(flipped ? i + 1 : leaves.length - i);
+        }
+      });
+      dots.forEach((dot, i) => dot.classList.toggle('is-active', i === page));
+      if (prev) prev.disabled = page === 0;
+      if (next) next.disabled = page === leaves.length;
+    }
+
+    function go(to: number) {
+      const target = Math.max(0, Math.min(leaves.length, to));
+      if (target === page) return;
+      // The turning leaf rides above both stacks until it lands.
+      const leaf = leaves[Math.min(page, target)];
+      leaf.classList.add('is-turning');
+      leaf.style.zIndex = '100';
+      window.setTimeout(() => {
+        leaf.classList.remove('is-turning');
+        render();
+      }, 1100);
+      page = target;
+      book.classList.remove('peek-next', 'peek-prev');
+      render();
+    }
+
+    const isLeftHalf = (clientX: number) => {
+      const rect = book.getBoundingClientRect();
+      return clientX < rect.left + rect.width / 2;
+    };
+
+    book.addEventListener('click', (e) => go(isLeftHalf(e.clientX) ? page - 1 : page + 1));
+
+    book.addEventListener('pointermove', (e) => {
+      if (e.pointerType !== 'mouse') return;
+      const left = isLeftHalf(e.clientX);
+      book.classList.toggle('peek-prev', left && page > 0);
+      book.classList.toggle('peek-next', !left && page < leaves.length);
+    });
+    book.addEventListener('pointerleave', () => book.classList.remove('peek-next', 'peek-prev'));
+
+    let touchX: number | null = null;
+    book.addEventListener('touchstart', (e) => (touchX = e.touches[0].clientX), { passive: true });
+    book.addEventListener('touchend', (e) => {
+      if (touchX === null) return;
+      const dx = e.changedTouches[0].clientX - touchX;
+      touchX = null;
+      if (Math.abs(dx) > 40) {
+        e.preventDefault(); // swallow the synthetic click
+        go(dx < 0 ? page + 1 : page - 1);
+      }
+    });
+
+    book.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') go(page + 1);
+      if (e.key === 'ArrowLeft') go(page - 1);
+    });
+    prev?.addEventListener('click', () => go(page - 1));
+    next?.addEventListener('click', () => go(page + 1));
+
+    render();
+  }
+
+  type Pt = [number, number];
+
+  // Smooth curve through points (Catmull-Rom converted to cubic Béziers)
+  function smoothPath(pts: Pt[], from = 0, to = pts.length - 1) {
+    let d = `M ${pts[from][0]} ${pts[from][1]}`;
+    for (let i = from; i < to; i++) {
+      const p0 = pts[i - 1] ?? pts[i];
+      const p1 = pts[i];
+      const p2 = pts[i + 1];
+      const p3 = pts[i + 2] ?? p2;
+      const c1: Pt = [p1[0] + (p2[0] - p0[0]) / 6, p1[1] + (p2[1] - p0[1]) / 6];
+      const c2: Pt = [p2[0] - (p3[0] - p1[0]) / 6, p2[1] - (p3[1] - p1[1]) / 6];
+      d += ` C ${c1[0]} ${c1[1]}, ${c2[0]} ${c2[1]}, ${p2[0]} ${p2[1]}`;
+    }
+    return d;
+  }
+
+  function initScarf() {
+    const root = document.querySelector<HTMLElement>('[data-scarf-root]');
+    const back = document.querySelector<SVGSVGElement>('[data-scarf="back"]');
+    const front = document.querySelector<SVGSVGElement>('[data-scarf="front"]');
+    const book = document.querySelector<HTMLElement>('[data-book]');
+    const hero = document.querySelector<HTMLElement>('[data-scarf-hero]');
+    const kishki = document.querySelector<HTMLElement>('[data-scarf-kishki]');
+    const more = document.querySelector<HTMLElement>('[data-scarf-more]');
+    const contact = document.querySelector<HTMLElement>('[data-scarf-contact]');
+    if (!root || !back || !front || !book || !hero || !kishki || !more || !contact) return;
+    if (root.dataset.scarfReady) return;
+    root.dataset.scarfReady = 'true';
+
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let samples: { len: number; y: number }[] = [];
+    let pieces: { d: string; ext: string; start: number; len: number; extLen: number }[] = [];
+    let total = 0;
+    let shown = 0;
+    let target = 0;
+    let raf = 0;
+    // Hold the scarf back until the book's fade-in (100ms delay + 500ms) has finished
+    let started = false;
+
+    function build() {
+      const base = root!.getBoundingClientRect();
+      const rel = (el: HTMLElement) => {
+        const r = el.getBoundingClientRect();
+        return { top: r.top - base.top, bottom: r.bottom - base.top, left: r.left - base.left, right: r.right - base.left, h: r.height, w: r.width };
+      };
+      const W = base.width;
+      const H = root!.scrollHeight;
+      const w = W < 768 ? 14 : 30;
+      const b = rel(book!);
+      const he = rel(hero!);
+      const k = rel(kishki!);
+      const m = rel(more!);
+      const c = rel(contact!);
+
+      // Centre lines of the side margins, outside the text column
+      const contentLeft = k.left + 24;
+      const contentRight = k.right - 24;
+      const lx = Math.max(contentLeft / 2, w / 2 + 2);
+      const rx = Math.min((contentRight + W) / 2, W - w / 2 - 2);
+      const roomy = contentLeft > 160;
+
+      const mobile = W < 768;
+      // Zig-zag waypoints for a run down one side; on phones the side margins
+      // are too narrow for straight runs, so the scarf swings into the content a little.
+      const wave = (xa: number, xb: number, y0: number, y1: number, step: number): Pt[] => {
+        const n = Math.max(2, Math.round((y1 - y0) / step));
+        return Array.from({ length: n + 1 }, (_, i) => [i % 2 ? xb : xa, y0 + ((y1 - y0) * i) / n] as Pt);
+      };
+
+      const pts: Pt[] = [
+        [-80, he.top + 20],
+        [mobile ? 14 : lx, he.top + he.h * 0.55],
+        [b.left - 50, b.top + b.h * 0.15],
+        // Slips under the book…
+        [b.left + b.w * 0.35, b.top + b.h * 0.3],
+        // …pokes out the right side…
+        [b.right + 70, b.top + b.h * 0.35],
+        [b.right + 100, b.top + b.h * 0.75],
+        // …and wraps back over the bottom-right corner.
+        [b.right - 60, b.bottom - 35],
+        [b.right - 40, b.bottom + 70],
+      ];
+      const gapY = k.bottom - (mobile ? 40 : 56);
+      const splits: number[] = [];
+      if (mobile) {
+        pts.push(...wave(W - 6, W - 28, k.top + 20, k.bottom - 120, 240));
+      } else {
+        pts.push([rx, k.top + 30]);
+        if (roomy) {
+          // A loose curl in the right margin next to the facts
+          const cy = k.top + k.h * 0.45;
+          const r = w * 1.6;
+          pts.push([rx + r, cy - r], [rx, cy + r * 0.8], [rx - r * 1.2, cy - r * 0.2]);
+          // Split here so the strand leaving the loop is drawn on top of the one entering it
+          splits.push(pts.length - 1);
+          pts.push([rx - r * 0.3, cy - r * 1.5], [rx + r * 0.8, cy + r * 0.3]);
+        }
+        pts.push([rx, k.bottom - 120]);
+      }
+      pts.push(
+        [W * 0.7, gapY + 10],
+        // Turn into the left margin before the "More stories" heading starts
+        [W * 0.35, gapY - 5],
+        [lx + 6, gapY + 30],
+      );
+      if (mobile) {
+        pts.push(...wave(26, 6, m.top + 90, c.bottom - 90, 260));
+      } else {
+        pts.push([lx, m.top + 80], [lx, m.top + m.h * 0.55], [lx, c.top - 30], [lx + 20, c.bottom - 140]);
+      }
+      // Drop out through the bottom of the page
+      pts.push([mobile ? 40 : lx + 70, c.bottom + 20], [mobile ? 70 : lx + 110, c.bottom + 120]);
+      // Each piece is drawn as its own scarf so later pieces sit on top of
+      // earlier ones (with their outline) where the scarf crosses itself.
+      const bounds = [0, ...splits, pts.length - 1];
+      const ruler = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      back!.innerHTML = '';
+      back!.appendChild(ruler);
+      let offset = 0;
+      pieces = bounds.slice(0, -1).map((from, i) => {
+        const to = bounds[i + 1];
+        const d = smoothPath(pts, from, to);
+        // Each piece runs one segment past its end, underneath the next piece,
+        // so the join between them doesn't show a seam.
+        const ext = to < pts.length - 1 ? smoothPath(pts, from, to + 1) : d;
+        ruler.setAttribute('d', d);
+        const len = ruler.getTotalLength();
+        ruler.setAttribute('d', ext);
+        const piece = { d, ext, start: offset, len, extLen: ruler.getTotalLength() };
+        offset += len;
+        return piece;
+      });
+      total = offset;
+
+      const stripe = w * 1.05;
+      const layers = (prefix: string) =>
+        pieces
+          .map(({ ext: d, start, extLen }, i) => `
+            <g mask="url(#${prefix}-${i})">
+              <path d="${d}" fill="none" stroke="#141414" stroke-width="${w + 5}" ${i > 0 ? `stroke-dasharray="0 3 ${extLen}"` : ''} />
+              <path d="${d}" fill="none" stroke="#1E2546" stroke-width="${w}" />
+              <path d="${d}" fill="none" stroke="#E3262B" stroke-width="${w}" stroke-dasharray="${stripe} ${stripe}" stroke-dashoffset="${-start}" />
+              <path d="${d}" fill="none" stroke="rgba(0,0,0,0.22)" stroke-width="${w}" stroke-dasharray="1 2.4" />
+            </g>`)
+          .join('');
+      const masks = (prefix: string) =>
+        pieces
+          .map(({ ext, extLen }, i) => `
+            <mask id="${prefix}-${i}" maskUnits="userSpaceOnUse" x="0" y="0" width="${W}" height="${H}">
+              <path data-reveal="${i}" d="${ext}" fill="none" stroke="#fff" stroke-width="${w + 12}" stroke-dasharray="${extLen} ${extLen}" />
+            </mask>`)
+          .join('');
+
+      for (const svg of [back!, front!]) {
+        svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+        svg.style.height = `${H}px`;
+      }
+      back!.innerHTML = `<defs>${masks('scarf-back')}</defs>${layers('scarf-back')}`;
+      // The front copy only shows where the scarf crosses over the book's corner
+      front!.innerHTML = `<defs>${masks('scarf-front')}
+          <clipPath id="scarf-over-book"><rect x="${b.right - 150}" y="${b.bottom - 80}" width="260" height="200" /></clipPath>
+        </defs><g clip-path="url(#scarf-over-book)">${layers('scarf-front')}</g>`;
+
+      samples = [];
+      for (const piece of pieces) {
+        ruler.setAttribute('d', piece.d);
+        for (let j = 0; j <= 200; j++) {
+          const len = (piece.len * j) / 200;
+          samples.push({ len: piece.start + len, y: ruler.getPointAtLength(len).y });
+        }
+      }
+      update();
+      paint();
+    }
+
+    // Grow the scarf down to just above the bottom of the viewport
+    function update() {
+      if (reduceMotion) {
+        target = total;
+        return;
+      }
+      if (!started) return;
+      const atBottom = window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 4;
+      const revealY = window.innerHeight * 0.85 - root!.getBoundingClientRect().top;
+      const firstBelow = samples.find((s) => s.y > revealY);
+      target = atBottom || !firstBelow ? total : firstBelow.len;
+      if (!raf) raf = requestAnimationFrame(tick);
+    }
+
+    // Grow at a steady pace that ramps up from zero, so it visibly starts from the tip
+    let speed = 0;
+    function tick() {
+      raf = 0;
+      const diff = target - shown;
+      // Gentle start, but catch up quickly after a fast scroll
+      speed = Math.min(speed + 0.6, Math.max(22, Math.abs(diff) * 0.08));
+      const step = Math.min(Math.abs(diff) * 0.15 + 1, speed);
+      shown += Math.sign(diff) * Math.min(step, Math.abs(diff));
+      if (Math.abs(target - shown) < 0.5) {
+        shown = target;
+        speed = 0;
+      }
+      paint();
+      if (shown !== target) raf = requestAnimationFrame(tick);
+    }
+
+    function paint() {
+      const reveal = reduceMotion ? total : shown;
+      for (const el of root!.querySelectorAll<SVGPathElement>('[data-reveal]')) {
+        const piece = pieces[Number(el.dataset.reveal)];
+        const visible = Math.max(0, Math.min(piece.extLen, reveal - piece.start));
+        el.setAttribute('stroke-dashoffset', String(piece.extLen - visible));
+      }
+    }
+
+    let resizeTimer = 0;
+    new ResizeObserver(() => {
+      window.clearTimeout(resizeTimer);
+      resizeTimer = window.setTimeout(build, 100);
+    }).observe(root);
+    window.addEventListener('scroll', update, { passive: true });
+    document.addEventListener('astro:before-swap', () => window.removeEventListener('scroll', update), { once: true });
+    build();
+    window.setTimeout(() => {
+      started = true;
+      update();
+    }, 750);
+  }
+
+  initBook();
+  initScarf();
+  document.addEventListener('astro:page-load', () => {
+    initBook();
+    initScarf();
+  });
+</script>
