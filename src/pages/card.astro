@@ -7,6 +7,12 @@ import { illustrations } from '../data/illustrations';
 // next spread on its back.
 const spreads = ['/kishki/6_Eng_page.jpg', '/kishki/10eng_page.jpg', '/kishki/11_Eng_page.jpg'];
 
+// Single pages for the phone layout, where a full spread is too small to read
+const pages = spreads.flatMap((src) => [
+  { src, side: 'left' as const },
+  { src, side: 'right' as const },
+]);
+
 const leaves = spreads.slice(0, -1).map((src, i) => ({ front: src, back: spreads[i + 1] }));
 
 const facts = [
@@ -53,8 +59,20 @@ const half = (src: string, side: 'left' | 'right') =>
 
     <!-- Kishki book -->
     <section class="relative z-[2] pb-16 md:pb-24 animate-fade-up" style="animation-delay: 100ms;" aria-label="Kishki preview">
-      <div class="book-stage">
-        <div class="book" data-book tabindex="0" aria-label="Kishki book. Use the arrow keys to turn pages.">
+      <!-- Phones: a stack of single pages, tap to flick through -->
+      <div class="md:hidden">
+        <div class="page-stack" data-stack data-scarf-book role="button" tabindex="0" aria-label="Kishki pages. Tap to see the next page.">
+          {pages.map((page, i) => (
+            <div class="stack-card half" data-stack-card style={half(page.src, page.side)} role="img" aria-label={`Kishki page ${i + 1}`}></div>
+          ))}
+        </div>
+        <p class="text-center text-sm text-neutral-700 mt-8">
+          Tap to turn the page · <span data-stack-count>1</span> / {pages.length}
+        </p>
+      </div>
+
+      <div class="book-stage hidden md:flex">
+        <div class="book" data-book data-scarf-book tabindex="0" aria-label="Kishki book. Use the arrow keys to turn pages.">
           <div class="base base-left half" style={half(spreads[0], 'left')} role="img" aria-label="Kishki page"></div>
           <div class="base base-right half" style={half(spreads[spreads.length - 1], 'right')} role="img" aria-label="Kishki page"></div>
           {leaves.map((leaf) => (
@@ -66,7 +84,7 @@ const half = (src: string, side: 'left' | 'right') =>
         </div>
       </div>
 
-      <div class="flex items-center justify-center gap-6 mt-8">
+      <div class="hidden md:flex items-center justify-center gap-6 mt-8">
         <button type="button" data-book-prev class="book-btn" aria-label="Previous page">←</button>
         <div class="flex gap-2" aria-hidden="true">
           {spreads.map(() => <span class="dot" data-dot></span>)}
@@ -171,7 +189,6 @@ const half = (src: string, side: 'left' | 'right') =>
 <style>
   .book-stage {
     --page: min(46vw, 440px);
-    display: flex;
     justify-content: center;
     padding: 24px 0 48px;
     overflow: hidden;
@@ -417,6 +434,27 @@ const half = (src: string, side: 'left' | 'right') =>
   .email-patch:hover {
     transform: rotate(0deg) scale(1.03);
   }
+
+  .page-stack {
+    position: relative;
+    width: min(84vw, 360px);
+    aspect-ratio: 1;
+    margin: 8px auto 0;
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: pan-y;
+  }
+  .stack-card {
+    position: absolute;
+    inset: 0;
+    border-radius: 6px;
+    box-shadow: 0 10px 24px -6px rgba(40, 30, 20, 0.3), 0 1px 3px rgba(40, 30, 20, 0.12);
+    transition: transform 0.45s cubic-bezier(0.3, 0.1, 0.2, 1), opacity 0.3s;
+  }
+  .stack-card.is-thrown {
+    transition-duration: 0.3s;
+    transition-timing-function: cubic-bezier(0.5, 0, 0.75, 0);
+  }
 </style>
 
 <script>
@@ -521,7 +559,10 @@ const half = (src: string, side: 'left' | 'right') =>
     const root = document.querySelector<HTMLElement>('[data-scarf-root]');
     const back = document.querySelector<SVGSVGElement>('[data-scarf="back"]');
     const front = document.querySelector<SVGSVGElement>('[data-scarf="front"]');
-    const book = document.querySelector<HTMLElement>('[data-book]');
+    // The desktop book or the phone page stack, whichever is showing
+    const visibleBook = () =>
+      Array.from(document.querySelectorAll<HTMLElement>('[data-scarf-book]')).find((el) => el.offsetWidth > 0) ?? null;
+    const book = visibleBook();
     const hero = document.querySelector<HTMLElement>('[data-scarf-hero]');
     const kishki = document.querySelector<HTMLElement>('[data-scarf-kishki]');
     const more = document.querySelector<HTMLElement>('[data-scarf-more]');
@@ -548,8 +589,8 @@ const half = (src: string, side: 'left' | 'right') =>
       };
       const W = base.width;
       const H = root!.scrollHeight;
-      const w = W < 768 ? 14 : 30;
-      const b = rel(book!);
+      const w = W < 768 ? 20 : 30;
+      const b = rel(visibleBook() ?? book!);
       const he = rel(hero!);
       const k = rel(kishki!);
       const m = rel(more!);
@@ -586,7 +627,7 @@ const half = (src: string, side: 'left' | 'right') =>
       const gapY = k.bottom - (mobile ? 40 : 56);
       const splits: number[] = [];
       if (mobile) {
-        pts.push(...wave(W - 6, W - 28, k.top + 20, k.bottom - 120, 240));
+        pts.push(...wave(W - 4, W - 24, k.top + 20, k.bottom - 120, 240));
       } else {
         pts.push([rx, k.top + 30]);
         if (roomy) {
@@ -607,7 +648,7 @@ const half = (src: string, side: 'left' | 'right') =>
         [lx + 6, gapY + 30],
       );
       if (mobile) {
-        pts.push(...wave(26, 6, m.top + 90, c.bottom - 90, 260));
+        pts.push(...wave(22, 4, m.top + 90, c.bottom - 90, 260));
       } else {
         pts.push([lx, m.top + 80], [lx, m.top + m.h * 0.55], [lx, c.top - 30], [lx + 20, c.bottom - 140]);
       }
@@ -730,10 +771,98 @@ const half = (src: string, side: 'left' | 'right') =>
     }, 750);
   }
 
+  function initStack() {
+    const stack = document.querySelector<HTMLElement>('[data-stack]');
+    if (!stack || stack.dataset.ready) return;
+    stack.dataset.ready = 'true';
+
+    const cards = Array.from(stack.querySelectorAll<HTMLElement>('[data-stack-card]'));
+    const count = document.querySelector<HTMLElement>('[data-stack-count]');
+    // A slightly messy pile: each depth gets its own tilt and offset
+    const tilts = [0, -4, 3, -2, 5, -3];
+    let order = cards.map((_, i) => i); // order[0] is on top
+    let busy = false;
+
+    function layout() {
+      order.forEach((cardIndex, depth) => {
+        const card = cards[cardIndex];
+        const visible = depth < 4;
+        card.style.zIndex = String(cards.length - depth);
+        card.style.opacity = visible ? '1' : '0';
+        card.style.transform = `translate(${depth * 5}px, ${depth * 7}px) rotate(${tilts[depth % tilts.length]}deg) scale(${1 - depth * 0.03})`;
+      });
+      if (count) count.textContent = String(order[0] + 1);
+    }
+
+    function turn(direction: 1 | -1) {
+      if (busy) return;
+      busy = true;
+      if (direction === 1) {
+        // Throw the top card aside, then tuck it under the pile
+        const top = cards[order[0]];
+        top.classList.add('is-thrown');
+        top.style.transform = 'translate(-115%, 30px) rotate(-14deg)';
+        window.setTimeout(() => {
+          top.classList.remove('is-thrown');
+          order = [...order.slice(1), order[0]];
+          layout();
+          busy = false;
+        }, 300);
+      } else {
+        // Pull the bottom card back out on top
+        const last = order[order.length - 1];
+        const card = cards[last];
+        card.style.transition = 'none';
+        card.style.zIndex = String(cards.length + 1);
+        card.style.opacity = '1';
+        card.style.transform = 'translate(-115%, 30px) rotate(-14deg)';
+        void card.offsetWidth; // commit the start position before animating in
+        card.style.transition = '';
+        order = [last, ...order.slice(0, -1)];
+        layout();
+        window.setTimeout(() => (busy = false), 450);
+      }
+    }
+
+    let touchX: number | null = null;
+    let swiped = false;
+    stack.addEventListener('touchstart', (e) => {
+      touchX = e.touches[0].clientX;
+      swiped = false;
+    }, { passive: true });
+    stack.addEventListener('touchend', (e) => {
+      if (touchX === null) return;
+      const dx = e.changedTouches[0].clientX - touchX;
+      touchX = null;
+      if (Math.abs(dx) > 40) {
+        swiped = true;
+        turn(dx < 0 ? 1 : -1);
+      }
+    });
+    stack.addEventListener('click', () => {
+      if (swiped) {
+        swiped = false;
+        return;
+      }
+      turn(1);
+    });
+    stack.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        turn(1);
+      }
+      if (e.key === 'ArrowLeft') turn(-1);
+    });
+
+    layout();
+  }
+
   initBook();
+  initStack();
   initScarf();
   document.addEventListener('astro:page-load', () => {
     initBook();
+    initStack();
     initScarf();
   });
 </script>
